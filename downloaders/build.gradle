@@ -23,12 +23,18 @@ android {
   }
 }
 
+androidExtensions {
+  experimental = true
+}
+
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
   implementation deps.kotlin.stdlib.jdk8
 
   implementation deps.dagger.runtime
   kapt deps.dagger.compiler
+
+  implementation deps.android.kotlinExtensions
 
   implementation deps.retrofit.xmlConverter
 
