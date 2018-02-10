@@ -9,6 +9,7 @@ buildscript {
 
   ext.versions = [
     'androidPlugin': '3.2.0-alpha02',
+    'dagger': '2.14.1',
     'kotlin': '1.2.21',
     'supportLibray': '27.0.2',
   ]
@@ -24,6 +25,10 @@ buildscript {
           'core': 'com.android.support.test.espresso:espresso-core:3.0.1',
         ],
       ],
+    ],
+    'dagger': [
+      'runtime': "com.google.dagger:dagger:${versions.dagger}",
+      'compiler': "com.google.dagger:dagger-compiler:${versions.dagger}",
     ],
     'kotlin': [
       'stdlib': [
