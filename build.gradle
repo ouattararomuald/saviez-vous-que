@@ -36,6 +36,9 @@ buildscript {
       ],
     ],
     'junit': 'junit:junit:4.12',
+    'retrofit': [
+      'xmlConverter': 'com.squareup.retrofit2:converter-simplexml:2.3.0'
+    ]
   ]
 
   repositories {
