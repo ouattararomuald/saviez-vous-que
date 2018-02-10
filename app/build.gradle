@@ -1,0 +1,39 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+  compileSdkVersion buildConfig.compileSdk
+  
+  defaultConfig {
+    applicationId "com.ouattararomuald.saviezvousque"
+    minSdkVersion buildConfig.minSdk
+    targetSdkVersion buildConfig.targetSdk
+    versionCode 1
+    versionName '1.0'
+
+    testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+
+    resConfigs 'fr'
+  }
+  
+  buildTypes {
+    release {
+      minifyEnabled true
+      shrinkResources true
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+}
+
+dependencies {
+  implementation fileTree(dir: 'libs', include: ['*.jar'])
+  implementation deps.kotlin.stdlib.jdk8
+
+  implementation deps.android.support.appcompatV7
+
+  testImplementation deps.junit
+
+  androidTestImplementation deps.android.test.espresso.runner
+  androidTestImplementation deps.android.test.espresso.core
+}
