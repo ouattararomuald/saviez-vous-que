@@ -34,11 +34,10 @@ dependencies {
   implementation deps.dagger.runtime
   kapt deps.dagger.compiler
 
-  implementation deps.android.kotlinExtensions
-
-  implementation deps.retrofit.xmlConverter
+  api deps.retrofit.xmlConverter
 
   testImplementation deps.junit
+  testImplementation deps.truth
 
   androidTestImplementation deps.android.test.espresso.runner
   androidTestImplementation deps.android.test.espresso.core
