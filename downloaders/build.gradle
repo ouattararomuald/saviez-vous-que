@@ -34,9 +34,14 @@ dependencies {
   implementation deps.dagger.runtime
   kapt deps.dagger.compiler
 
+  api deps.retrofit.rxjavaCallAdapter
   api deps.retrofit.xmlConverter
 
   testImplementation deps.junit
+  testImplementation deps.retrofit.mock
+  testImplementation deps.retrofit.rxjavaCallAdapter
+  testImplementation deps.retrofit.xmlConverter
+  testImplementation deps.mockWebserver
   testImplementation deps.truth
 
   androidTestImplementation deps.android.test.espresso.runner
