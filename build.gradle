@@ -3,44 +3,48 @@
 buildscript {
   ext.buildConfig = [
     'compileSdk': 27,
-    'minSdk': 17,
-    'targetSdk': 27,
+    'minSdk'    : 17,
+    'targetSdk' : 27,
   ]
 
   ext.versions = [
     'androidPlugin': '3.2.0-alpha02',
-    'dagger': '2.14.1',
-    'kotlin': '1.2.21',
+    'dagger'       : '2.14.1',
+    'kotlin'       : '1.2.21',
+    'retrofit'     : '2.3.0',
     'supportLibray': '27.0.2',
   ]
 
   ext.deps = [
-    'android': [
+    'android'      : [
       'kotlinExtensions': 'androidx.core:core-ktx:0.1',
-      'support': [
+      'support'         : [
         'appcompatV7': "com.android.support:appcompat-v7:${versions.supportLibray}",
       ],
-      'test': [
+      'test'            : [
         'espresso': [
           'runner': 'com.android.support.test:runner:1.0.1',
-          'core': 'com.android.support.test.espresso:espresso-core:3.0.1',
+          'core'  : 'com.android.support.test.espresso:espresso-core:3.0.1',
         ],
       ],
     ],
-    'dagger': [
-      'runtime': "com.google.dagger:dagger:${versions.dagger}",
+    'dagger'       : [
+      'runtime' : "com.google.dagger:dagger:${versions.dagger}",
       'compiler': "com.google.dagger:dagger-compiler:${versions.dagger}",
     ],
-    'kotlin': [
+    'kotlin'       : [
       'stdlib': [
         'jdk8': "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}",
       ],
     ],
-    'junit': 'junit:junit:4.12',
-    'retrofit': [
-      'xmlConverter': 'com.squareup.retrofit2:converter-simplexml:2.3.0'
+    'mockWebserver': 'com.squareup.okhttp3:mockwebserver:3.9.1',
+    'junit'        : 'junit:junit:4.12',
+    'retrofit'     : [
+      'mock': "com.squareup.retrofit2:retrofit-mock:${versions.retrofit}",
+      'rxjavaCallAdapter': "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}",
+      'xmlConverter'     : "com.squareup.retrofit2:converter-simplexml:${versions.retrofit}"
     ],
-    'truth': 'com.google.truth:truth:0.39',
+    'truth'        : 'com.google.truth:truth:0.39',
   ]
 
   repositories {
@@ -65,6 +69,25 @@ allprojects {
   repositories {
     google()
     jcenter()
+  }
+}
+
+subprojects { project ->
+
+  repositories {
+    google()
+    jcenter()
+  }
+
+  task copyResourcesToClasses(type: Copy) {
+    from "${projectDir}/src/test/resources"
+    into "${buildDir}/intermediates/classes/test/debug/resources"
+  }
+
+  afterEvaluate {
+    if (project.tasks.findByName('assembleDebug')) {
+      assembleDebug.dependsOn(copyResourcesToClasses)
+    }
   }
 }
 
