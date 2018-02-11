@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
   compileSdkVersion buildConfig.compileSdk
-  
+
   defaultConfig {
     applicationId "com.ouattararomuald.saviezvousque"
     minSdkVersion buildConfig.minSdk
@@ -16,9 +16,18 @@ android {
 
     resConfigs 'fr'
   }
-  
+
   buildTypes {
+    def FEED_BASE_URL = '"http://saviezvousque.net"'
+    def FEED_BASE_URL_KEY = 'FEED_BASE_URL'
+
+    debug {
+      buildConfigField 'String', FEED_BASE_URL_KEY, FEED_BASE_URL
+    }
+
     release {
+      buildConfigField 'String', FEED_BASE_URL_KEY, FEED_BASE_URL
+
       minifyEnabled true
       shrinkResources true
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
