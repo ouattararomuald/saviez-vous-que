@@ -1,4 +1,4 @@
-package com.ouattararomuald.saviezvousque.downloaders;
+package com.ouattararomuald.saviezvousque.common;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -12,29 +12,21 @@ import org.simpleframework.xml.Root;
  * <br/>
  * Represents a node of an RSS feed.
  *
- * @author OUATTARA Gninlikpoho Romuald
- * @version 1.0
- * @since 1.0
+ * @see Rss
  */
-@Root(strict = false) public class Item implements Parcelable {
+@Root(strict = false)
+public class Item implements Parcelable {
 
-  /**
-   * Title of the current Item.
-   */
+  /** Title of the current Item. */
   @Element private final String title;
 
-  /**
-   * Link of the current Item.
-   */
+  /** Link of the current Item. */
   @Element private final String link;
-  /**
-   * Publication date of the current Item.
-   */
+
+  /** Publication date of the current Item. */
   @Element private final String pubDate;
 
-  /**
-   * Content of the current Item.
-   */
+  /** Content of the current Item. */
   private final String content;
 
   public Item(@Element(name = "title") String title,
@@ -48,38 +40,22 @@ import org.simpleframework.xml.Root;
     this.content = content;
   }
 
-  /**
-   * Gets the title of the Item.
-   *
-   * @since 1.0
-   */
+  /** Gets the title of the Item. */
   public String getTitle() {
     return title;
   }
 
-  /**
-   * Gets the link of the Item.
-   *
-   * @since 1.0
-   */
+  /** Gets the link of the Item. */
   public String getLink() {
     return link;
   }
 
-  /**
-   * Gets the publication date of the Item.
-   *
-   * @since 1.0
-   */
+  /** Gets the publication date of the Item. */
   public String getPubDate() {
     return pubDate;
   }
 
-  /**
-   * Gets the content of the Item.
-   *
-   * @since 1.0
-   */
+  /** Gets the content of the Item. */
   @Namespace(prefix = "content", reference = "http://purl.org/rss/1.0/modules/content/")
   @Element(name = "encoded") public String getContent() {
     try {
@@ -108,7 +84,8 @@ import org.simpleframework.xml.Root;
     return content.equals(item.content);
   }
 
-  @Override public int hashCode() {
+  @Override
+  public int hashCode() {
     int result = title.hashCode();
     result = 31 * result + link.hashCode();
     result = 31 * result + pubDate.hashCode();
@@ -116,11 +93,13 @@ import org.simpleframework.xml.Root;
     return result;
   }
 
-  @Override public int describeContents() {
+  @Override
+  public int describeContents() {
     return 0;
   }
 
-  @Override public void writeToParcel(Parcel out, int flags) {
+  @Override
+  public void writeToParcel(Parcel out, int flags) {
     out.writeString(title);
     out.writeString(link);
     out.writeString(pubDate);

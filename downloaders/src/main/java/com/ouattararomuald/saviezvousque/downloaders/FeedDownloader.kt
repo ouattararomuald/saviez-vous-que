@@ -1,5 +1,6 @@
 package com.ouattararomuald.saviezvousque.downloaders
 
+import com.ouattararomuald.saviezvousque.common.Rss
 import io.reactivex.Flowable
 
 class FeedDownloader private constructor(private val feedService: FeedService) {

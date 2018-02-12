@@ -1,5 +1,6 @@
 package com.ouattararomuald.saviezvousque.downloaders
 
+import com.ouattararomuald.saviezvousque.common.Rss
 import java.io.File
 import org.simpleframework.xml.core.Persister
 

@@ -9,6 +9,7 @@ buildscript {
 
   ext.versions = [
     'androidPlugin': '3.2.0-alpha02',
+    'arch': '1.1.0-alpha1',
     'dagger': '2.14.1',
     'kotlin': '1.2.21',
     'retrofit': '2.3.0',
@@ -16,7 +17,14 @@ buildscript {
   ]
 
   ext.deps = [
-    'android'      : [
+    'android': [
+      'arch': [
+        'room': [
+          'rxjava': "android.arch.persistence.room:rxjava2:${versions.arch}",
+          'runtime': "android.arch.persistence.room:runtime:${versions.arch}",
+          'compiler': "android.arch.persistence.room:compiler:${versions.arch}",
+        ],
+      ],
       'kotlinExtensions': 'androidx.core:core-ktx:0.1',
       'support': [
         'appcompatV7': "com.android.support:appcompat-v7:${versions.supportLibray}",

@@ -1,5 +1,6 @@
 package com.ouattararomuald.saviezvousque.downloaders
 
+import com.ouattararomuald.saviezvousque.common.Rss
 import io.reactivex.Flowable
 import retrofit2.http.GET
 import retrofit2.http.Path

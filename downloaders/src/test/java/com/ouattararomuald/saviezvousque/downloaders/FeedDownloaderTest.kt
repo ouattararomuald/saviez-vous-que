@@ -1,5 +1,6 @@
 package com.ouattararomuald.saviezvousque.downloaders
 
+import com.ouattararomuald.saviezvousque.common.Rss
 import io.reactivex.Flowable
 import org.junit.After
 import org.junit.Before
