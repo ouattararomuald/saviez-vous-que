@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
   compileSdkVersion buildConfig.compileSdk
@@ -14,6 +15,12 @@ android {
     testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
 
     resConfigs 'fr'
+
+    javaCompileOptions {
+      annotationProcessorOptions {
+        arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+      }
+    }
   }
 
   buildTypes {
@@ -27,6 +34,11 @@ android {
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
   implementation deps.kotlin.stdlib.jdk8
+  api project(':common')
+
+  api deps.android.arch.room.rxjava
+  api deps.android.arch.room.runtime
+  kapt deps.android.arch.room.compiler
 
   testImplementation deps.junit
 

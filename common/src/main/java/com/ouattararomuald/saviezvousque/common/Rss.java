@@ -1,4 +1,4 @@
-package com.ouattararomuald.saviezvousque.downloaders;
+package com.ouattararomuald.saviezvousque.common;
 
 import java.util.Collections;
 import java.util.List;
@@ -10,15 +10,15 @@ import org.simpleframework.xml.Root;
 /**
  * Represents an RSS feed.
  *
- * @author OUATTARA Gninlikpoho Romuald
- * @version 1.0
  * @see Item
- * @since 1.0
  */
-@Root(strict = false) public class Rss {
+@Root(strict = false)
+public class Rss {
 
   /** Title of the RSS feed. */
-  @Path("channel[1]") @Element private final String title;
+  @Path("channel[1]")
+  @Element
+  private final String title;
 
   /**
    * Collection of Items for the current RSS feed.
@@ -27,9 +27,12 @@ import org.simpleframework.xml.Root;
    */
   private final List<Item> items;
 
-  public Rss(@Element(name = "title") String title,
-      @Path("channel") @ElementList(name = "channel", entry = "item", inline = true)
-          List<Item> items) {
+  public Rss(
+      @Element(name = "title") String title,
+      @Path("channel")
+      @ElementList(name = "channel", entry = "item", inline = true)
+          List<Item> items
+  ) {
     this.title = title;
     this.items = items;
   }
@@ -48,7 +51,8 @@ import org.simpleframework.xml.Root;
    *
    * @since 1.0
    */
-  @Path("channel") @ElementList(name = "channel", entry = "item", inline = true)
+  @Path("channel")
+  @ElementList(name = "channel", entry = "item", inline = true)
   public List<Item> getItems() {
     return Collections.unmodifiableList(items);
   }
@@ -65,7 +69,8 @@ import org.simpleframework.xml.Root;
     return items.equals(rss.items);
   }
 
-  @Override public int hashCode() {
+  @Override
+  public int hashCode() {
     int result = title.hashCode();
     result = 31 * result + items.hashCode();
     return result;
