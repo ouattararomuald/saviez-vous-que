@@ -15,18 +15,14 @@ import java.io.File
 
 class FeedDownloaderTest {
 
-  private val downloaderComponent = DaggerDownloaderComponent.builder()
-      .feedBaseUrl("http://fake.url.com")
-      .build()
-
   private lateinit var feedDownloader: FeedDownloader
   private lateinit var behavior: NetworkBehavior
   private lateinit var mockRetrofit: MockRetrofit
   private lateinit var retrofit: Retrofit
+  private lateinit var mockFeedService: MockFeedService
 
   @Before
   fun setUp() {
-    feedDownloader = downloaderComponent.feedDownloader()
     retrofit = Retrofit.Builder()
         .baseUrl("http://fake.url.com")
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -38,19 +34,24 @@ class FeedDownloaderTest {
     mockRetrofit = MockRetrofit.Builder(retrofit)
         .networkBehavior(behavior)
         .build()
+
+    val delegate: BehaviorDelegate<FeedService> = mockRetrofit.create(FeedService::class.java)
+    mockFeedService = MockFeedService(delegate)
+
+    feedDownloader = FeedDownloader.create(mockFeedService)
   }
 
   @After
   fun tearDown() {
   }
 
+  /**
+   * Makes sure that the [FeedDownloader] can download a feed and the result can be successfully
+   * parsed.
+   */
   @Test
   fun downloadSuccess() {
     val file = TestsUtil.loadFileFromResources(TestsUtil.FEED_FILE_NAME)
-
-    val delegate: BehaviorDelegate<FeedService> = mockRetrofit.create(FeedService::class.java)
-    val mockFeedService = MockFeedService(delegate)
-
     val expectedRss = TestsUtil.deserializeXmlFromFile(file)
 
     mockFeedService.downloadFeed(FeedDownloader.Category.NEWS.path)
