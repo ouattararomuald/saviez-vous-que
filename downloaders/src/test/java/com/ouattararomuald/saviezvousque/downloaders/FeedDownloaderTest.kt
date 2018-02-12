@@ -54,7 +54,7 @@ class FeedDownloaderTest {
     val file = TestsUtil.loadFileFromResources(TestsUtil.FEED_FILE_NAME)
     val expectedRss = TestsUtil.deserializeXmlFromFile(file)
 
-    mockFeedService.downloadFeed(FeedDownloader.Category.NEWS.path)
+    feedDownloader.download(FeedDownloader.Category.NEWS)
         .test()
         .assertNoErrors()
         .assertValue(expectedRss)
