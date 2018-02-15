@@ -8,9 +8,6 @@ android {
 
   defaultConfig {
     minSdkVersion buildConfig.minSdk
-    targetSdkVersion buildConfig.targetSdk
-    versionCode 1
-    versionName '1.0'
 
     testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
 
@@ -23,6 +20,11 @@ android {
     }
   }
 
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
   buildTypes {
     release {
       minifyEnabled false
@@ -32,9 +34,11 @@ android {
 }
 
 dependencies {
-  implementation fileTree(dir: 'libs', include: ['*.jar'])
   implementation deps.kotlin.stdlib.jdk8
   api project(':common')
+
+  api deps.dagger.runtime
+  kapt deps.dagger.compiler
 
   api deps.android.arch.room.rxjava
   api deps.android.arch.room.runtime
@@ -42,6 +46,8 @@ dependencies {
 
   testImplementation deps.junit
 
+  androidTestImplementation deps.android.arch.coreTesting
+  androidTestImplementation deps.android.arch.room.testHelper
   androidTestImplementation deps.android.test.espresso.runner
   androidTestImplementation deps.android.test.espresso.core
 }
