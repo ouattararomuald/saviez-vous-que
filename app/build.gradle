@@ -28,10 +28,18 @@ android {
     resConfigs 'fr'
   }
 
-//  compileOptions {
-//    sourceCompatibility JavaVersion.VERSION_1_8
-//    targetCompatibility JavaVersion.VERSION_1_8
-//  }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  lintOptions {
+    textReport true
+    textOutput 'stdout'
+
+    // InvalidPackage: Needed cause of SimpleXml
+    disable 'AllowBackup', 'InvalidPackage', 'GoogleAppIndexingWarning' // We don't care
+  }
 
   buildTypes {
     def FEED_BASE_URL = '"http://saviezvousque.net"'

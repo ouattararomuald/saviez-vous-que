@@ -16,6 +16,14 @@ android {
     targetCompatibility JavaVersion.VERSION_1_8
   }
 
+  lintOptions {
+    textReport true
+    textOutput 'stdout'
+
+    // InvalidPackage: Needed cause of SimpleXml
+    disable 'InvalidPackage'
+  }
+
   buildTypes {
     release {
       minifyEnabled false
