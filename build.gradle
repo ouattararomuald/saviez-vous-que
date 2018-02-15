@@ -8,7 +8,7 @@ buildscript {
   ]
 
   ext.versions = [
-    'androidPlugin': '3.2.0-alpha02',
+    'androidPlugin': '3.1.0-beta2',
     'arch': '1.1.0-alpha1',
     'dagger': '2.14.1',
     'kotlin': '1.2.21',
