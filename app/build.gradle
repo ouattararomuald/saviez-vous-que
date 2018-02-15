@@ -1,6 +1,17 @@
+buildscript {
+  repositories {
+    mavenCentral() // or jcenter()
+  }
+
+  dependencies {
+    classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.2'
+  }
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
   compileSdkVersion buildConfig.compileSdk
@@ -17,6 +28,11 @@ android {
     resConfigs 'fr'
   }
 
+//  compileOptions {
+//    sourceCompatibility JavaVersion.VERSION_1_8
+//    targetCompatibility JavaVersion.VERSION_1_8
+//  }
+
   buildTypes {
     def FEED_BASE_URL = '"http://saviezvousque.net"'
     def FEED_BASE_URL_KEY = 'FEED_BASE_URL'
@@ -26,23 +42,45 @@ android {
     }
 
     release {
-      buildConfigField 'String', FEED_BASE_URL_KEY, FEED_BASE_URL
-
-      minifyEnabled true
-      shrinkResources true
+      minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+      buildConfigField 'String', FEED_BASE_URL_KEY, FEED_BASE_URL
     }
   }
+}
+
+configurations {
+  implementation.exclude group: 'stax'
+  implementation.exclude group: 'xpp3'
 }
 
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
   implementation deps.kotlin.stdlib.jdk8
+  implementation project(':common')
+  implementation project(':db')
+  implementation project(':downloaders')
+
+  implementation deps.dagger.runtime
+  kapt deps.dagger.compiler
 
   implementation deps.android.support.appcompatV7
+
+  implementation deps.android.arch.room.rxjava
+  implementation deps.android.arch.room.runtime
+  kapt deps.android.arch.room.compiler
+
+  implementation deps.retrofit.rxjavaCallAdapter
+  implementation(deps.retrofit.xmlConverter) {
+    exclude group: 'stax'
+    exclude group: 'xpp3'
+  }
 
   testImplementation deps.junit
 
   androidTestImplementation deps.android.test.espresso.runner
   androidTestImplementation deps.android.test.espresso.core
 }
+
+apply plugin: 'com.getkeepsafe.dexcount'
