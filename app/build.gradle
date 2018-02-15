@@ -42,10 +42,12 @@ android {
   }
 
   buildTypes {
+    def DATABASE_NAME_KEY = 'DATABASE_NAME'
     def FEED_BASE_URL = '"http://saviezvousque.net"'
     def FEED_BASE_URL_KEY = 'FEED_BASE_URL'
 
     debug {
+      buildConfigField 'String', DATABASE_NAME_KEY, '"HaveFunDebug"'
       buildConfigField 'String', FEED_BASE_URL_KEY, FEED_BASE_URL
     }
 
@@ -53,6 +55,7 @@ android {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
+      buildConfigField 'String', DATABASE_NAME_KEY, '"HaveFun"'
       buildConfigField 'String', FEED_BASE_URL_KEY, FEED_BASE_URL
     }
   }
