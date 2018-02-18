@@ -1,6 +1,7 @@
 package com.ouattararomuald.saviezvousque.common
 
 import com.google.gson.annotations.SerializedName
+import java.util.*
 
 data class Post(
     val id: Int,
@@ -12,4 +13,13 @@ data class Post(
     val lastUpdateUtc: String,
 
     val content: Content
-)
+) {
+  fun getImageUrl(): String? {
+    val tokenizer = StringTokenizer(content.value, "\"")
+    if (tokenizer.countTokens() > 1) {
+      tokenizer.nextToken()
+      return tokenizer.nextToken()
+    }
+    return null
+  }
+}
