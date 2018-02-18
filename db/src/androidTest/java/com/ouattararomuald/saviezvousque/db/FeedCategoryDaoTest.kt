@@ -119,25 +119,8 @@ class FeedCategoryDaoTest {
    * @return a list containing the categories inserted.
    */
   private fun insertFeedCategories(quantity: Int = 1): List<FeedCategory> {
-    if (quantity < 1) {
-      throw IllegalArgumentException("quantity must be greater or equals to 1")
-    }
-
-    val feedCategories = mutableListOf<FeedCategory>()
-
-    (1..quantity).forEach { index ->
-      val feedCategory = FeedCategory(
-          index,
-          index,
-          "name $index",
-          "slug $index"
-      )
-
-      feedCategoryDao.insert(listOf(feedCategory))
-
-      feedCategories.add(feedCategory)
-    }
-
-    return feedCategories.sortedBy { it.name }
+    val feedCategories = TestUtil.gnerateFeedCategories(quantity)
+    feedCategoryDao.insert(feedCategories)
+    return feedCategories
   }
 }
