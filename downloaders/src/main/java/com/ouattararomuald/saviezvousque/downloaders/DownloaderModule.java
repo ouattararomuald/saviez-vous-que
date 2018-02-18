@@ -4,7 +4,7 @@ import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
 abstract class DownloaderModule {
@@ -13,7 +13,7 @@ abstract class DownloaderModule {
     return new Retrofit.Builder()
         .baseUrl(baseUrl)
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-        .addConverterFactory(SimpleXmlConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create())
         .build();
   }
 
