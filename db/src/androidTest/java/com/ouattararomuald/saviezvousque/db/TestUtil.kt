@@ -7,7 +7,7 @@ class TestUtil {
   companion object {
 
     @JvmStatic
-    fun gnerateFeedCategories(quantity: Int = 1): List<FeedCategory> {
+    fun generateFeedCategories(quantity: Int = 1): List<FeedCategory> {
       if (quantity < 1) {
         throw IllegalArgumentException("quantity must be greater or equals to 1")
       }
@@ -36,19 +36,23 @@ class TestUtil {
 
       val feeds = mutableListOf<FeedItem>()
 
-      (1..quantity).forEach { index ->
+      var date: OffsetDateTime = OffsetDateTime.now()
+
+      (quantity until 0).forEach { index ->
         val feed = FeedItem(
             index,
             "htt://fake-url-$index.jpeg",
-            OffsetDateTime.now(),
-            OffsetDateTime.now(),
+            date,
+            date.plusMinutes(5),
             "content"
         )
+
+        date = date.plusHours(1)
 
         feeds.add(feed)
       }
 
-      return feeds
+      return feeds.sortedByDescending { it.updatedOn }.sortedByDescending { it.publishedOn }
     }
   }
 }
