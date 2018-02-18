@@ -7,7 +7,7 @@ import android.arch.persistence.room.Query
 import io.reactivex.Flowable
 
 @Dao
-internal interface FeedCategoryDao {
+interface FeedCategoryDao {
   @Query("SELECT * FROM FeedCategory ORDER BY name ASC")
   fun getAll(): Flowable<List<FeedCategory>>
 

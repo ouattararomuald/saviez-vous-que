@@ -8,7 +8,7 @@ import android.arch.persistence.room.PrimaryKey
 @Entity(indices = [
   Index(value = ["numberOfItems"])
 ])
-internal data class FeedCategory(
+data class FeedCategory(
     @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo val numberOfItems: Int,
     @ColumnInfo val name: String,
