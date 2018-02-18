@@ -30,6 +30,7 @@ buildscript {
       'kotlinExtensions': 'androidx.core:core-ktx:0.1',
       'support': [
         'appcompatV7': "com.android.support:appcompat-v7:${versions.supportLibray}",
+        'constraintLayout': "com.android.support.constraint:constraint-layout:1.1.0-beta5",
       ],
       'test': [
         'espresso': [

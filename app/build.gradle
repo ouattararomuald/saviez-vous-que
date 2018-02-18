@@ -72,6 +72,7 @@ dependencies {
   kapt deps.dagger.compiler
 
   implementation deps.android.support.appcompatV7
+  implementation deps.android.support.constraintLayout
 
   implementation deps.android.arch.room.rxjava
   implementation deps.android.arch.room.runtime
