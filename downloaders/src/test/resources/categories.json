@@ -1,0 +1,202 @@
+[
+  {
+    "id": 3142,
+    "count": 127,
+    "description": "",
+    "link": "http:\/\/saviezvousque.net\/conseils-utiles\/",
+    "name": "Conseils Utiles",
+    "slug": "conseils-utiles",
+    "taxonomy": "category",
+    "parent": 0,
+    "meta": [],
+    "_links": {
+      "self": [
+        {
+          "href": "http:\/\/saviezvousque.net\/wp-json\/wp\/v2\/categories\/3142"
+        }
+      ],
+      "collection": [
+        {
+          "href": "http:\/\/saviezvousque.net\/wp-json\/wp\/v2\/categories"
+        }
+      ],
+      "about": [
+        {
+          "href": "http:\/\/saviezvousque.net\/wp-json\/wp\/v2\/taxonomies\/category"
+        }
+      ],
+      "wp:post_type": [
+        {
+          "href": "http:\/\/saviezvousque.net\/wp-json\/wp\/v2\/posts?categories=3142"
+        }
+      ],
+      "curies": [
+        {
+          "name": "wp",
+          "href": "https:\/\/api.w.org\/{rel}",
+          "templated": true
+        }
+      ]
+    }
+  },
+  {
+    "id": 2307,
+    "count": 3045,
+    "description": "",
+    "link": "http:\/\/saviezvousque.net\/lol\/",
+    "name": "LOL",
+    "slug": "lol",
+    "taxonomy": "category",
+    "parent": 0,
+    "meta": [],
+    "_links": {
+      "self": [
+        {
+          "href": "http:\/\/saviezvousque.net\/wp-json\/wp\/v2\/categories\/2307"
+        }
+      ],
+      "collection": [
+        {
+          "href": "http:\/\/saviezvousque.net\/wp-json\/wp\/v2\/categories"
+        }
+      ],
+      "about": [
+        {
+          "href": "http:\/\/saviezvousque.net\/wp-json\/wp\/v2\/taxonomies\/category"
+        }
+      ],
+      "wp:post_type": [
+        {
+          "href": "http:\/\/saviezvousque.net\/wp-json\/wp\/v2\/posts?categories=2307"
+        }
+      ],
+      "curies": [
+        {
+          "name": "wp",
+          "href": "https:\/\/api.w.org\/{rel}",
+          "templated": true
+        }
+      ]
+    }
+  },
+  {
+    "id": 27522,
+    "count": 12,
+    "description": "",
+    "link": "http:\/\/saviezvousque.net\/prenoms\/",
+    "name": "Pr\u00e9noms",
+    "slug": "prenoms",
+    "taxonomy": "category",
+    "parent": 0,
+    "meta": [],
+    "_links": {
+      "self": [
+        {
+          "href": "http:\/\/saviezvousque.net\/wp-json\/wp\/v2\/categories\/27522"
+        }
+      ],
+      "collection": [
+        {
+          "href": "http:\/\/saviezvousque.net\/wp-json\/wp\/v2\/categories"
+        }
+      ],
+      "about": [
+        {
+          "href": "http:\/\/saviezvousque.net\/wp-json\/wp\/v2\/taxonomies\/category"
+        }
+      ],
+      "wp:post_type": [
+        {
+          "href": "http:\/\/saviezvousque.net\/wp-json\/wp\/v2\/posts?categories=27522"
+        }
+      ],
+      "curies": [
+        {
+          "name": "wp",
+          "href": "https:\/\/api.w.org\/{rel}",
+          "templated": true
+        }
+      ]
+    }
+  },
+  {
+    "id": 1,
+    "count": 6466,
+    "description": "",
+    "link": "http:\/\/saviezvousque.net\/saviezvousque\/",
+    "name": "Saviez-vous que ?",
+    "slug": "saviezvousque",
+    "taxonomy": "category",
+    "parent": 0,
+    "meta": [],
+    "_links": {
+      "self": [
+        {
+          "href": "http:\/\/saviezvousque.net\/wp-json\/wp\/v2\/categories\/1"
+        }
+      ],
+      "collection": [
+        {
+          "href": "http:\/\/saviezvousque.net\/wp-json\/wp\/v2\/categories"
+        }
+      ],
+      "about": [
+        {
+          "href": "http:\/\/saviezvousque.net\/wp-json\/wp\/v2\/taxonomies\/category"
+        }
+      ],
+      "wp:post_type": [
+        {
+          "href": "http:\/\/saviezvousque.net\/wp-json\/wp\/v2\/posts?categories=1"
+        }
+      ],
+      "curies": [
+        {
+          "name": "wp",
+          "href": "https:\/\/api.w.org\/{rel}",
+          "templated": true
+        }
+      ]
+    }
+  },
+  {
+    "id": 21560,
+    "count": 6,
+    "description": "",
+    "link": "http:\/\/saviezvousque.net\/terreur\/",
+    "name": "Terreur",
+    "slug": "terreur",
+    "taxonomy": "category",
+    "parent": 0,
+    "meta": [],
+    "_links": {
+      "self": [
+        {
+          "href": "http:\/\/saviezvousque.net\/wp-json\/wp\/v2\/categories\/21560"
+        }
+      ],
+      "collection": [
+        {
+          "href": "http:\/\/saviezvousque.net\/wp-json\/wp\/v2\/categories"
+        }
+      ],
+      "about": [
+        {
+          "href": "http:\/\/saviezvousque.net\/wp-json\/wp\/v2\/taxonomies\/category"
+        }
+      ],
+      "wp:post_type": [
+        {
+          "href": "http:\/\/saviezvousque.net\/wp-json\/wp\/v2\/posts?categories=21560"
+        }
+      ],
+      "curies": [
+        {
+          "name": "wp",
+          "href": "https:\/\/api.w.org\/{rel}",
+          "templated": true
+        }
+      ]
+    }
+  }
+]
