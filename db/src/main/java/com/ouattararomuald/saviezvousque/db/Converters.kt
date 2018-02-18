@@ -13,7 +13,7 @@ internal fun List<Post>.toFeedItems(): List<FeedItem> = map {
 
 internal fun Post.toFeedItem(): FeedItem = FeedItem(
     id,
-    "",
+    getImageUrl(),
     publicationDateUtc.toLocalDateTime(),
     lastUpdateUtc.toLocalDateTime(),
     content.value
@@ -27,9 +27,4 @@ internal fun List<Category>.toFeedCategories(): List<FeedCategory> = map {
   it.toFeedCategory()
 }
 
-internal fun Category.toFeedCategory(): FeedCategory = FeedCategory(
-    id,
-    count,
-    name,
-    slug
-)
+internal fun Category.toFeedCategory(): FeedCategory = FeedCategory(id, count, name, slug)
