@@ -4,7 +4,7 @@ import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.Index
 import android.arch.persistence.room.PrimaryKey
-import org.threeten.bp.OffsetDateTime
+import org.threeten.bp.LocalDateTime
 
 
 @Entity(indices = [
@@ -15,7 +15,7 @@ import org.threeten.bp.OffsetDateTime
 data class FeedItem constructor(
     @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo val imageUrl: String,
-    @ColumnInfo val publishedOn: OffsetDateTime,
-    @ColumnInfo val updatedOn: OffsetDateTime,
+    @ColumnInfo val publishedOn: LocalDateTime,
+    @ColumnInfo val updatedOn: LocalDateTime,
     @ColumnInfo val content: String
 )
