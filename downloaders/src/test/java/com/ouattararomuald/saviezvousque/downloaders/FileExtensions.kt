@@ -7,3 +7,5 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 internal fun File.asString(path: Path): String = String(Files.readAllBytes(path))
+
+internal fun File.toText(): String = String(Files.readAllBytes(this.toPath()))
