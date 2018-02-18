@@ -1,21 +1,26 @@
 package com.ouattararomuald.saviezvousque.downloaders
 
-import com.ouattararomuald.saviezvousque.common.Rss
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.ouattararomuald.saviezvousque.common.Category
+import com.ouattararomuald.saviezvousque.common.Post
 import io.reactivex.Flowable
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.mock.BehaviorDelegate
 import retrofit2.mock.MockRetrofit
 import retrofit2.mock.NetworkBehavior
 import java.io.File
+import java.util.*
 
 
 class FeedDownloaderTest {
 
+  private val gson = Gson()
   private lateinit var feedDownloader: FeedDownloader
   private lateinit var behavior: NetworkBehavior
   private lateinit var mockRetrofit: MockRetrofit
@@ -27,7 +32,7 @@ class FeedDownloaderTest {
     retrofit = Retrofit.Builder()
         .baseUrl("http://fake.url.com")
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-        .addConverterFactory(SimpleXmlConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create())
         .build()
 
     // Create a MockRetrofit object with a NetworkBehavior which manages the fake behavior of calls.
@@ -46,32 +51,92 @@ class FeedDownloaderTest {
   fun tearDown() {
   }
 
-  /**
-   * Makes sure that the [FeedDownloader] can download a feed and the result can be successfully
-   * parsed.
-   */
   @Test
-  fun downloadSuccess() {
-    val file = TestsUtil.loadFileFromResources(TestsUtil.FEED_FILE_NAME)
-    val expectedRss = TestsUtil.deserializeXmlFromFile(file)
+  fun getPostShouldSuccess() {
+    val file = TestsUtil.loadFileFromResources(TestsUtil.POSTS_JSON_FILE)
+    val postListType = object : TypeToken<List<Post>>() {
+    }.type
+    val posts: List<Post> = gson.fromJson(file.toText(), postListType)
 
-    feedDownloader.download(FeedDownloader.Category.NEWS)
+    feedDownloader.getPosts()
         .test()
         .assertNoErrors()
-        .assertValue(expectedRss)
+        .assertValue(posts)
   }
 
-  private class MockFeedService(private val delegate: BehaviorDelegate<FeedService>) : FeedService {
+  @Test
+  fun getCategoriesShouldSuccess() {
+    val file = TestsUtil.loadFileFromResources(TestsUtil.CATEGORIES_JSON_FILE)
+    val categoriesListType = object : TypeToken<List<Category>>() {
+    }.type
+    val categories: List<Category> = gson.fromJson(file.toText(), categoriesListType)
 
-    private val file: File = TestsUtil.loadFileFromResources(TestsUtil.FEED_FILE_NAME)
-    private val rss: Rss = TestsUtil.deserializeXmlFromFile(file)!!
+    feedDownloader.getCategories()
+        .test()
+        .assertNoErrors()
+        .assertValue(categories)
+  }
 
-    override fun downloadFeed(path: String): Flowable<Rss> {
-      return delegate.returningResponse(rss).downloadFeed(path)
+  @Test
+  fun getPostByPage() {
+    val file = TestsUtil.loadFileFromResources(TestsUtil.POSTS_JSON_FILE)
+    val postListType = object : TypeToken<List<Post>>() {
+    }.type
+    val posts: List<Post> = gson.fromJson(file.toText(), postListType)
+
+    val rand = Random()
+
+    feedDownloader.getPostByPage(rand.nextInt())
+        .test()
+        .assertNoErrors()
+        .assertValue(posts)
+  }
+
+  @Test
+  fun getPostsByCategoryShouldSuccess() {
+    val file = TestsUtil.loadFileFromResources(TestsUtil.POSTS_JSON_FILE)
+    val postListType = object : TypeToken<List<Post>>() {
+    }.type
+    val posts: List<Post> = gson.fromJson(file.toText(), postListType)
+
+    val rand = Random()
+
+    feedDownloader.getPostsByCategory(rand.nextInt())
+        .test()
+        .assertNoErrors()
+        .assertValue(posts)
+  }
+
+  private inner class MockFeedService(
+      private val delegate: BehaviorDelegate<FeedService>
+  ) : FeedService {
+    private val postFile: File = TestsUtil.loadFileFromResources(TestsUtil.POSTS_JSON_FILE)
+    private val categoriesFile: File = TestsUtil.loadFileFromResources(TestsUtil.CATEGORIES_JSON_FILE)
+
+    override fun getPosts(): Flowable<List<Post>> {
+      return delegate.returningResponse(generatePosts()).getPosts()
     }
 
-    override fun downloadArchiveFeed(paged: Int): Flowable<Rss> {
-      return delegate.returningResponse(rss).downloadArchiveFeed(paged)
+    override fun getPostByPage(page: Int): Flowable<List<Post>> {
+      return delegate.returningResponse(generatePosts()).getPostByPage(page)
+    }
+
+    override fun getCategories(): Flowable<List<Category>> {
+      val categoriesListType = object : TypeToken<List<Category>>() {
+      }.type
+      val categories: List<Category> = gson.fromJson(categoriesFile.toText(), categoriesListType)
+
+      return delegate.returningResponse(categories).getCategories()
+    }
+
+    override fun getPostsByCategory(categoryId: Int): Flowable<List<Post>> {
+      return delegate.returningResponse(generatePosts()).getPostsByCategory(categoryId)
+    }
+
+    private fun generatePosts(): List<Post> {
+      val postListType = object : TypeToken<List<Post>>() {
+      }.type
+      return gson.fromJson(postFile.toText(), postListType)
     }
   }
 }
