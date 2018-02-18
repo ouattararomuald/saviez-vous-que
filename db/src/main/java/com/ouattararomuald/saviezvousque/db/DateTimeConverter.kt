@@ -8,7 +8,7 @@ import org.threeten.bp.format.DateTimeFormatter
  * This [DateTimeConverter] provides utility methods to convert ThreeTen's [OffsetDateTime] to [String]
  * and from [String] to [OffsetDateTime].
  */
-object DateTimeConverter {
+internal object DateTimeConverter {
   private val formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
 
   @JvmStatic
