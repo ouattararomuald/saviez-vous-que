@@ -14,7 +14,7 @@ import org.threeten.bp.LocalDateTime
 ])
 data class FeedItem constructor(
     @PrimaryKey(autoGenerate = true) val id: Int,
-    @ColumnInfo val imageUrl: String,
+    @ColumnInfo val imageUrl: String?,
     @ColumnInfo val publishedOn: LocalDateTime,
     @ColumnInfo val updatedOn: LocalDateTime,
     @ColumnInfo val content: String
