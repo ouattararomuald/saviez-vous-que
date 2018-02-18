@@ -5,7 +5,7 @@ import com.ouattararomuald.saviezvousque.common.Content
 import com.ouattararomuald.saviezvousque.common.Post
 import org.threeten.bp.LocalDateTime
 
-class TestUtil {
+class TestsUtil {
 
   companion object {
 
@@ -88,7 +88,8 @@ class TestUtil {
             id = index,
             publicationDateUtc = "2018-02-17T10:36:22",
             lastUpdateUtc = "2018-02-18T11:36:22",
-            content = Content(value = "value $index")
+            // content = Content(value = "<p><img src=\\\"https:\\/\\/i.pinimg.com\\/564x\\/51\\/06\\/51\\/510651569a57a6f53579ae68019d28b3.jpg\\\" width=\\\"564\\\" height=\\\"564\\\" class=\\\"alignnone size-medium\\\" \\/><\\/p>\\n")
+            content = Content(value = "<p>")
         )
 
         posts.add(post)
