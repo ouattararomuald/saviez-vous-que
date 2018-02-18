@@ -126,26 +126,8 @@ class FeedItemDaoTest {
    * @return a list containing the feeds inserted.
    */
   private fun insertFeedItems(quantity: Int = 1): List<FeedItem> {
-    if (quantity < 1) {
-      throw IllegalArgumentException("quantity must be greater or equals to 1")
-    }
-
-    val feeds = mutableListOf<FeedItem>()
-
-    (1..quantity).forEach { index ->
-      val feed = FeedItem(
-          index,
-          "htt://fake-url-$index.jpeg",
-          OffsetDateTime.now(),
-          OffsetDateTime.now(),
-          "content"
-      )
-
-      feedItemDao.insert(listOf(feed))
-
-      feeds.add(feed)
-    }
-
-    return feeds
+    val feedItems = TestUtil.generateFeedItems(quantity)
+    feedItemDao.insert(feedItems)
+    return feedItems
   }
 }
