@@ -1,10 +1,17 @@
 package com.ouattararomuald.saviezvousque.db
 
-import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.Database
+import android.arch.persistence.room.RoomDatabase
+import android.arch.persistence.room.TypeConverters
 
 
-@Database(entities = [Feed::class], version = 2)
+@TypeConverters(DateTimeConverter::class)
+@Database(entities = [
+  FeedCategory::class,
+  FeedItem::class
+], version = 2)
 abstract class AppDatabase : RoomDatabase() {
-  abstract fun feedDao(): FeedDao
+  abstract fun feedCategoryDao(): FeedCategoryDao
+
+  abstract fun feedItemDao(): FeedItemDao
 }
