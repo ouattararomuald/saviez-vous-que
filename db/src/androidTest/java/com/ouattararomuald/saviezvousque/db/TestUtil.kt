@@ -67,7 +67,7 @@ class TestUtil {
       val categories = mutableListOf<Category>()
 
       (1..quantity).forEach { index ->
-        val category = Category(id = index, count = 10, name = "name", slug = "slug")
+        val category = Category(id = index, count = 10, name = "name $index", slug = "slug")
 
         categories.add(category)
       }
