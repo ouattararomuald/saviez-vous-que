@@ -10,7 +10,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.threeten.bp.OffsetDateTime
+import org.threeten.bp.LocalDateTime
 
 @RunWith(AndroidJUnit4::class)
 class FeedItemDaoTest {
@@ -108,8 +108,8 @@ class FeedItemDaoTest {
   private fun createFeedItem(id: Int = 1): FeedItem = FeedItem(
       id,
       "htt://fake-url-$id.jpeg",
-      OffsetDateTime.now(),
-      OffsetDateTime.now(),
+      LocalDateTime.now(),
+      LocalDateTime.now(),
       "content"
   )
 

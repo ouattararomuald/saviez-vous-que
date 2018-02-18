@@ -1,6 +1,7 @@
 package com.ouattararomuald.saviezvousque.db
 
 import android.arch.persistence.room.TypeConverter
+import org.threeten.bp.LocalDateTime
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.format.DateTimeFormatter
 
@@ -9,17 +10,17 @@ import org.threeten.bp.format.DateTimeFormatter
  * and from [String] to [OffsetDateTime].
  */
 internal object DateTimeConverter {
-  private val formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
+  private val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
 
   @JvmStatic
   @TypeConverter
-  fun toOffsetDateTime(value: String): OffsetDateTime {
-    return formatter.parse(value, OffsetDateTime::from)
+  fun toLocalDateTime(value: String): LocalDateTime {
+    return formatter.parse(value, LocalDateTime::from)
   }
 
   @JvmStatic
   @TypeConverter
-  fun fromOffsetDateTime(date: OffsetDateTime): String {
+  fun fromLocalDateTime(date: LocalDateTime): String {
     return date.format(formatter)
   }
 }
