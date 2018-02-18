@@ -119,7 +119,7 @@ class FeedCategoryDaoTest {
    * @return a list containing the categories inserted.
    */
   private fun insertFeedCategories(quantity: Int = 1): List<FeedCategory> {
-    val feedCategories = TestUtil.gnerateFeedCategories(quantity)
+    val feedCategories = TestUtil.generateFeedCategories(quantity)
     feedCategoryDao.insert(feedCategories)
     return feedCategories
   }
