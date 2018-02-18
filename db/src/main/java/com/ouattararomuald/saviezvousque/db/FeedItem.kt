@@ -12,7 +12,7 @@ import org.threeten.bp.OffsetDateTime
   Index(value = ["publishedOn"]),
   Index(value = ["updatedOn"])
 ])
-data class FeedItem constructor(
+internal data class FeedItem constructor(
     @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo val imageUrl: String,
     @ColumnInfo val publishedOn: OffsetDateTime,

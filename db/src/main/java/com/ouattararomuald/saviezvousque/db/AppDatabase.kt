@@ -10,7 +10,7 @@ import android.arch.persistence.room.TypeConverters
   FeedCategory::class,
   FeedItem::class
 ], version = 2)
-abstract class AppDatabase : RoomDatabase() {
+internal abstract class AppDatabase : RoomDatabase() {
   abstract fun feedCategoryDao(): FeedCategoryDao
 
   abstract fun feedItemDao(): FeedItemDao

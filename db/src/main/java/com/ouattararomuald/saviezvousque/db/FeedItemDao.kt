@@ -7,7 +7,7 @@ import android.arch.persistence.room.Query
 import io.reactivex.Flowable
 
 @Dao
-interface FeedItemDao {
+internal interface FeedItemDao {
   @Query("SELECT * FROM FeedItem ORDER BY updatedOn, publishedOn DESC")
   fun getAll(): Flowable<List<FeedItem>>
 
