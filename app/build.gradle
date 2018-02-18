@@ -80,6 +80,8 @@ dependencies {
   implementation deps.retrofit.rxjavaCallAdapter
   implementation deps.retrofit.gsonConverter
 
+  implementation deps.threetenabp
+
   testImplementation deps.junit
 
   androidTestImplementation deps.android.test.espresso.runner

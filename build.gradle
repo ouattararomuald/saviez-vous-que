@@ -54,6 +54,7 @@ buildscript {
       'gsonConverter': "com.squareup.retrofit2:converter-gson:${versions.retrofit}"
     ],
     'gson': 'com.google.code.gson:gson:2.8.2',
+    'threetenabp': 'com.jakewharton.threetenabp:threetenabp:1.0.5',
     'truth': 'com.google.truth:truth:0.39',
   ]
 

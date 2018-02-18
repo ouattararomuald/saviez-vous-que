@@ -52,6 +52,8 @@ dependencies {
   api deps.android.arch.room.runtime
   kapt deps.android.arch.room.compiler
 
+  api deps.threetenabp
+
   testImplementation deps.junit
 
   androidTestImplementation deps.android.arch.coreTesting
