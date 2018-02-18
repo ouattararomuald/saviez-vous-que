@@ -43,7 +43,7 @@ android {
 
   buildTypes {
     def DATABASE_NAME_KEY = 'DATABASE_NAME'
-    def FEED_BASE_URL = '"http://saviezvousque.net"'
+    def FEED_BASE_URL = '"http://saviezvousque.net/wp-json/wp/v2/"'
     def FEED_BASE_URL_KEY = 'FEED_BASE_URL'
 
     debug {
@@ -59,11 +59,6 @@ android {
       buildConfigField 'String', FEED_BASE_URL_KEY, FEED_BASE_URL
     }
   }
-}
-
-configurations {
-  implementation.exclude group: 'stax'
-  implementation.exclude group: 'xpp3'
 }
 
 dependencies {
@@ -83,10 +78,7 @@ dependencies {
   kapt deps.android.arch.room.compiler
 
   implementation deps.retrofit.rxjavaCallAdapter
-  implementation(deps.retrofit.xmlConverter) {
-    exclude group: 'stax'
-    exclude group: 'xpp3'
-  }
+  implementation deps.retrofit.gsonConverter
 
   testImplementation deps.junit
 
