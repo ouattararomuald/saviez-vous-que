@@ -39,10 +39,7 @@ androidExtensions {
 dependencies {
   implementation deps.kotlin.stdlib.jdk8
 
-  api (deps.retrofit.xmlConverter) {
-    exclude group: 'stax'
-    exclude group: 'xpp3'
-  }
+  api deps.gson
 
   testImplementation deps.junit
   testImplementation deps.truth
