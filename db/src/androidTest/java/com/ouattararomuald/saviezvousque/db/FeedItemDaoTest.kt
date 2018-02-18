@@ -126,7 +126,7 @@ class FeedItemDaoTest {
    * @return a list containing the feeds inserted.
    */
   private fun insertFeedItems(quantity: Int = 1): List<FeedItem> {
-    val feedItems = TestUtil.generateFeedItems(quantity)
+    val feedItems = TestsUtil.generateFeedItems(quantity)
     feedItemDao.insert(feedItems)
     return feedItems
   }

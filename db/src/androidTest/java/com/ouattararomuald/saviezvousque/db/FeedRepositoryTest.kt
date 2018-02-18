@@ -47,11 +47,13 @@ class FeedRepositoryTest {
 
   @Test
   fun savePosts() {
-    val posts = TestUtil.generatePosts(quantity = 10)
+    val posts = TestsUtil.generatePosts(quantity = 10)
     feedRepository.savePosts(posts)
         .test()
         .assertNoErrors()
         .assertComplete()
+
+    val feedItems = posts.toFeedItems()
 
     feedItemDao.getAll()
         .test()
@@ -67,7 +69,7 @@ class FeedRepositoryTest {
 
   @Test
   fun saveCategories() {
-    val categories = TestUtil.generateCategories(quantity = 10)
+    val categories = TestsUtil.generateCategories(quantity = 10)
     feedRepository.saveCategories(categories)
         .test()
         .assertNoErrors()
