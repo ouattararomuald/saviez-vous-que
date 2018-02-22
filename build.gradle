@@ -54,6 +54,7 @@ buildscript {
       'rxjavaCallAdapter': "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}",
       'gsonConverter': "com.squareup.retrofit2:converter-gson:${versions.retrofit}"
     ],
+    'fresco': 'com.facebook.fresco:fresco:1.8.1',
     'gson': 'com.google.code.gson:gson:2.8.2',
     'threetenabp': 'com.jakewharton.threetenabp:threetenabp:1.0.5',
     'truth': 'com.google.truth:truth:0.39',
