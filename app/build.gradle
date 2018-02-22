@@ -74,6 +74,8 @@ dependencies {
   implementation deps.android.support.appcompatV7
   implementation deps.android.support.constraintLayout
 
+  implementation deps.fresco
+
   implementation deps.android.arch.room.rxjava
   implementation deps.android.arch.room.runtime
   kapt deps.android.arch.room.compiler
