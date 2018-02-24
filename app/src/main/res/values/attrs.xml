@@ -1,0 +1,6 @@
+<resources>
+  <declare-styleable name="PostView">
+    <attr name="postImageUrl" format="string"/>
+    <attr name="postTitle" format="string"/>
+  </declare-styleable>
+</resources>
