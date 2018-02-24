@@ -13,6 +13,7 @@ import com.ouattararomuald.saviezvousque.db.DbComponent
 import com.ouattararomuald.saviezvousque.downloaders.DownloaderComponent
 import com.ouattararomuald.saviezvousque.util.getDbComponent
 import com.ouattararomuald.saviezvousque.util.getDownloaderComponent
+import com.ouattararomuald.saviezvousque.util.toDrawerItem
 import javax.inject.Inject
 
 
@@ -36,6 +37,7 @@ class HomeActivity : AppCompatActivity() {
     drawer = DrawerBuilder().withActivity(this)
         .withToolbar(toolbar)
         .withHasStableIds(true)
+        .withSavedInstance(savedInstanceState)
         .build()
 
     dbComponent = getDbComponent()
@@ -74,11 +76,8 @@ class HomeActivity : AppCompatActivity() {
   private fun createDrawerItemsFromCategories(categories: List<Category>) {
     if (categories.isNotEmpty()) {
       drawer.drawerItems.clear()
-      categories.forEach { category ->
-        drawer.addItem(
-            PrimaryDrawerItem().withName(category.name).withIcon(R.drawable.ic_rss_feed)
-                .withIdentifier(category.id.toLong())
-        )
+      categories.forEach {
+        drawer.addItem(it.toDrawerItem())
       }
     }
   }
