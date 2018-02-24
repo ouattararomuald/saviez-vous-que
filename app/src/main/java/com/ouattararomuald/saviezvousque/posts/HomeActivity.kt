@@ -1,18 +1,30 @@
 package com.ouattararomuald.saviezvousque.posts
 
+import android.databinding.ObservableList
 import android.os.Bundle
-import android.support.design.widget.NavigationView
-import android.support.v4.view.GravityCompat
-import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.view.MenuItem
+import com.mikepenz.materialdrawer.Drawer
+import com.mikepenz.materialdrawer.DrawerBuilder
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
 import com.ouattararomuald.saviezvousque.R
+import com.ouattararomuald.saviezvousque.common.Category
+import com.ouattararomuald.saviezvousque.db.DbComponent
+import com.ouattararomuald.saviezvousque.downloaders.DownloaderComponent
+import com.ouattararomuald.saviezvousque.util.getDbComponent
+import com.ouattararomuald.saviezvousque.util.getDownloaderComponent
+import javax.inject.Inject
 
 
 class HomeActivity : AppCompatActivity() {
 
-  private lateinit var drawerLayout: DrawerLayout
+  @Inject
+  lateinit var viewModel: HomeViewModel
+
+  lateinit var dbComponent: DbComponent
+  lateinit var downloaderComponent: DownloaderComponent
+
+  private lateinit var drawer: Drawer
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -21,29 +33,58 @@ class HomeActivity : AppCompatActivity() {
     val toolbar = findViewById<Toolbar>(R.id.toolbar)
     setSupportActionBar(toolbar)
 
-    val actionbar = supportActionBar!!
-    actionbar.apply {
-      setDisplayHomeAsUpEnabled(true)
-      actionbar.setHomeAsUpIndicator(R.drawable.ic_menu)
-    }
+    drawer = DrawerBuilder().withActivity(this)
+        .withToolbar(toolbar)
+        .withHasStableIds(true)
+        .build()
 
-    drawerLayout = findViewById(R.id.drawer_layout)
+    dbComponent = getDbComponent()
+    downloaderComponent = getDownloaderComponent()
 
-    val navigationView = findViewById<NavigationView>(R.id.nav_view)
-    navigationView.setNavigationItemSelectedListener { menuItem ->
-      menuItem.isChecked = true
-      drawerLayout.closeDrawers()
-      true
+    DaggerHomeActivityInjectorComponent.builder()
+        .downloaderComponent(downloaderComponent)
+        .activity(this)
+        .build()
+        .inject(this)
+
+    viewModel.categories.addOnListChangedCallback(object : ObservableList.OnListChangedCallback<ObservableList<Category>>() {
+      override fun onChanged(sender: ObservableList<Category>?) {
+        createDrawerItemsFromCategories(viewModel.categories)
+      }
+
+      override fun onItemRangeRemoved(sender: ObservableList<Category>?, positionStart: Int, itemCount: Int) {
+        createDrawerItemsFromCategories(viewModel.categories)
+      }
+
+      override fun onItemRangeMoved(sender: ObservableList<Category>?, fromPosition: Int, toPosition: Int, itemCount: Int) {
+        createDrawerItemsFromCategories(viewModel.categories)
+      }
+
+      override fun onItemRangeInserted(sender: ObservableList<Category>?, positionStart: Int, itemCount: Int) {
+        createDrawerItemsFromCategories(viewModel.categories)
+      }
+
+      override fun onItemRangeChanged(sender: ObservableList<Category>?, positionStart: Int, itemCount: Int) {
+        createDrawerItemsFromCategories(viewModel.categories)
+      }
+
+    })
+  }
+
+  private fun createDrawerItemsFromCategories(categories: List<Category>) {
+    if (categories.isNotEmpty()) {
+      drawer.drawerItems.clear()
+      categories.forEach { category ->
+        drawer.addItem(
+            PrimaryDrawerItem().withName(category.name).withIcon(R.drawable.ic_rss_feed)
+                .withIdentifier(category.id.toLong())
+        )
+      }
     }
   }
 
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    when (item.itemId) {
-      android.R.id.home -> {
-        drawerLayout.openDrawer(GravityCompat.START)
-        return true
-      }
-    }
-    return super.onOptionsItemSelected(item)
+  override fun onResume() {
+    super.onResume()
+    viewModel.start()
   }
 }
