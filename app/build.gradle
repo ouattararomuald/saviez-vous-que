@@ -25,6 +25,8 @@ android {
 
     testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
 
+    vectorDrawables.useSupportLibrary true
+
     resConfigs 'fr'
   }
 
@@ -62,7 +64,7 @@ android {
 }
 
 dependencies {
-  implementation fileTree(dir: 'libs', include: ['*.jar'])
+  implementation fileTree(include: ['*.jar'], dir: 'libs')
   implementation deps.kotlin.stdlib.jdk8
   implementation project(':common')
   implementation project(':db')
@@ -72,6 +74,7 @@ dependencies {
   kapt deps.dagger.compiler
 
   implementation deps.android.support.appcompatV7
+  implementation deps.android.support.vectorDrawables
   implementation deps.android.support.constraintLayout
 
   implementation deps.fresco
@@ -89,6 +92,7 @@ dependencies {
 
   androidTestImplementation deps.android.test.espresso.runner
   androidTestImplementation deps.android.test.espresso.core
+  androidTestImplementation deps.truth
 }
 
 apply plugin: 'com.getkeepsafe.dexcount'
