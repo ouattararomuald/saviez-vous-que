@@ -74,6 +74,7 @@ dependencies {
   kapt deps.dagger.compiler
 
   implementation deps.android.support.appcompatV7
+  implementation deps.android.support.design
   implementation deps.android.support.vectorDrawables
   implementation deps.android.support.constraintLayout
 
