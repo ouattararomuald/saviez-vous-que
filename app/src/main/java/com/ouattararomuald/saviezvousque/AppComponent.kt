@@ -1,3 +1,0 @@
-package com.ouattararomuald.saviezvousque
-
-interface AppComponent

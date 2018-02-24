@@ -74,12 +74,25 @@ dependencies {
   kapt deps.dagger.compiler
 
   implementation deps.android.support.appcompatV7
-  implementation deps.android.support.design
-  implementation deps.android.support.vectorDrawables
   implementation deps.android.support.constraintLayout
+  implementation deps.android.support.design
+  implementation deps.android.support.recyclerView
+  implementation deps.android.support.supportAnnotations
+  implementation deps.android.support.vectorDrawables
+
+  implementation deps.android.support.databinding.library
+  kapt deps.android.support.databinding.compiler
+
+  implementation deps.android.arch.lifecycle.extensions
+  implementation deps.android.arch.lifecycle.viewModel
 
   implementation deps.fresco
 
+  implementation(deps.materialDrawer) {
+    transitive = true
+  }
+
+  implementation deps.rxAndroid
   implementation deps.android.arch.room.rxjava
   implementation deps.android.arch.room.runtime
   kapt deps.android.arch.room.compiler

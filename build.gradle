@@ -9,8 +9,10 @@ buildscript {
 
   ext.versions = [
     'androidPlugin': '3.2.0-alpha02',
-    'arch': '1.1.0-alpha1',
+    'arch': '1.1.0',
+    'arch_room': '1.1.0-alpha2',
     'dagger': '2.14.1',
+    'databinding': '3.2.0-alpha04',
     'kotlin': '1.2.21',
     'retrofit': '2.3.0',
     'supportLibray': '27.0.2',
@@ -19,11 +21,15 @@ buildscript {
   ext.deps = [
     'android': [
       'arch': [
+        'lifecycle': [
+          'extensions': "android.arch.lifecycle:extensions:${versions.arch}",
+          'viewModel': "android.arch.lifecycle:viewmodel:${versions.arch}",
+        ],
         'room': [
-          'rxjava': "android.arch.persistence.room:rxjava2:${versions.arch}",
-          'runtime': "android.arch.persistence.room:runtime:${versions.arch}",
-          'compiler': "android.arch.persistence.room:compiler:${versions.arch}",
-          'testHelper': "android.arch.persistence.room:testing:${versions.arch}"
+          'rxjava': "android.arch.persistence.room:rxjava2:${versions.arch_room}",
+          'runtime': "android.arch.persistence.room:runtime:${versions.arch_room}",
+          'compiler': "android.arch.persistence.room:compiler:${versions.arch_room}",
+          'testHelper': "android.arch.persistence.room:testing:${versions.arch_room}"
         ],
         'coreTesting': 'android.arch.core:core-testing:1.1.0'
       ],
@@ -32,7 +38,13 @@ buildscript {
         'appcompatV7': "com.android.support:appcompat-v7:${versions.supportLibray}",
         'constraintLayout': "com.android.support.constraint:constraint-layout:1.1.0-beta5",
         'design': "com.android.support:design:${versions.supportLibray}",
+        'recyclerView': "com.android.support:recyclerview-v7:${versions.supportLibray}",
+        'supportAnnotations': "com.android.support:support-annotations:${versions.supportLibray}",
         'vectorDrawables': "com.android.support:support-vector-drawable:${versions.supportLibray}",
+        'databinding': [
+          'compiler': "com.android.databinding:compiler:${versions.databinding}",
+          'library': "com.android.databinding:library:${versions.databinding}",
+        ],
       ],
       'test': [
         'espresso': [
@@ -58,6 +70,8 @@ buildscript {
     ],
     'fresco': 'com.facebook.fresco:fresco:1.8.1',
     'gson': 'com.google.code.gson:gson:2.8.2',
+    'materialDrawer': 'com.mikepenz:materialdrawer:6.0.6@aar',
+    'rxAndroid': 'io.reactivex.rxjava2:rxandroid:2.0.2',
     'threetenabp': 'com.jakewharton.threetenabp:threetenabp:1.0.5',
     'truth': 'com.google.truth:truth:0.39',
   ]
