@@ -6,7 +6,6 @@ import android.widget.LinearLayout
 import com.facebook.drawee.view.SimpleDraweeView
 import com.ouattararomuald.saviezvousque.R
 
-
 /** Displays a post. */
 class PostView : LinearLayout {
 

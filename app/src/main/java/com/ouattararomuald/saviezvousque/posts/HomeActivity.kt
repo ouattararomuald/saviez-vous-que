@@ -4,7 +4,6 @@ import android.databinding.ObservableList
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import com.mikepenz.materialdrawer.AccountHeader
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
@@ -18,15 +17,22 @@ import com.ouattararomuald.saviezvousque.util.getDownloaderComponent
 import com.ouattararomuald.saviezvousque.util.toDrawerItem
 import javax.inject.Inject
 
-
+/**
+ * Home Page.
+ *
+ * Displays the different categories and allow users to navigate between them.
+ */
 class HomeActivity : AppCompatActivity() {
 
-  @Inject
-  lateinit var viewModel: HomeViewModel
+  /** The [HomeViewModel] bound to this activity. */
+  @Inject lateinit var viewModel: HomeViewModel
 
-  lateinit var dbComponent: DbComponent
-  lateinit var downloaderComponent: DownloaderComponent
+  /** Dagger database component. */
+  private lateinit var dbComponent: DbComponent
+  /** Downloader component. */
+  private lateinit var downloaderComponent: DownloaderComponent
 
+  /** [Drawer] that displays the different categories as a list in the navigation drawer. */
   private lateinit var drawer: Drawer
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,24 +66,33 @@ class HomeActivity : AppCompatActivity() {
         .build()
         .inject(this)
 
-    viewModel.categories.addOnListChangedCallback(object : ObservableList.OnListChangedCallback<ObservableList<Category>>() {
+    viewModel.categories.addOnListChangedCallback(
+        object : ObservableList.OnListChangedCallback<ObservableList<Category>>() {
       override fun onChanged(sender: ObservableList<Category>?) {
         createDrawerItemsFromCategories(viewModel.categories)
       }
 
-      override fun onItemRangeRemoved(sender: ObservableList<Category>?, positionStart: Int, itemCount: Int) {
+      override fun onItemRangeRemoved(
+          sender: ObservableList<Category>?, positionStart: Int, itemCount: Int
+      ) {
         createDrawerItemsFromCategories(viewModel.categories)
       }
 
-      override fun onItemRangeMoved(sender: ObservableList<Category>?, fromPosition: Int, toPosition: Int, itemCount: Int) {
+      override fun onItemRangeMoved(
+          sender: ObservableList<Category>?, fromPosition: Int, toPosition: Int, itemCount: Int
+      ) {
         createDrawerItemsFromCategories(viewModel.categories)
       }
 
-      override fun onItemRangeInserted(sender: ObservableList<Category>?, positionStart: Int, itemCount: Int) {
+      override fun onItemRangeInserted(
+          sender: ObservableList<Category>?, positionStart: Int, itemCount: Int
+      ) {
         createDrawerItemsFromCategories(viewModel.categories)
       }
 
-      override fun onItemRangeChanged(sender: ObservableList<Category>?, positionStart: Int, itemCount: Int) {
+      override fun onItemRangeChanged(
+          sender: ObservableList<Category>?, positionStart: Int, itemCount: Int
+      ) {
         createDrawerItemsFromCategories(viewModel.categories)
       }
 
