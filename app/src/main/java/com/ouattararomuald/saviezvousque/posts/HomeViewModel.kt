@@ -10,7 +10,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-
 class HomeViewModel @Inject constructor(private val feedDownloader: FeedDownloader) : ViewModel() {
   /** Observable list of categories */
   val categories: ObservableList<Category> = ObservableArrayList()

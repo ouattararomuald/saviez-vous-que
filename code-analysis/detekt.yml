@@ -161,6 +161,15 @@ naming:
     variablePattern: '[a-z][A-Za-z0-9]*'
     privateVariablePattern: '(_)?[a-z][A-Za-z0-9]*'
 
+performance:
+  active: true
+  ForEachOnRange:
+    active: true
+  SpreadOperator:
+    active: true
+  UnnecessaryTemporaryInstantiation:
+    active: true
+
 potential-bugs:
   active: true
   DuplicateCaseInWhenExpression:
@@ -169,6 +178,8 @@ potential-bugs:
     active: true
   UnsafeCallOnNullableType:
     active: false
+  LateinitUsage:
+      active: false
 
 style:
   MaxLineLength:

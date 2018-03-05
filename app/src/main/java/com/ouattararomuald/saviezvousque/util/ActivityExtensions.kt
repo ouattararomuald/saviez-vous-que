@@ -9,4 +9,5 @@ internal fun Activity.getDbComponent(): DbComponent = getApp().dbComponent
 
 internal fun Activity.getDownloaderComponent(): DownloaderComponent = getApp().downloaderComponent
 
+@Suppress("UnsafeCast")
 internal fun Activity.getApp(): App = applicationContext as App
