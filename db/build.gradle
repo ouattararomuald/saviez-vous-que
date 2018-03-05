@@ -61,3 +61,6 @@ dependencies {
   androidTestImplementation deps.android.test.espresso.runner
   androidTestImplementation deps.android.test.espresso.core
 }
+repositories {
+  mavenCentral()
+}

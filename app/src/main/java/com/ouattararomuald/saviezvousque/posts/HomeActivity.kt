@@ -4,9 +4,11 @@ import android.databinding.ObservableList
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import com.mikepenz.materialdrawer.AccountHeader
+import com.mikepenz.materialdrawer.AccountHeaderBuilder
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.ouattararomuald.saviezvousque.R
 import com.ouattararomuald.saviezvousque.common.Category
 import com.ouattararomuald.saviezvousque.db.DbComponent
@@ -34,9 +36,18 @@ class HomeActivity : AppCompatActivity() {
     val toolbar = findViewById<Toolbar>(R.id.toolbar)
     setSupportActionBar(toolbar)
 
+    val header = AccountHeaderBuilder().withActivity(this)
+        .addProfiles(
+            ProfileDrawerItem().withName("Romuald OUATTARA")
+                .withEmail("Email@gmail.com")
+                .withIcon(R.drawable.ic_rss_feed)
+        )
+        .build()
+
     drawer = DrawerBuilder().withActivity(this)
         .withToolbar(toolbar)
         .withHasStableIds(true)
+        .withAccountHeader(header)
         .withSavedInstance(savedInstanceState)
         .build()
 

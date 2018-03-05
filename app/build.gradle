@@ -110,3 +110,6 @@ dependencies {
 }
 
 apply plugin: 'com.getkeepsafe.dexcount'
+repositories {
+  mavenCentral()
+}
