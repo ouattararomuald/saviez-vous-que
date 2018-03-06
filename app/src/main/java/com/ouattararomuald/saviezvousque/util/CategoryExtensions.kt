@@ -5,10 +5,8 @@ import com.ouattararomuald.saviezvousque.R
 import com.ouattararomuald.saviezvousque.common.Category
 
 internal fun Category.toDrawerItem(drawerTextColor: Int, drawerSelectedTextColor: Int)
-    : PrimaryDrawerItem {
-  return PrimaryDrawerItem().withIdentifier(id.toLong())
-      .withName(name)
-      .withTextColor(drawerTextColor)
-      .withSelectedTextColor(drawerSelectedTextColor)
-      .withIcon(R.drawable.ic_rss_feed)
-}
+    : PrimaryDrawerItem = PrimaryDrawerItem().withIdentifier(id.toLong())
+    .withName(name)
+    .withTextColor(drawerTextColor)
+    .withSelectedTextColor(drawerSelectedTextColor)
+    .withIcon(R.drawable.ic_rss_feed)
