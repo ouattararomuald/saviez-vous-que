@@ -5,6 +5,7 @@ import android.databinding.ObservableArrayList
 import android.databinding.ObservableList
 import com.ouattararomuald.saviezvousque.common.Category
 import com.ouattararomuald.saviezvousque.common.Post
+import com.ouattararomuald.saviezvousque.db.FeedRepository
 import com.ouattararomuald.saviezvousque.downloaders.FeedDownloader
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -14,6 +15,7 @@ import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(
     private val feedDownloader: FeedDownloader,
+    private val feedRepository: FeedRepository,
     private val viewContract: ViewContract
 ) : ViewModel() {
 
@@ -24,7 +26,7 @@ class HomeViewModel @Inject constructor(
   val displayedPosts: ObservableList<Post> = ObservableArrayList()
 
   /** Observable list of displayedPosts grouped by category. */
-  val postsByCategory: MutableMap<Int, List<Post>> = mutableMapOf()
+  private val postsByCategory: MutableMap<Int, List<Post>> = mutableMapOf()
 
   private val disposable = CompositeDisposable()
 

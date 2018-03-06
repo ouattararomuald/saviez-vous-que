@@ -1,6 +1,7 @@
 package com.ouattararomuald.saviezvousque.posts;
 
 import android.arch.lifecycle.ViewModelProviders;
+import com.ouattararomuald.saviezvousque.db.FeedRepository;
 import com.ouattararomuald.saviezvousque.downloaders.FeedDownloader;
 import dagger.Module;
 import dagger.Provides;
@@ -12,9 +13,9 @@ abstract class HomeModule {
   @Singleton
   @Provides
   static ViewModelFactory viewModelFactory(
-      FeedDownloader feedDownloader, ViewContract viewContract
+      FeedDownloader feedDownloader, FeedRepository feedRepository, ViewContract viewContract
   ) {
-    return new ViewModelFactory(feedDownloader, viewContract);
+    return new ViewModelFactory(feedDownloader, feedRepository, viewContract);
   }
 
   @Singleton
