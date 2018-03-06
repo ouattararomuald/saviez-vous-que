@@ -16,12 +16,18 @@ data class Post(
 
     val content: Content
 ) {
+  @Suppress("ConvertTwoComparisonsToRangeCheck")
   fun getImageUrl(): String? {
-    val tokenizer = StringTokenizer(content.value, "\"")
-    if (tokenizer.countTokens() > 1) {
-      tokenizer.nextToken()
-      return tokenizer.nextToken()
+    val src = "src=\""
+    val imageSrcIndex = content.value.indexOf(src)
+    val imageLinkStartIndex = imageSrcIndex + src.length
+    if (imageLinkStartIndex > 0) {
+      val imageLinkEndIndex = content.value.indexOf("\"", imageLinkStartIndex)
+      if (imageLinkStartIndex > 0 && imageLinkEndIndex > imageLinkStartIndex) {
+        return content.value.substring(imageLinkStartIndex, imageLinkEndIndex)
+      }
     }
+
     return null
   }
 }
