@@ -9,6 +9,12 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       app:viewAspectRatio="1"
+      app:failureImage="@drawable/ic_broken_image"
+      app:failureImageScaleType="center"
+      app:retryImage="@drawable/ic_file_download"
+      app:retryImageScaleType="center"
+      app:placeholderImage="@drawable/ic_image"
+      app:placeholderImageScaleType="center"
   />
 
   <android.support.v7.widget.AppCompatImageButton
