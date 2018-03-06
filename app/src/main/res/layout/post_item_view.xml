@@ -9,15 +9,12 @@
     <variable name="post" type="Post"/>
   </data>
 
-  <android.support.constraint.ConstraintLayout
+  <com.ouattararomuald.saviezvousque.customviews.PostView
+      android:background="@drawable/post_item_background"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-  >
-    <com.ouattararomuald.saviezvousque.customviews.PostView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:postTitle="@{post.title.value}"
-        app:postImageUrl="@{post.getImageUrl()}"
-    />
-  </android.support.constraint.ConstraintLayout>
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="@dimen/post_margin_button"
+      app:postTitle="@{post.title.value}"
+      app:postImageUrl="@{post.getImageUrl()}"
+  />
 </layout>
