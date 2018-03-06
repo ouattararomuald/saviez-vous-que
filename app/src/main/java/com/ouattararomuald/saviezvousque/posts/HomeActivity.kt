@@ -20,7 +20,6 @@ import com.ouattararomuald.saviezvousque.util.getDownloaderComponent
 import com.ouattararomuald.saviezvousque.util.toDrawerItem
 import javax.inject.Inject
 
-
 /**
  * Home Page.
  *
@@ -118,7 +117,9 @@ class HomeActivity : AppCompatActivity(), ViewContract {
     if (categories.isNotEmpty()) {
       drawer.drawerItems.clear()
       val drawerTextColor = ContextCompat.getColor(this, R.color.drawer_item_text_color)
-      val drawerSelectedTextColor = ContextCompat.getColor(this, R.color.drawer_item_selected_text_color)
+      val drawerSelectedTextColor = ContextCompat.getColor(
+          this, R.color.drawer_item_selected_text_color
+      )
       categories.forEach {
         drawer.addItem(it.toDrawerItem(drawerTextColor, drawerSelectedTextColor))
       }
@@ -126,7 +127,7 @@ class HomeActivity : AppCompatActivity(), ViewContract {
   }
 
   override fun onPostsDownloaded(posts: List<Post>) {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    TODO("not implemented")
   }
 
   override fun notifyDatasetChanged() {
