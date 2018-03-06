@@ -2,6 +2,7 @@ package com.ouattararomuald.saviezvousque.posts
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import com.mikepenz.materialdrawer.AccountHeaderBuilder
@@ -14,6 +15,7 @@ import com.ouattararomuald.saviezvousque.common.Post
 import com.ouattararomuald.saviezvousque.databinding.HomeActivityBinding
 import com.ouattararomuald.saviezvousque.db.DbComponent
 import com.ouattararomuald.saviezvousque.downloaders.DownloaderComponent
+import com.ouattararomuald.saviezvousque.util.getApp
 import com.ouattararomuald.saviezvousque.util.getDbComponent
 import com.ouattararomuald.saviezvousque.util.getDownloaderComponent
 import com.ouattararomuald.saviezvousque.util.toDrawerItem
@@ -45,7 +47,7 @@ class HomeActivity : AppCompatActivity(), ViewContract {
   /** Handles click on item in the [drawer]. */
   private val drawerItemClickHandler = Drawer.OnDrawerItemClickListener { _, _, drawerItem ->
     viewModel.onCategorySelected(drawerItem.identifier.toInt())
-    true
+    false
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,10 +66,11 @@ class HomeActivity : AppCompatActivity(), ViewContract {
         .build()
 
     drawer = DrawerBuilder().withActivity(this)
-        .withToolbar(toolbar!!)
+        .withToolbar(toolbar)
         .withHasStableIds(true)
         .withAccountHeader(header)
         .withSavedInstance(savedInstanceState)
+        .withCloseOnClick(true)
         .build()
 
     dbComponent = getDbComponent()
@@ -114,8 +117,10 @@ class HomeActivity : AppCompatActivity(), ViewContract {
   private fun createDrawerItemsFromCategories(categories: List<Category>) {
     if (categories.isNotEmpty()) {
       drawer.drawerItems.clear()
+      val drawerTextColor = ContextCompat.getColor(this, R.color.drawer_item_text_color)
+      val drawerSelectedTextColor = ContextCompat.getColor(this, R.color.drawer_item_selected_text_color)
       categories.forEach {
-        drawer.addItem(it.toDrawerItem())
+        drawer.addItem(it.toDrawerItem(drawerTextColor, drawerSelectedTextColor))
       }
     }
   }
