@@ -11,11 +11,12 @@ class PostTest {
         id = 1,
         publicationDateUtc = "2018-02-17T20:20:20",
         lastUpdateUtc = "2018-02-17T20:20:20",
-        content = Content(value = "<p><img src=\\\"https:\\/\\/i.pinimg.com\\/564x\\/51\\/06\\/51\\/510651569a57a6f53579ae68019d28b3.jpg\\\" width=\\\"564\\\" height=\\\"564\\\" class=\\\"alignnone size-medium\\\" \\/><\\/p>\\n")
+        title = Title(value = "title"),
+        content = Content(value = "<p><img src=\"https:\\/\\/i.pinimg.com\\/564x\\/51\\/06\\/51\\/510651569a57a6f53579ae68019d28b3.jpg\" width=\"564\" height=\"564\" class=\"alignnone size-medium\" /></p>\n")
     )
 
     assertThat(post.getImageUrl()).isNotNull()
-    assertThat(post.getImageUrl()).isEqualTo("https:\\/\\/i.pinimg.com\\/564x\\/51\\/06\\/51\\/510651569a57a6f53579ae68019d28b3.jpg\\")
+    assertThat(post.getImageUrl()).isEqualTo("https:\\/\\/i.pinimg.com\\/564x\\/51\\/06\\/51\\/510651569a57a6f53579ae68019d28b3.jpg")
   }
 
   @Test
@@ -24,6 +25,7 @@ class PostTest {
         id = 1,
         publicationDateUtc = "2018-02-17T20:20:20",
         lastUpdateUtc = "2018-02-17T20:20:20",
+        title = Title(value = "title"),
         content = Content(value = "<p>")
     )
 
