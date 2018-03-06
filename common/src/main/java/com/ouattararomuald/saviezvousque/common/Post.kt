@@ -12,6 +12,8 @@ data class Post(
     @SerializedName(value = "modified_gmt")
     val lastUpdateUtc: String,
 
+    val title: Title,
+
     val content: Content
 ) {
   fun getImageUrl(): String? {
