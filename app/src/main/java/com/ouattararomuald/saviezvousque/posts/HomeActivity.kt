@@ -15,7 +15,6 @@ import com.ouattararomuald.saviezvousque.common.Post
 import com.ouattararomuald.saviezvousque.databinding.HomeActivityBinding
 import com.ouattararomuald.saviezvousque.db.DbComponent
 import com.ouattararomuald.saviezvousque.downloaders.DownloaderComponent
-import com.ouattararomuald.saviezvousque.util.getApp
 import com.ouattararomuald.saviezvousque.util.getDbComponent
 import com.ouattararomuald.saviezvousque.util.getDownloaderComponent
 import com.ouattararomuald.saviezvousque.util.toDrawerItem
@@ -77,6 +76,7 @@ class HomeActivity : AppCompatActivity(), ViewContract {
     downloaderComponent = getDownloaderComponent()
 
     DaggerHomeActivityInjectorComponent.builder()
+        .databaseComponent(dbComponent)
         .downloaderComponent(downloaderComponent)
         .activity(this)
         .viewContract(this)

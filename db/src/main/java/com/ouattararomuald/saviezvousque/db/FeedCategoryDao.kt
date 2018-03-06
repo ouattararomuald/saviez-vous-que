@@ -11,7 +11,7 @@ interface FeedCategoryDao {
   @Query("SELECT * FROM FeedCategory ORDER BY name ASC")
   fun getAll(): Flowable<List<FeedCategory>>
 
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  @Insert(onConflict = OnConflictStrategy.IGNORE)
   fun insert(feedCategories: List<FeedCategory>)
 
   @Query("DELETE FROM FeedCategory")

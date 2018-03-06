@@ -11,7 +11,10 @@ interface FeedItemDao {
   @Query("SELECT * FROM FeedItem ORDER BY updatedOn, publishedOn DESC")
   fun getAll(): Flowable<List<FeedItem>>
 
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  @Query("SELECT * FROM FeedItem WHERE categoryId = :categoryId ORDER BY updatedOn, publishedOn DESC")
+  fun getAllByCategory(categoryId: Int): Flowable<List<FeedItem>>
+
+  @Insert(onConflict = OnConflictStrategy.IGNORE)
   fun insert(feedItems: List<FeedItem>)
 
   @Query("DELETE FROM FeedItem")

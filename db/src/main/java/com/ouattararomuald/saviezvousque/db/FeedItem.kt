@@ -8,14 +8,16 @@ import org.threeten.bp.LocalDateTime
 
 
 @Entity(indices = [
-  Index(value = ["imageUrl"], unique = true),
+  Index(value = ["imageUrl", "categoryId"], unique = true),
   Index(value = ["publishedOn"]),
   Index(value = ["updatedOn"])
 ])
 data class FeedItem constructor(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey val id: Int,
+    @ColumnInfo val categoryId: Int,
     @ColumnInfo val imageUrl: String?,
     @ColumnInfo val publishedOn: LocalDateTime,
     @ColumnInfo val updatedOn: LocalDateTime,
+    @ColumnInfo val title: String,
     @ColumnInfo val content: String
 )
