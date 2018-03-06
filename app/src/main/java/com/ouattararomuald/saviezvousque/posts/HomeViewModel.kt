@@ -4,17 +4,33 @@ import android.arch.lifecycle.ViewModel
 import android.databinding.ObservableArrayList
 import android.databinding.ObservableList
 import com.ouattararomuald.saviezvousque.common.Category
+import com.ouattararomuald.saviezvousque.common.Post
 import com.ouattararomuald.saviezvousque.downloaders.FeedDownloader
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class HomeViewModel @Inject constructor(private val feedDownloader: FeedDownloader) : ViewModel() {
+
+class HomeViewModel @Inject constructor(
+    private val feedDownloader: FeedDownloader,
+    private val viewContract: ViewContract
+) : ViewModel() {
+
   /** Observable list of categories */
-  val categories: ObservableList<Category> = ObservableArrayList()
+  private val categories: ObservableList<Category> = ObservableArrayList()
+
+  /** Observable list of displayedPosts */
+  val displayedPosts: ObservableList<Post> = ObservableArrayList()
+
+  /** Observable list of displayedPosts grouped by category. */
+  val postsByCategory: MutableMap<Int, List<Post>> = mutableMapOf()
 
   private val disposable = CompositeDisposable()
+
+  fun onResume() {
+    downloadCategories()
+  }
 
   private fun downloadCategories() {
     disposable.add(
@@ -24,15 +40,35 @@ class HomeViewModel @Inject constructor(private val feedDownloader: FeedDownload
             .subscribe {
               categories.clear()
               categories.addAll(it)
+              viewContract.onCategoriesDownloaded(it)
+              displayedPosts.clear()
+              downloadPosts()
             }
     )
   }
 
-  fun start() {
-    downloadCategories()
+  private fun downloadPosts() {
+    categories.forEach { category ->
+      disposable.add(
+          feedDownloader.getPostsByCategory(category.id)
+              .observeOn(AndroidSchedulers.mainThread())
+              .subscribeOn(Schedulers.io())
+              .subscribe { posts ->
+                postsByCategory[category.id] = posts
+              }
+      )
+    }
   }
 
-  fun stop() {
+  fun onPause() {
     disposable.clear()
+  }
+
+  fun onCategorySelected(categoryId: Int) {
+    if (postsByCategory.contains(categoryId)) {
+      displayedPosts.clear()
+      displayedPosts.addAll(postsByCategory[categoryId]!!)
+      viewContract.notifyDatasetChanged()
+    }
   }
 }

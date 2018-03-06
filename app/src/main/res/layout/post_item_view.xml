@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+>
+  <data>
+    <import type="com.ouattararomuald.saviezvousque.common.Post"/>
+
+    <variable name="post" type="Post"/>
+  </data>
+
+  <android.support.constraint.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+  >
+    <com.ouattararomuald.saviezvousque.customviews.PostView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:postTitle="@{post.title.value}"
+        app:postImageUrl="@{post.getImageUrl()}"
+    />
+  </android.support.constraint.ConstraintLayout>
+</layout>

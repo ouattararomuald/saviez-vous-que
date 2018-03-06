@@ -5,14 +5,16 @@ import android.util.AttributeSet
 import android.widget.LinearLayout
 import com.facebook.drawee.view.SimpleDraweeView
 import com.ouattararomuald.saviezvousque.R
+import com.ouattararomuald.saviezvousque.db.FeedItem
 
-/** Displays a post. */
+/** Displays a *single* [FeedItem]. */
 class PostView : LinearLayout {
 
   private lateinit var imageView: SimpleDraweeView
 
   private var imageUrl: String = ""
 
+  /** URL of the post's image. */
   var postImageUrl: String
     get() = imageUrl
     set(value) {
@@ -20,6 +22,7 @@ class PostView : LinearLayout {
       imageView.setImageURI(imageUrl)
     }
 
+  /** Title of the post. */
   var postTitle: String = ""
 
   constructor(context: Context) : this(context, null)
@@ -40,8 +43,13 @@ class PostView : LinearLayout {
     // Load attributes
     val a = context.obtainStyledAttributes(attrs, R.styleable.PostView, defStyle, 0)
 
-    postImageUrl = a.getString(R.styleable.PostView_postImageUrl)
-    postTitle = a.getString(R.styleable.PostView_postTitle)
+    if (a.hasValue(R.styleable.PostView_postImageUrl)) {
+      postImageUrl = a.getString(R.styleable.PostView_postImageUrl)
+    }
+
+    if (a.hasValue(R.styleable.PostView_postImageUrl)) {
+      postTitle = a.getString(R.styleable.PostView_postTitle)
+    }
 
     a.recycle()
   }
