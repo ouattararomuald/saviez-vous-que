@@ -4,7 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.ouattararomuald.saviezvousque.common.Category
 import com.ouattararomuald.saviezvousque.common.Post
-import io.reactivex.Flowable
+import io.reactivex.Single
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -113,15 +113,15 @@ class FeedDownloaderTest {
     private val postFile: File = TestsUtil.loadFileFromResources(TestsUtil.POSTS_JSON_FILE)
     private val categoriesFile: File = TestsUtil.loadFileFromResources(TestsUtil.CATEGORIES_JSON_FILE)
 
-    override fun getPosts(): Flowable<List<Post>> {
+    override fun getPosts(): Single<List<Post>> {
       return delegate.returningResponse(generatePosts()).getPosts()
     }
 
-    override fun getPostByPage(page: Int): Flowable<List<Post>> {
+    override fun getPostByPage(page: Int): Single<List<Post>> {
       return delegate.returningResponse(generatePosts()).getPostByPage(page)
     }
 
-    override fun getCategories(): Flowable<List<Category>> {
+    override fun getCategories(): Single<List<Category>> {
       val categoriesListType = object : TypeToken<List<Category>>() {
       }.type
       val categories: List<Category> = gson.fromJson(categoriesFile.toText(), categoriesListType)
@@ -129,7 +129,7 @@ class FeedDownloaderTest {
       return delegate.returningResponse(categories).getCategories()
     }
 
-    override fun getPostsByCategory(categoryId: Int): Flowable<List<Post>> {
+    override fun getPostsByCategory(categoryId: Int): Single<List<Post>> {
       return delegate.returningResponse(generatePosts()).getPostsByCategory(categoryId)
     }
 
