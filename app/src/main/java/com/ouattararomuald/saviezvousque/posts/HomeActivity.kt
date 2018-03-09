@@ -111,6 +111,11 @@ class HomeActivity : AppCompatActivity(), ViewContract {
 
   override fun onCategoriesDownloaded(categories: List<Category>) {
     createDrawerItemsFromCategories(categories)
+
+    if (drawer.drawerItems.isNotEmpty()) {
+      drawer.drawerItems[0].withSetSelected(true)
+      viewModel.onCategorySelected(drawer.drawerItems[0].identifier.toInt())
+    }
   }
 
   private fun createDrawerItemsFromCategories(categories: List<Category>) {

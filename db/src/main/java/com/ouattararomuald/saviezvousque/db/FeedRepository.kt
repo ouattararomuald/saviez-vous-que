@@ -33,7 +33,7 @@ class FeedRepository @Inject constructor(
         }
   }
 
-  fun getAllFeedItemByCategory(categoryId: Int): Flowable<List<Post>> {
+  fun getAllPostsByCategory(categoryId: Int): Flowable<List<Post>> {
     return feedItemDao.getAllByCategory(categoryId)
         .map { feedItems ->
           return@map feedItems.toPosts()
