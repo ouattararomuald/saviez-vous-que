@@ -1,7 +1,9 @@
 package com.ouattararomuald.saviezvousque
 
 import android.app.Application
+import android.os.Build
 import com.facebook.drawee.backends.pipeline.Fresco
+import com.facebook.stetho.Stetho
 import com.ouattararomuald.saviezvousque.db.DaggerDbComponent
 import com.ouattararomuald.saviezvousque.db.DbComponent
 import com.ouattararomuald.saviezvousque.downloaders.DaggerDownloaderComponent
@@ -20,6 +22,10 @@ class App : Application() {
   override fun onCreate() {
     super.onCreate()
     Fresco.initialize(this)
+
+    if (BuildConfig.DEBUG) {
+      Stetho.initializeWithDefaults(this)
+    }
 
     dbComponent = DaggerDbComponent.builder()
         .appContext(this)
