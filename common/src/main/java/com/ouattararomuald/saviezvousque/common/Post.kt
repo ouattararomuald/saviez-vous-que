@@ -1,7 +1,6 @@
 package com.ouattararomuald.saviezvousque.common
 
 import com.google.gson.annotations.SerializedName
-import java.util.*
 
 data class Post(
     val id: Int,
