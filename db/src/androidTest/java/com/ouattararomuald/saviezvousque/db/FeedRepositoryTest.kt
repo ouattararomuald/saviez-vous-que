@@ -48,23 +48,21 @@ class FeedRepositoryTest {
   @Test
   fun savePosts() {
     val posts = TestsUtil.generatePosts(quantity = 10)
-    feedRepository.savePosts(posts)
+    feedRepository.savePosts(posts, categoryId = 1)
         .test()
         .assertNoErrors()
         .assertComplete()
 
-    val feedItems = posts.toFeedItems()
+    val feedItems = posts.toFeedItems(1)
+        .sortedByDescending { it.updatedOn }
+        .sortedByDescending { it.publishedOn }
 
     feedItemDao.getAll()
         .test()
         .assertNoErrors()
         .assertNotComplete()
         .assertValueCount(1)
-        .assertValue(
-            posts.toFeedItems()
-                .sortedByDescending { it.updatedOn }
-                .sortedByDescending { it.publishedOn }
-        )
+        .assertValue(feedItems)
   }
 
   @Test

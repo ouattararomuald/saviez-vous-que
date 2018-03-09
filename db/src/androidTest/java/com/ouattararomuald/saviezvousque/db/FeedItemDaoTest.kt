@@ -107,9 +107,11 @@ class FeedItemDaoTest {
 
   private fun createFeedItem(id: Int = 1): FeedItem = FeedItem(
       id,
+      id,
       "htt://fake-url-$id.jpeg",
       LocalDateTime.now(),
       LocalDateTime.now(),
+      "title",
       "content"
   )
 
