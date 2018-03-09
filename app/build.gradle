@@ -92,6 +92,8 @@ dependencies {
 
   implementation deps.fresco
 
+  implementation deps.stetho
+
   implementation(deps.materialDrawer) {
     transitive = true
   }

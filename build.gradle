@@ -73,6 +73,7 @@ buildscript {
     'gson': 'com.google.code.gson:gson:2.8.2',
     'materialDrawer': 'com.mikepenz:materialdrawer:6.0.6@aar',
     'rxAndroid': 'io.reactivex.rxjava2:rxandroid:2.0.2',
+    'stetho': 'com.facebook.stetho:stetho:1.5.0',
     'threetenabp': 'com.jakewharton.threetenabp:threetenabp:1.0.5',
     'truth': 'com.google.truth:truth:0.39',
   ]
