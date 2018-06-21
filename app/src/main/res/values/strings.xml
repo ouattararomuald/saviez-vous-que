@@ -1,4 +1,8 @@
 <resources>
   <string name="app_name">Saviez Vous Que</string>
+
+  <string name="navigation_drawer_open">Open navigation drawer</string>
+  <string name="navigation_drawer_close">Close navigation drawer</string>
+
   <string name="title_home_activity">@string/app_name</string>
 </resources>

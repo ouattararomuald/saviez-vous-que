@@ -2,13 +2,13 @@ package com.ouattararomuald.saviezvousque.posts
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
+import android.support.design.widget.NavigationView
+import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import com.mikepenz.materialdrawer.AccountHeaderBuilder
+import android.support.v7.widget.RecyclerView
+import android.view.MenuItem
 import com.mikepenz.materialdrawer.Drawer
-import com.mikepenz.materialdrawer.DrawerBuilder
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.ouattararomuald.saviezvousque.R
 import com.ouattararomuald.saviezvousque.common.Category
 import com.ouattararomuald.saviezvousque.common.Post
@@ -17,7 +17,9 @@ import com.ouattararomuald.saviezvousque.db.DbComponent
 import com.ouattararomuald.saviezvousque.downloaders.DownloaderComponent
 import com.ouattararomuald.saviezvousque.util.getDbComponent
 import com.ouattararomuald.saviezvousque.util.getDownloaderComponent
-import com.ouattararomuald.saviezvousque.util.toDrawerItem
+import kotlinx.android.synthetic.main.home_activity.nav_view
+import kotlinx.android.synthetic.main.home_app_bar.toolbar
+import kotlinx.android.synthetic.main.home_content.posts_recycler_view
 import javax.inject.Inject
 
 /**
@@ -25,7 +27,8 @@ import javax.inject.Inject
  *
  * Displays the different categories and allow users to navigate between them.
  */
-class HomeActivity : AppCompatActivity(), ViewContract {
+class HomeActivity : AppCompatActivity(), ViewContract,
+    NavigationView.OnNavigationItemSelectedListener {
 
   /** The [HomeViewModel] bound to this activity. */
   @Inject
@@ -40,7 +43,10 @@ class HomeActivity : AppCompatActivity(), ViewContract {
   private lateinit var downloaderComponent: DownloaderComponent
 
   /** [Drawer] that displays the different categories as a list in the navigation drawer. */
-  private lateinit var drawer: Drawer
+  // private lateinit var drawer: Drawer
+
+  private lateinit var postsRecyclerView: RecyclerView
+  private lateinit var navigationView: NavigationView
 
   /** Handles click on item in the [drawer]. */
   private val drawerItemClickHandler = Drawer.OnDrawerItemClickListener { _, _, drawerItem ->
@@ -52,24 +58,20 @@ class HomeActivity : AppCompatActivity(), ViewContract {
     super.onCreate(savedInstanceState)
     homeActivityBinding = DataBindingUtil.setContentView(this, R.layout.home_activity)
 
-    val toolbar = homeActivityBinding.toolbar
     setSupportActionBar(toolbar)
 
-    val header = AccountHeaderBuilder().withActivity(this)
-        .addProfiles(
-            ProfileDrawerItem().withName("Romuald OUATTARA")
-                .withEmail("Email@gmail.com")
-                .withIcon(R.drawable.ic_rss_feed)
-        )
-        .build()
+    val toggle = ActionBarDrawerToggle(
+        this,
+        homeActivityBinding.drawerLayout,
+        toolbar,
+        R.string.navigation_drawer_open,
+        R.string.navigation_drawer_close
+    )
+    homeActivityBinding.drawerLayout.addDrawerListener(toggle)
+    toggle.syncState()
 
-    drawer = DrawerBuilder().withActivity(this)
-        .withToolbar(toolbar)
-        .withHasStableIds(true)
-        .withAccountHeader(header)
-        .withSavedInstance(savedInstanceState)
-        .withCloseOnClick(true)
-        .build()
+    navigationView = nav_view
+    postsRecyclerView = posts_recycler_view
 
     dbComponent = getDbComponent()
     downloaderComponent = getDownloaderComponent()
@@ -82,17 +84,15 @@ class HomeActivity : AppCompatActivity(), ViewContract {
         .build()
         .inject(this)
 
-    drawer.onDrawerItemClickListener = drawerItemClickHandler
-
     initializeBinding()
     configureRecyclerView()
   }
 
   private fun configureRecyclerView() {
     feedAdapter = FeedAdapter(viewModel.displayedPosts)
-    homeActivityBinding.postsRecyclerView.layoutManager = LinearLayoutManager(this)
-    homeActivityBinding.postsRecyclerView.setHasFixedSize(true)
-    homeActivityBinding.postsRecyclerView.adapter = feedAdapter
+    postsRecyclerView.layoutManager = LinearLayoutManager(this)
+    postsRecyclerView.setHasFixedSize(true)
+    postsRecyclerView.adapter = feedAdapter
   }
 
   private fun initializeBinding() {
@@ -109,30 +109,30 @@ class HomeActivity : AppCompatActivity(), ViewContract {
     viewModel.onPause()
   }
 
+  override fun onNavigationItemSelected(item: MenuItem): Boolean {
+    return false
+  }
+
   override fun onCategoriesDownloaded(categories: List<Category>) {
     createDrawerItemsFromCategories(categories)
 
-    if (drawer.drawerItems.isNotEmpty()) {
+    /*if (drawer.drawerItems.isNotEmpty()) {
       drawer.drawerItems[0].withSetSelected(true)
       viewModel.onCategorySelected(drawer.drawerItems[0].identifier.toInt())
-    }
+    }*/
   }
 
   private fun createDrawerItemsFromCategories(categories: List<Category>) {
     if (categories.isNotEmpty()) {
-      drawer.drawerItems.clear()
-      val drawerTextColor = ContextCompat.getColor(this, R.color.drawer_item_text_color)
-      val drawerSelectedTextColor = ContextCompat.getColor(
-          this, R.color.drawer_item_selected_text_color
-      )
+      val menu = navigationView.menu
       categories.forEach {
-        drawer.addItem(it.toDrawerItem(drawerTextColor, drawerSelectedTextColor))
+        menu.add(it.name)
       }
     }
   }
 
   override fun onPostsDownloaded(posts: List<Post>) {
-    TODO("not implemented")
+    //feedAdapter.
   }
 
   override fun notifyDatasetChanged() {
