@@ -2,6 +2,7 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
 >
   <data>
     <import type="com.ouattararomuald.saviezvousque.posts.HomeViewModel"/>
@@ -9,33 +10,27 @@
     <variable name="viewModel" type="HomeViewModel"/>
   </data>
 
-  <LinearLayout
+  <android.support.v4.widget.DrawerLayout
       android:id="@+id/drawer_layout"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:fitsSystemWindows="true"
-      android:orientation="vertical"
+      tools:openDrawer="start"
   >
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:popupTheme="@style/AppTheme.PopupOverlay"
-    />
-
-    <FrameLayout
-        android:id="@+id/content_frame"
+    <include
+        layout="@layout/home_app_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/transparent"
-    >
-      <android.support.v7.widget.RecyclerView
-          android:id="@+id/posts_recycler_view"
-          android:background="#F2F2F2"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-      />
-    </FrameLayout>
-  </LinearLayout>
+    />
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/drawer_menu"
+    />
+  </android.support.v4.widget.DrawerLayout>
 </layout>
