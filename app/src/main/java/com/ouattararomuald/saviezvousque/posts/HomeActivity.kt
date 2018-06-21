@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.Menu
 import android.view.MenuItem
 import com.mikepenz.materialdrawer.Drawer
 import com.ouattararomuald.saviezvousque.R
@@ -73,6 +74,8 @@ class HomeActivity : AppCompatActivity(), ViewContract,
     navigationView = nav_view
     postsRecyclerView = posts_recycler_view
 
+    navigationView.setNavigationItemSelectedListener(this)
+
     dbComponent = getDbComponent()
     downloaderComponent = getDownloaderComponent()
 
@@ -110,7 +113,8 @@ class HomeActivity : AppCompatActivity(), ViewContract,
   }
 
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
-    return false
+    viewModel.onCategorySelected(item.itemId)
+    return true
   }
 
   override fun onCategoriesDownloaded(categories: List<Category>) {
@@ -126,7 +130,7 @@ class HomeActivity : AppCompatActivity(), ViewContract,
     if (categories.isNotEmpty()) {
       val menu = navigationView.menu
       categories.forEach {
-        menu.add(it.name)
+        menu.add(R.id.main_group, it.id, Menu.NONE, it.name)
       }
     }
   }
