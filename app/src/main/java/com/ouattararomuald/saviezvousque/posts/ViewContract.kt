@@ -3,7 +3,7 @@ package com.ouattararomuald.saviezvousque.posts
 import com.ouattararomuald.saviezvousque.common.Category
 import com.ouattararomuald.saviezvousque.common.Post
 
-internal interface ViewContract {
+interface ViewContract {
 
   fun onCategoriesDownloaded(categories: List<Category>)
 
