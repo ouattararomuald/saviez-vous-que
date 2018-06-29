@@ -84,7 +84,9 @@ class HomeActivity : AppCompatActivity(), ViewContract,
 
   private fun configureRecyclerView() {
     feedAdapter = FeedAdapter(viewModel.displayedPosts)
-    postsRecyclerView.layoutManager = LinearLayoutManager(this)
+    postsRecyclerView.layoutManager = LinearLayoutManager(this).apply {
+      reverseLayout = true
+    }
     postsRecyclerView.setHasFixedSize(true)
     postsRecyclerView.adapter = feedAdapter
   }
