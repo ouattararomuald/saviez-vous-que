@@ -13,9 +13,9 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(
-    private val feedDownloader: FeedDownloader,
-    private val feedRepository: FeedRepository,
-    private val viewContract: ViewContract
+  private val feedDownloader: FeedDownloader,
+  private val feedRepository: FeedRepository,
+  private val viewContract: ViewContract
 ) : ViewModel() {
 
   /** Observable list of categories */
@@ -39,14 +39,16 @@ class HomeViewModel @Inject constructor(
   }
 
   private fun observeCategoriesFromDatabase() {
-    feedRepository.getAllCategories()
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribeOn(Schedulers.io())
-        .subscribe {
-          updateCategories(it)
-          askViewToRefreshCategories()
-          observePostsFromDatabase()
-        }
+    disposable.add(
+        feedRepository.getAllCategories()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+              updateCategories(it)
+              askViewToRefreshCategories()
+              observePostsFromDatabase()
+            }
+    );
   }
 
   private fun updateCategories(categories: List<Category>) {
