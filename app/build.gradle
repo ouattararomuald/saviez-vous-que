@@ -1,6 +1,6 @@
 buildscript {
   repositories {
-    mavenCentral() // or jcenter()
+    mavenCentral()
   }
 
   dependencies {
@@ -85,7 +85,9 @@ dependencies {
   implementation deps.android.support.vectorDrawables
 
   implementation deps.android.support.databinding.library
-  kapt deps.android.support.databinding.compiler
+  // Use annotationProcessor cause of a bug in kapt since (kotlin 1.2.50)
+  // issue: https://youtrack.jetbrains.com/issue/KT-24919
+  annotationProcessor deps.android.support.databinding.compiler
 
   implementation deps.android.arch.lifecycle.extensions
   implementation deps.android.arch.lifecycle.viewModel
@@ -93,10 +95,6 @@ dependencies {
   implementation deps.fresco
 
   implementation deps.stetho
-
-  implementation(deps.materialDrawer) {
-    transitive = true
-  }
 
   implementation deps.rxAndroid
   implementation deps.android.arch.room.rxjava
