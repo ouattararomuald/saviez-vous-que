@@ -9,8 +9,8 @@ import com.ouattararomuald.saviezvousque.R
 import com.ouattararomuald.saviezvousque.common.Post
 import com.ouattararomuald.saviezvousque.databinding.PostItemViewBinding
 
-class FeedAdapter(
-    private val observablePostsList: ObservableList<Post>
+internal class FeedAdapter(
+  private val observablePostsList: ObservableList<Post>
 ) : RecyclerView.Adapter<PostViewHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
