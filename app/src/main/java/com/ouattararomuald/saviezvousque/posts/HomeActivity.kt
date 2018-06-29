@@ -112,11 +112,6 @@ class HomeActivity : AppCompatActivity(), ViewContract,
 
   override fun onCategoriesDownloaded(categories: List<Category>) {
     createDrawerItemsFromCategories(categories)
-
-    /*if (drawer.drawerItems.isNotEmpty()) {
-      drawer.drawerItems[0].withSetSelected(true)
-      viewModel.onCategorySelected(drawer.drawerItems[0].identifier.toInt())
-    }*/
   }
 
   private fun createDrawerItemsFromCategories(categories: List<Category>) {
@@ -129,12 +124,12 @@ class HomeActivity : AppCompatActivity(), ViewContract,
       if (categories.isNotEmpty()) {
         menu.setGroupCheckable(R.id.main_group, true, true)
         menu.getItem(0).isChecked = true
+        viewModel.onCategorySelected(menu.getItem(0).itemId)
       }
     }
   }
 
   override fun onPostsDownloaded(posts: List<Post>) {
-    //feedAdapter.
   }
 
   override fun notifyDatasetChanged() {
