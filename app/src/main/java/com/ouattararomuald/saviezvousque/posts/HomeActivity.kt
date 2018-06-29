@@ -3,6 +3,7 @@ package com.ouattararomuald.saviezvousque.posts
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -104,6 +105,8 @@ class HomeActivity : AppCompatActivity(), ViewContract,
 
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
     viewModel.onCategorySelected(item.itemId)
+    item.isChecked = true
+    homeActivityBinding.drawerLayout.closeDrawer(GravityCompat.START)
     return true
   }
 
@@ -124,6 +127,7 @@ class HomeActivity : AppCompatActivity(), ViewContract,
       }
 
       if (categories.isNotEmpty()) {
+        menu.setGroupCheckable(R.id.main_group, true, true)
         menu.getItem(0).isChecked = true
       }
     }
