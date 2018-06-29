@@ -1,8 +1,10 @@
 <resources>
-  <string name="app_name">Saviez Vous Que</string>
+  <string name="app_name" translatable="false">Saviez Vous Que?</string>
 
-  <string name="navigation_drawer_open">Open navigation drawer</string>
-  <string name="navigation_drawer_close">Close navigation drawer</string>
+  <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+  <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
 
-  <string name="title_home_activity">@string/app_name</string>
+  <string name="title_home_activity" translatable="false">@string/app_name</string>
+
+  <string name="archives_menu_item">Archives</string>
 </resources>
