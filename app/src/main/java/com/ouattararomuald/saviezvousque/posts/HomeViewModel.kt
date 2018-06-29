@@ -12,7 +12,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class HomeViewModel @Inject constructor(
+internal class HomeViewModel @Inject constructor(
   private val feedDownloader: FeedDownloader,
   private val feedRepository: FeedRepository,
   private val viewContract: ViewContract

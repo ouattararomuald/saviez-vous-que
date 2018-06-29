@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView
 import com.ouattararomuald.saviezvousque.common.Post
 import com.ouattararomuald.saviezvousque.databinding.PostItemViewBinding
 
-class PostViewHolder(
+internal class PostViewHolder(
     private val itemBinding: PostItemViewBinding
 ) : RecyclerView.ViewHolder(itemBinding.root) {
 
