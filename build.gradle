@@ -1,22 +1,20 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-  ext.kotlin_version = '1.2.30'
   ext.buildConfig = [
-    'compileSdk': 27,
-    'minSdk': 17,
-    'targetSdk' : 27,
+    'compileSdk': 28,
+    'minSdk': 21,
+    'targetSdk' : 28,
   ]
 
   ext.versions = [
-    'androidPlugin': '3.2.0-alpha04',
+    'androidPlugin': '3.2.0-beta02',
     'arch': '1.1.0',
-    'arch_room': '1.1.0-alpha2',
     'dagger': '2.14.1',
-    'databinding': '3.2.0-alpha04',
-    'kotlin': '1.2.30',
+    'kotlin': '1.2.41',
     'retrofit': '2.3.0',
-    'supportLibray': '27.0.2',
+    'room': '1.1.1',
+    'supportLibray': '28.0.0-alpha3',
   ]
 
   ext.deps = [
@@ -27,24 +25,24 @@ buildscript {
           'viewModel': "android.arch.lifecycle:viewmodel:${versions.arch}",
         ],
         'room': [
-          'rxjava': "android.arch.persistence.room:rxjava2:${versions.arch_room}",
-          'runtime': "android.arch.persistence.room:runtime:${versions.arch_room}",
-          'compiler': "android.arch.persistence.room:compiler:${versions.arch_room}",
-          'testHelper': "android.arch.persistence.room:testing:${versions.arch_room}"
+          'rxjava': "android.arch.persistence.room:rxjava2:${versions.room}",
+          'runtime': "android.arch.persistence.room:runtime:${versions.room}",
+          'compiler': "android.arch.persistence.room:compiler:${versions.room}",
+          'testHelper': "android.arch.persistence.room:testing:${versions.room}"
         ],
         'coreTesting': 'android.arch.core:core-testing:1.1.0'
       ],
       'kotlinExtensions': 'androidx.core:core-ktx:0.1',
       'support': [
         'appcompatV7': "com.android.support:appcompat-v7:${versions.supportLibray}",
-        'constraintLayout': "com.android.support.constraint:constraint-layout:1.1.0-beta5",
+        'constraintLayout': 'com.android.support.constraint:constraint-layout:2.0.0-alpha1',
         'design': "com.android.support:design:${versions.supportLibray}",
         'recyclerView': "com.android.support:recyclerview-v7:${versions.supportLibray}",
         'supportAnnotations': "com.android.support:support-annotations:${versions.supportLibray}",
         'vectorDrawables': "com.android.support:support-vector-drawable:${versions.supportLibray}",
         'databinding': [
-          'compiler': "com.android.databinding:compiler:${versions.databinding}",
-          'library': "com.android.databinding:library:${versions.databinding}",
+          'compiler': 'com.android.databinding:compiler:3.2.0-alpha10',
+          'library': 'com.android.databinding:library:3.3.0-alpha01',
         ],
       ],
       'test': [
@@ -70,12 +68,11 @@ buildscript {
       'gsonConverter': "com.squareup.retrofit2:converter-gson:${versions.retrofit}"
     ],
     'fresco': 'com.facebook.fresco:fresco:1.8.1',
-    'gson': 'com.google.code.gson:gson:2.8.2',
-    'materialDrawer': 'com.mikepenz:materialdrawer:6.0.6@aar',
+    'gson': 'com.google.code.gson:gson:2.8.5',
     'rxAndroid': 'io.reactivex.rxjava2:rxandroid:2.0.2',
     'stetho': 'com.facebook.stetho:stetho:1.5.0',
-    'threetenabp': 'com.jakewharton.threetenabp:threetenabp:1.0.5',
-    'truth': 'com.google.truth:truth:0.39',
+    'threetenabp': 'com.jakewharton.threetenabp:threetenabp:1.1.0',
+    'truth': 'com.google.truth:truth:0.41',
   ]
 
   repositories {
@@ -94,7 +91,7 @@ buildscript {
 }
 
 plugins {
-  id 'io.gitlab.arturbosch.detekt' version '1.0.0.RC6-3'
+  id 'io.gitlab.arturbosch.detekt' version '1.0.0.RC7-2'
 }
 
 allprojects {
@@ -129,7 +126,7 @@ task clean(type: Delete) {
 }
 
 detekt {
-  version = "1.0.0.RC6-3"
+  version = "1.0.0.RC7-2"
   profile("main") {
     input = "$projectDir/app/src/main/java"
     config = "$projectDir/code-analysis/detekt.yml"

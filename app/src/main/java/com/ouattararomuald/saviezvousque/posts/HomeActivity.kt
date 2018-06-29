@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
-import com.mikepenz.materialdrawer.Drawer
 import com.ouattararomuald.saviezvousque.R
 import com.ouattararomuald.saviezvousque.common.Category
 import com.ouattararomuald.saviezvousque.common.Post
@@ -18,9 +17,9 @@ import com.ouattararomuald.saviezvousque.db.DbComponent
 import com.ouattararomuald.saviezvousque.downloaders.DownloaderComponent
 import com.ouattararomuald.saviezvousque.util.getDbComponent
 import com.ouattararomuald.saviezvousque.util.getDownloaderComponent
-import kotlinx.android.synthetic.main.home_activity.nav_view
-import kotlinx.android.synthetic.main.home_app_bar.toolbar
-import kotlinx.android.synthetic.main.home_content.posts_recycler_view
+import kotlinx.android.synthetic.main.home_app_bar.view.toolbar
+import kotlinx.android.synthetic.main.home_content.view.content_frame
+import kotlinx.android.synthetic.main.home_content.view.posts_recycler_view
 import javax.inject.Inject
 
 /**
@@ -43,36 +42,27 @@ class HomeActivity : AppCompatActivity(), ViewContract,
   /** Downloader component. */
   private lateinit var downloaderComponent: DownloaderComponent
 
-  /** [Drawer] that displays the different categories as a list in the navigation drawer. */
-  // private lateinit var drawer: Drawer
-
   private lateinit var postsRecyclerView: RecyclerView
   private lateinit var navigationView: NavigationView
-
-  /** Handles click on item in the [drawer]. */
-  private val drawerItemClickHandler = Drawer.OnDrawerItemClickListener { _, _, drawerItem ->
-    viewModel.onCategorySelected(drawerItem.identifier.toInt())
-    false
-  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     homeActivityBinding = DataBindingUtil.setContentView(this, R.layout.home_activity)
 
-    setSupportActionBar(toolbar)
+    setSupportActionBar(homeActivityBinding.drawerLayout.toolbar)
 
     val toggle = ActionBarDrawerToggle(
         this,
         homeActivityBinding.drawerLayout,
-        toolbar,
+        homeActivityBinding.drawerLayout.toolbar,
         R.string.navigation_drawer_open,
         R.string.navigation_drawer_close
     )
     homeActivityBinding.drawerLayout.addDrawerListener(toggle)
     toggle.syncState()
 
-    navigationView = nav_view
-    postsRecyclerView = posts_recycler_view
+    navigationView = homeActivityBinding.navView
+    postsRecyclerView = homeActivityBinding.drawerLayout.content_frame.posts_recycler_view
 
     navigationView.setNavigationItemSelectedListener(this)
 
@@ -131,6 +121,10 @@ class HomeActivity : AppCompatActivity(), ViewContract,
       val menu = navigationView.menu
       categories.forEach {
         menu.add(R.id.main_group, it.id, Menu.NONE, it.name)
+      }
+
+      if (categories.isNotEmpty()) {
+        menu.getItem(0).isChecked = true
       }
     }
   }
