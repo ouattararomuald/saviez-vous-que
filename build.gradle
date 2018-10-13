@@ -8,13 +8,13 @@ buildscript {
   ]
 
   ext.versions = [
-    'androidPlugin': '3.2.0-beta02',
-    'arch': '1.1.0',
-    'dagger': '2.14.1',
-    'kotlin': '1.2.41',
-    'retrofit': '2.3.0',
+    'androidPlugin': '3.3.0-alpha13',
+    'arch': '1.1.1',
+    'dagger': '2.17',
+    'kotlin': '1.2.71',
+    'retrofit': '2.4.0',
     'room': '1.1.1',
-    'supportLibray': '28.0.0-alpha3',
+    'supportLibray': '28.0.0',
   ]
 
   ext.deps = [
@@ -30,12 +30,12 @@ buildscript {
           'compiler': "android.arch.persistence.room:compiler:${versions.room}",
           'testHelper': "android.arch.persistence.room:testing:${versions.room}"
         ],
-        'coreTesting': 'android.arch.core:core-testing:1.1.0'
+        'coreTesting': 'android.arch.core:core-testing:1.1.1'
       ],
       'kotlinExtensions': 'androidx.core:core-ktx:0.1',
       'support': [
         'appcompatV7': "com.android.support:appcompat-v7:${versions.supportLibray}",
-        'constraintLayout': 'com.android.support.constraint:constraint-layout:2.0.0-alpha1',
+        'constraintLayout': 'com.android.support.constraint:constraint-layout:2.0.0-alpha2',
         'design': "com.android.support:design:${versions.supportLibray}",
         'recyclerView': "com.android.support:recyclerview-v7:${versions.supportLibray}",
         'supportAnnotations': "com.android.support:support-annotations:${versions.supportLibray}",
@@ -47,8 +47,8 @@ buildscript {
       ],
       'test': [
         'espresso': [
-          'runner': 'com.android.support.test:runner:1.0.1',
-          'core': 'com.android.support.test.espresso:espresso-core:3.0.1',
+          'runner': 'com.android.support.test:runner:1.0.2',
+          'core': 'com.android.support.test.espresso:espresso-core:3.0.2',
         ],
       ],
     ],
@@ -67,12 +67,12 @@ buildscript {
       'rxjavaCallAdapter': "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}",
       'gsonConverter': "com.squareup.retrofit2:converter-gson:${versions.retrofit}"
     ],
-    'fresco': 'com.facebook.fresco:fresco:1.8.1',
+    'fresco': 'com.facebook.fresco:fresco:1.10.0',
     'gson': 'com.google.code.gson:gson:2.8.5',
-    'rxAndroid': 'io.reactivex.rxjava2:rxandroid:2.0.2',
+    'rxAndroid': 'io.reactivex.rxjava2:rxandroid:2.1.0',
     'stetho': 'com.facebook.stetho:stetho:1.5.0',
-    'threetenabp': 'com.jakewharton.threetenabp:threetenabp:1.1.0',
-    'truth': 'com.google.truth:truth:0.41',
+    'threetenabp': 'com.jakewharton.threetenabp:threetenabp:1.1.1',
+    'truth': 'com.google.truth:truth:0.42',
   ]
 
   repositories {
@@ -91,7 +91,8 @@ buildscript {
 }
 
 plugins {
-  id 'io.gitlab.arturbosch.detekt' version '1.0.0.RC7-2'
+  id 'io.gitlab.arturbosch.detekt' version '1.0.0.RC9.2'
+  id 'com.github.ben-manes.versions' version '0.20.0'
 }
 
 allprojects {
@@ -126,10 +127,8 @@ task clean(type: Delete) {
 }
 
 detekt {
-  version = "1.0.0.RC7-2"
-  profile("main") {
-    input = "$projectDir/app/src/main/java"
-    config = "$projectDir/code-analysis/detekt.yml"
-    filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
-  }
+  toolVersion = "1.0.0.RC9.2"
+  input = files("$projectDir/app/src/main/java")
+  config = files("$projectDir/code-analysis/detekt.yml")
+  filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
 }
