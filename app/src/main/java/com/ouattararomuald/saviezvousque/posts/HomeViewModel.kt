@@ -75,23 +75,6 @@ class HomeViewModel @Inject constructor(
     }
   }
 
-  private fun observePostsFromDatabase() {
-    categories.forEach { category ->
-      disposable.add(
-          feedRepository.getAllPostsByCategory(category.id)
-              .observeOn(AndroidSchedulers.mainThread())
-              .subscribeOn(Schedulers.io())
-              .subscribe { posts ->
-                postsByCategory[category.id] = posts
-                if (category.id == displayedCategoryId) {
-                  synchronizeDisplayedPostsWithUi(displayedCategoryId)
-                }
-              }
-      )
-      isObservingDatabasePosts = true
-    }
-  }
-
   private fun downloadCategories() {
     disposable.add(
         feedDownloader.getCategories()
@@ -117,12 +100,44 @@ class HomeViewModel @Inject constructor(
     categories.forEach { category ->
       disposable.add(
           feedDownloader.getPostsByCategory(category.id)
-              .observeOn(AndroidSchedulers.mainThread())
               .subscribeOn(Schedulers.io())
+              .observeOn(AndroidSchedulers.mainThread())
               .subscribe { posts ->
                 saveFetchedPosts(posts, category.id)
               }
       )
+    }
+  }
+
+  /** Notifies this [ViewModel] that the UI is being paused. */
+  fun onPause() {
+    disposable.clear()
+  }
+
+  /** Notifies this [ViewModel] that the [Category] with the given id has been selected. */
+  fun onCategorySelected(categoryId: Int, isArchive: Boolean = false) {
+    displayedCategoryId = categoryId
+    synchronizeDisplayedPostsWithUi(displayedCategoryId, isArchive)
+  }
+
+  private fun synchronizeDisplayedPostsWithUi(
+    displayedCategoryId: Int,
+    isArchive: Boolean = false
+  ) {
+    if (!isArchive && postsByCategory.contains(displayedCategoryId)) {
+      displayedPosts.clear()
+      displayedPosts.addAll(postsByCategory[displayedCategoryId]!!)
+      viewContract.notifyDatasetChanged()
+    } else if (isArchive) {
+      feedDownloader.getPostByPage(page = 1)
+          .subscribeOn(Schedulers.io())
+          .observeOn(AndroidSchedulers.mainThread())
+          .subscribe { posts ->
+            saveFetchedPosts(posts, displayedCategoryId)
+            displayedPosts.clear()
+            displayedPosts.addAll(posts)
+            viewContract.notifyDatasetChanged()
+          }
     }
   }
 
@@ -136,22 +151,20 @@ class HomeViewModel @Inject constructor(
         .subscribe()
   }
 
-  /** Notifies this [ViewModel] that the UI is being paused. */
-  fun onPause() {
-    disposable.clear()
-  }
-
-  /** Notifies this [ViewModel] that the [Category] with the given id has been selected. */
-  fun onCategorySelected(categoryId: Int) {
-    displayedCategoryId = categoryId
-    synchronizeDisplayedPostsWithUi(displayedCategoryId)
-  }
-
-  private fun synchronizeDisplayedPostsWithUi(displayedCategoryId: Int) {
-    if (postsByCategory.contains(displayedCategoryId)) {
-      displayedPosts.clear()
-      displayedPosts.addAll(postsByCategory[displayedCategoryId]!!)
-      viewContract.notifyDatasetChanged()
+  private fun observePostsFromDatabase() {
+    categories.forEach { category ->
+      disposable.add(
+          feedRepository.getAllPostsByCategory(category.id)
+              .observeOn(AndroidSchedulers.mainThread())
+              .subscribeOn(Schedulers.io())
+              .subscribe { posts ->
+                postsByCategory[category.id] = posts
+                if (category.id == displayedCategoryId) {
+                  synchronizeDisplayedPostsWithUi(displayedCategoryId)
+                }
+              }
+      )
+      isObservingDatabasePosts = true
     }
   }
 }
