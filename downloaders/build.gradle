@@ -9,7 +9,7 @@ android {
   defaultConfig {
     minSdkVersion buildConfig.minSdk
 
-    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
   }
 
   compileOptions {
@@ -53,8 +53,9 @@ dependencies {
   testImplementation deps.retrofit.mock
   testImplementation deps.truth
 
-  androidTestImplementation deps.android.test.espresso.runner
-  androidTestImplementation deps.android.test.espresso.core
+  androidTestImplementation deps.androidx.test.ext.junit
+  androidTestImplementation deps.androidx.test.espresso.runner
+  androidTestImplementation deps.androidx.test.espresso.core
 }
 repositories {
   mavenCentral()

@@ -1,7 +1,7 @@
 package com.ouattararomuald.saviezvousque.posts
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.ouattararomuald.saviezvousque.db.FeedRepository
 import com.ouattararomuald.saviezvousque.downloaders.FeedDownloader
 import javax.inject.Inject

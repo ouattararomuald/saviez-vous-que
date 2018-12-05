@@ -9,7 +9,7 @@ android {
   defaultConfig {
     minSdkVersion buildConfig.minSdk
 
-    testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+    testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 
     resConfigs 'fr'
 
@@ -48,18 +48,19 @@ dependencies {
   api deps.dagger.runtime
   kapt deps.dagger.compiler
 
-  api deps.android.arch.room.rxjava
-  api deps.android.arch.room.runtime
-  kapt deps.android.arch.room.compiler
+  api deps.androidx.arch.room.rxjava2
+  api deps.androidx.arch.room.runtime
+  kapt deps.androidx.arch.room.compiler
 
   api deps.threetenabp
 
   testImplementation deps.junit
 
-  androidTestImplementation deps.android.arch.coreTesting
-  androidTestImplementation deps.android.arch.room.testHelper
-  androidTestImplementation deps.android.test.espresso.runner
-  androidTestImplementation deps.android.test.espresso.core
+  androidTestImplementation deps.androidx.arch.coreTesting
+  androidTestImplementation deps.androidx.arch.room.testing
+  androidTestImplementation deps.androidx.test.ext.junit
+  androidTestImplementation deps.androidx.test.espresso.runner
+  androidTestImplementation deps.androidx.test.espresso.core
 }
 repositories {
   mavenCentral()

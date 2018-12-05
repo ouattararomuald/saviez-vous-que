@@ -1,8 +1,8 @@
 package com.ouattararomuald.saviezvousque.posts
 
-import android.arch.lifecycle.ViewModel
-import android.databinding.ObservableArrayList
-import android.databinding.ObservableList
+import androidx.databinding.ObservableArrayList
+import androidx.databinding.ObservableList
+import androidx.lifecycle.ViewModel
 import com.ouattararomuald.saviezvousque.common.Category
 import com.ouattararomuald.saviezvousque.common.Post
 import com.ouattararomuald.saviezvousque.db.FeedRepository

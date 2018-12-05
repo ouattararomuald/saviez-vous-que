@@ -1,7 +1,7 @@
 package com.ouattararomuald.saviezvousque.db;
 
-import android.arch.persistence.room.Room;
 import android.content.Context;
+import androidx.room.Room;
 import dagger.Module;
 import dagger.Provides;
 
