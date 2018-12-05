@@ -1,7 +1,6 @@
 package com.ouattararomuald.saviezvousque
 
 import android.app.Application
-import android.os.Build
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.stetho.Stetho
 import com.ouattararomuald.saviezvousque.db.DaggerDbComponent

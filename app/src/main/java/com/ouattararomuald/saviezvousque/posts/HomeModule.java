@@ -1,6 +1,6 @@
 package com.ouattararomuald.saviezvousque.posts;
 
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import com.ouattararomuald.saviezvousque.db.FeedRepository;
 import com.ouattararomuald.saviezvousque.downloaders.FeedDownloader;
 import dagger.Module;

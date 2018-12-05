@@ -1,8 +1,8 @@
 package com.ouattararomuald.saviezvousque.db
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.Index
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Index
 import org.threeten.bp.LocalDateTime
 
 

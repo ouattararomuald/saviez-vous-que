@@ -1,15 +1,13 @@
 package com.ouattararomuald.saviezvousque.posts
 
-import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.design.widget.NavigationView
-import android.support.v4.view.GravityCompat
-import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import androidx.databinding.DataBindingUtil
+import com.google.android.material.navigation.NavigationView
 import com.ouattararomuald.saviezvousque.R
 import com.ouattararomuald.saviezvousque.common.Category
 import com.ouattararomuald.saviezvousque.common.Post
@@ -39,7 +37,7 @@ class HomeActivity : AppCompatActivity(), ViewContract,
   /** Downloader component. */
   private lateinit var downloaderComponent: DownloaderComponent
 
-  private lateinit var postsRecyclerView: RecyclerView
+  private lateinit var postsRecyclerView: androidx.recyclerview.widget.RecyclerView
   private lateinit var navigationView: NavigationView
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,7 +78,7 @@ class HomeActivity : AppCompatActivity(), ViewContract,
 
   private fun configureRecyclerView() {
     feedAdapter = FeedAdapter(viewModel.displayedPosts)
-    postsRecyclerView.layoutManager = LinearLayoutManager(this).apply {
+    postsRecyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this).apply {
       reverseLayout = true
     }
     postsRecyclerView.setHasFixedSize(true)

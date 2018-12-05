@@ -23,7 +23,7 @@ android {
     versionCode 1
     versionName '1.0'
 
-    testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+    testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 
     vectorDrawables.useSupportLibrary true
 
@@ -77,29 +77,27 @@ dependencies {
   implementation deps.dagger.runtime
   kapt deps.dagger.compiler
 
-  implementation deps.android.support.appcompatV7
-  implementation deps.android.support.constraintLayout
-  implementation deps.android.support.design
-  implementation deps.android.support.recyclerView
-  implementation deps.android.support.supportAnnotations
-  implementation deps.android.support.vectorDrawables
+  implementation deps.androidx.appcompat
+  implementation deps.androidx.constraintlayout
+  implementation deps.androidx.material
+  implementation deps.androidx.recyclerview
+  implementation deps.androidx.annotation
+  implementation deps.androidx.vectordrawable
 
-  implementation deps.android.support.databinding.library
-  // Use annotationProcessor cause of a bug in kapt since (kotlin 1.2.50)
-  // issue: https://youtrack.jetbrains.com/issue/KT-24919
-  annotationProcessor deps.android.support.databinding.compiler
+  implementation deps.androidx.databinding.library
+  kapt deps.androidx.databinding.compiler
 
-  implementation deps.android.arch.lifecycle.extensions
-  implementation deps.android.arch.lifecycle.viewModel
+  implementation deps.androidx.arch.lifecycle.extensions
+  implementation deps.androidx.arch.lifecycle.viewModel
 
   implementation deps.fresco
 
   implementation deps.stetho
 
   implementation deps.rxAndroid
-  implementation deps.android.arch.room.rxjava
-  implementation deps.android.arch.room.runtime
-  kapt deps.android.arch.room.compiler
+  implementation deps.androidx.arch.room.rxjava2
+  implementation deps.androidx.arch.room.runtime
+  kapt deps.androidx.arch.room.compiler
 
   implementation deps.retrofit.rxjavaCallAdapter
   implementation deps.retrofit.gsonConverter
@@ -108,8 +106,9 @@ dependencies {
 
   testImplementation deps.junit
 
-  androidTestImplementation deps.android.test.espresso.runner
-  androidTestImplementation deps.android.test.espresso.core
+  androidTestImplementation deps.androidx.test.ext.junit
+  androidTestImplementation deps.androidx.test.espresso.runner
+  androidTestImplementation deps.androidx.test.espresso.core
   androidTestImplementation deps.truth
 }
 

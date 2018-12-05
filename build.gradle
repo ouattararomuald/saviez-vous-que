@@ -8,47 +8,50 @@ buildscript {
   ]
 
   ext.versions = [
+    'androidx': '1.0.0-beta01',
     'androidPlugin': '3.3.0-rc01',
-    'arch': '1.1.1',
+    'arch': '2.0.0',
     'dagger': '2.17',
     'kotlin': '1.3.10',
-    'retrofit': '2.4.0',
-    'room': '1.1.1',
-    'supportLibray': '28.0.0',
+    'retrofit': '2.5.0',
+    'room': '2.1.0-alpha03',
   ]
 
   ext.deps = [
-    'android': [
+    'androidx': [
+      'appcompat': "androidx.appcompat:appcompat:${versions.androidx}",
+      'constraintlayout': 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2',
+      'material': "com.google.android.material:material:${versions.androidx}",
+      'recyclerview': "androidx.recyclerview:recyclerview:${versions.androidx}",
+      'annotation': "androidx.annotation:annotation:${versions.androidx}",
+      'vectordrawable': "androidx.vectordrawable:vectordrawable:${versions.androidx}",
       'arch': [
         'lifecycle': [
-          'extensions': "android.arch.lifecycle:extensions:${versions.arch}",
-          'viewModel': "android.arch.lifecycle:viewmodel:${versions.arch}",
+          'extensions': "androidx.lifecycle:lifecycle-extensions:${versions.arch}",
+          'viewModel': "androidx.lifecycle:lifecycle-viewmodel:${versions.arch}",
+        ],
+        'core': [
+          'ktx': 'androidx.core:core-ktx:1.0.1',
         ],
         'room': [
-          'rxjava': "android.arch.persistence.room:rxjava2:${versions.room}",
-          'runtime': "android.arch.persistence.room:runtime:${versions.room}",
-          'compiler': "android.arch.persistence.room:compiler:${versions.room}",
-          'testHelper': "android.arch.persistence.room:testing:${versions.room}"
+          'rxjava2': "androidx.room:room-rxjava2:${versions.room}",
+          'runtime': "androidx.room:room-runtime:${versions.room}",
+          'compiler': "androidx.room:room-compiler:${versions.room}",
+          'testing': "androidx.room:room-testing:${versions.room}"
         ],
-        'coreTesting': 'android.arch.core:core-testing:1.1.1'
+        'coreTesting': "androidx.arch.core:core-testing:${versions.arch}"
       ],
-      'kotlinExtensions': 'androidx.core:core-ktx:0.1',
-      'support': [
-        'appcompatV7': "com.android.support:appcompat-v7:${versions.supportLibray}",
-        'constraintLayout': 'com.android.support.constraint:constraint-layout:2.0.0-alpha2',
-        'design': "com.android.support:design:${versions.supportLibray}",
-        'recyclerView': "com.android.support:recyclerview-v7:${versions.supportLibray}",
-        'supportAnnotations': "com.android.support:support-annotations:${versions.supportLibray}",
-        'vectorDrawables': "com.android.support:support-vector-drawable:${versions.supportLibray}",
-        'databinding': [
-          'compiler': 'com.android.databinding:compiler:3.2.0-alpha10',
-          'library': 'com.android.databinding:library:3.3.0-alpha01',
-        ],
+      'databinding': [
+        'compiler': "androidx.databinding:databinding-compiler:${versions.androidPlugin}",
+        'library': "androidx.databinding:databinding-runtime:${versions.androidPlugin}",
       ],
       'test': [
+        'ext': [
+          'junit': 'androidx.test.ext:junit:1.1.0-alpha01'
+        ],
         'espresso': [
-          'runner': 'com.android.support.test:runner:1.0.2',
-          'core': 'com.android.support.test.espresso:espresso-core:3.0.2',
+          'runner': 'androidx.test:runner:1.1.1-alpha01',
+          'core': 'androidx.test.espresso:espresso-core:3.1.1-alpha01',
         ],
       ],
     ],
@@ -67,7 +70,7 @@ buildscript {
       'rxjavaCallAdapter': "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}",
       'gsonConverter': "com.squareup.retrofit2:converter-gson:${versions.retrofit}"
     ],
-    'fresco': 'com.facebook.fresco:fresco:1.10.0',
+    'fresco': 'com.facebook.fresco:fresco:1.11.0',
     'gson': 'com.google.code.gson:gson:2.8.5',
     'rxAndroid': 'io.reactivex.rxjava2:rxandroid:2.1.0',
     'stetho': 'com.facebook.stetho:stetho:1.5.0',

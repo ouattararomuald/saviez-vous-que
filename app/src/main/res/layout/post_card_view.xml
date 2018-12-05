@@ -17,7 +17,7 @@
       app:placeholderImageScaleType="center"
   />
 
-  <android.support.v7.widget.AppCompatImageButton
+  <androidx.appcompat.widget.AppCompatImageButton
       android:background="@android:color/transparent"
       android:layout_marginStart="@dimen/share_button_margin_left"
       android:layout_marginTop="@dimen/share_button_margin"

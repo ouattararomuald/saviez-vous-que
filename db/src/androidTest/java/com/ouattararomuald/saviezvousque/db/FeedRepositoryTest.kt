@@ -1,8 +1,8 @@
 package com.ouattararomuald.saviezvousque.db
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.arch.persistence.room.Room
-import android.support.test.InstrumentationRegistry
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.room.Room
+import androidx.test.platform.app.InstrumentationRegistry
 import com.jakewharton.threetenabp.AndroidThreeTen
 import org.junit.After
 import org.junit.Before
@@ -22,7 +22,7 @@ class FeedRepositoryTest {
   val instantTaskExecutorRule = InstantTaskExecutorRule()
 
   init {
-    AndroidThreeTen.init(InstrumentationRegistry.getTargetContext())
+    AndroidThreeTen.init(InstrumentationRegistry.getInstrumentation().context)
   }
 
   @Before
@@ -31,7 +31,7 @@ class FeedRepositoryTest {
   }
 
   private fun createDatabase() {
-    val appContext = InstrumentationRegistry.getTargetContext()
+    val appContext = InstrumentationRegistry.getInstrumentation().context
     database = Room.inMemoryDatabaseBuilder(appContext, AppDatabase::class.java)
         .allowMainThreadQueries()
         .build()
