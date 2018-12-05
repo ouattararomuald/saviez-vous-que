@@ -23,11 +23,7 @@ import kotlinx.android.synthetic.main.home_content.view.content_frame
 import kotlinx.android.synthetic.main.home_content.view.posts_recycler_view
 import javax.inject.Inject
 
-/**
- * Home Page.
- *
- * Displays the different categories and allow users to navigate between them.
- */
+/** Displays the different categories and allow users to navigate between them. */
 class HomeActivity : AppCompatActivity(), ViewContract,
     NavigationView.OnNavigationItemSelectedListener {
 
@@ -106,7 +102,7 @@ class HomeActivity : AppCompatActivity(), ViewContract,
   }
 
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
-    viewModel.onCategorySelected(item.itemId)
+    viewModel.onCategorySelected(item.itemId, item.itemId == R.id.archive_menu_item)
     item.isChecked = true
     homeActivityBinding.drawerLayout.closeDrawer(GravityCompat.START)
     return true
