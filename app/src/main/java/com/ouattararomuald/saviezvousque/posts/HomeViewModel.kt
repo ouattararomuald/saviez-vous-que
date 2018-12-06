@@ -17,19 +17,32 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
   /** Observable list of categories */
-  internal val categories: MutableLiveData<List<Category>>
+  internal val categories: MutableLiveData<List<Category>> = MutableLiveData()
 
   /** Observable list of posts grouped by category */
-  internal val posts: MutableLiveData<MutableMap<Int, List<Post>>>
+  internal val posts: MutableLiveData<MutableMap<Int, List<Post>>> = MutableLiveData()
 
   private val disposable = CompositeDisposable()
 
   init {
+    loadCategories()
     downloadCategories()
-    categories = MutableLiveData()
-    posts = MutableLiveData()
 
     posts.value = mutableMapOf()
+  }
+
+  private fun loadCategories() {
+    disposable.add(
+        feedRepository.getAllCategories()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+              categories.value = getOrderedCategories(it.toMutableList())
+              loadPostsByCategories(it)
+            }, {
+              // TODO: Log error
+            })
+    )
   }
 
   private fun downloadCategories() {
@@ -51,6 +64,23 @@ class HomeViewModel @Inject constructor(
     feedRepository.saveCategories(categories)
         .subscribeOn(Schedulers.io())
         .subscribe()
+  }
+
+  /** Download the [Post]s for all available categories. */
+  private fun loadPostsByCategories(categories: List<Category>) {
+    categories.forEach { category ->
+      disposable.add(
+          feedRepository.getAllPostsByCategory(category.id)
+              .subscribeOn(Schedulers.io())
+              .observeOn(AndroidSchedulers.mainThread())
+              .subscribe { posts ->
+                val postMap = mutableMapOf<Int, List<Post>>()
+                postMap[category.id] = posts
+                postMap.putAll(this.posts.value!!)
+                this.posts.value = postMap
+              }
+      )
+    }
   }
 
   /** Download the [Post]s for all available categories. */
