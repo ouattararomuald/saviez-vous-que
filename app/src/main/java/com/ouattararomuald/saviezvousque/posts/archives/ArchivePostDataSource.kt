@@ -29,7 +29,7 @@ internal class ArchivePostDataSource(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ posts ->
               updateState(RequestState.LOADING)
-              callback.onResult(posts, -1, 2)
+              callback.onResult(posts, 0, 2)
               savePosts(posts, R.id.archive_menu_item)
             }, {
               updateState(RequestState.ERROR)
