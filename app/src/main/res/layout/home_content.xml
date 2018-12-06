@@ -13,18 +13,16 @@
       tools:context="com.ouattararomuald.saviezvousque.posts.HomeActivity"
       tools:showIn="@layout/home_app_bar"
   >
-    <FrameLayout
-        android:id="@+id/content_frame"
+    <fragment
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/transparent"
-    >
-      <androidx.recyclerview.widget.RecyclerView
-          android:id="@+id/posts_recycler_view"
-          android:background="#F2F2F2"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-      />
-    </FrameLayout>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/navigation_graph"/>
   </LinearLayout>
 </layout>

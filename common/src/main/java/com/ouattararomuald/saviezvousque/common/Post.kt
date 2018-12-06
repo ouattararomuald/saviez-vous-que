@@ -1,20 +1,23 @@
 package com.ouattararomuald.saviezvousque.common
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class Post(
-    val id: Int,
+  val id: Int,
 
-    @SerializedName(value = "date_gmt")
-    val publicationDateUtc: String,
+  @SerializedName(value = "date_gmt")
+  val publicationDateUtc: String,
 
-    @SerializedName(value = "modified_gmt")
-    val lastUpdateUtc: String,
+  @SerializedName(value = "modified_gmt")
+  val lastUpdateUtc: String,
 
-    val title: Title,
+  val title: Title,
 
-    val content: Content
-) {
+  val content: Content
+) : Parcelable {
   @Suppress("ConvertTwoComparisonsToRangeCheck")
   fun getImageUrl(): String? {
     val src = "src=\""

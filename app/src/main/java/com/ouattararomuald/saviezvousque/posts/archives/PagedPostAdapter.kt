@@ -1,16 +1,15 @@
-package com.ouattararomuald.saviezvousque.posts
+package com.ouattararomuald.saviezvousque.posts.archives
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.ObservableList
+import androidx.paging.PagedListAdapter
 import com.ouattararomuald.saviezvousque.R
 import com.ouattararomuald.saviezvousque.common.Post
 import com.ouattararomuald.saviezvousque.databinding.PostItemViewBinding
+import com.ouattararomuald.saviezvousque.posts.PostViewHolder
 
-internal class FeedAdapter(
-  private val observablePostsList: ObservableList<Post>
-) : androidx.recyclerview.widget.RecyclerView.Adapter<PostViewHolder>() {
+class PagedPostAdapter : PagedListAdapter<Post, PostViewHolder>(PostDiffUtilCallback) {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
     val itemBinding: PostItemViewBinding = DataBindingUtil.inflate(
@@ -20,11 +19,11 @@ internal class FeedAdapter(
     return PostViewHolder(itemBinding)
   }
 
-  override fun getItemCount(): Int = observablePostsList.size
-
   override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-    holder.bind(getPostAtPosition(position))
-  }
+    val post = getItem(position)
 
-  private fun getPostAtPosition(position: Int): Post = observablePostsList[position]
+    if (post != null) {
+      holder.bind(post)
+    }
+  }
 }

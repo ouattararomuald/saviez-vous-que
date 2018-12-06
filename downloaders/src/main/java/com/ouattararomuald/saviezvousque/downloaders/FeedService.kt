@@ -11,7 +11,10 @@ interface FeedService {
   fun getPosts(): Single<List<Post>>
 
   @GET("posts/")
-  fun getPostByPage(@Query("page") page: Int): Single<List<Post>>
+  fun getPostByPage(
+    @Query("page") pageIndex: Int,
+    @Query("per_page") pageSize: Int
+  ): Single<List<Post>>
 
   @GET("categories/")
   fun getCategories(): Single<List<Category>>

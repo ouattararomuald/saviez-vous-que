@@ -7,6 +7,13 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.ouattararomuald.saviezvousque.R
 import com.ouattararomuald.saviezvousque.common.Category
@@ -17,34 +24,40 @@ import com.ouattararomuald.saviezvousque.downloaders.DownloaderComponent
 import com.ouattararomuald.saviezvousque.util.getDbComponent
 import com.ouattararomuald.saviezvousque.util.getDownloaderComponent
 import kotlinx.android.synthetic.main.home_app_bar.view.toolbar
-import kotlinx.android.synthetic.main.home_content.view.content_frame
-import kotlinx.android.synthetic.main.home_content.view.posts_recycler_view
 import javax.inject.Inject
 
 /** Displays the different categories and allow users to navigate between them. */
-class HomeActivity : AppCompatActivity(), ViewContract,
+class HomeActivity : AppCompatActivity(),
     NavigationView.OnNavigationItemSelectedListener {
 
   /** The [HomeViewModel] bound to this activity. */
   @Inject
   lateinit var viewModel: HomeViewModel
 
+  private lateinit var sharedViewModel: SharedViewModel
+
   private lateinit var homeActivityBinding: HomeActivityBinding
-  private lateinit var feedAdapter: FeedAdapter
 
   /** Dagger database component. */
   private lateinit var dbComponent: DbComponent
+
   /** Downloader component. */
   private lateinit var downloaderComponent: DownloaderComponent
 
-  private lateinit var postsRecyclerView: androidx.recyclerview.widget.RecyclerView
   private lateinit var navigationView: NavigationView
+
+  private var currentSelectedMenuItemId: Int = -1
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     homeActivityBinding = DataBindingUtil.setContentView(this, R.layout.home_activity)
 
     setSupportActionBar(homeActivityBinding.drawerLayout.toolbar)
+
+    setupNavigationMenu(findNavController(R.id.nav_host_fragment))
+    setupActionBar(findNavController(R.id.nav_host_fragment))
+
+    sharedViewModel = ViewModelProviders.of(this).get(SharedViewModel::class.java)
 
     val toggle = ActionBarDrawerToggle(
         this,
@@ -57,8 +70,6 @@ class HomeActivity : AppCompatActivity(), ViewContract,
     toggle.syncState()
 
     navigationView = homeActivityBinding.navView
-    postsRecyclerView = homeActivityBinding.drawerLayout.content_frame.posts_recycler_view
-
     navigationView.setNavigationItemSelectedListener(this)
 
     dbComponent = getDbComponent()
@@ -68,45 +79,56 @@ class HomeActivity : AppCompatActivity(), ViewContract,
         .databaseComponent(dbComponent)
         .downloaderComponent(downloaderComponent)
         .activity(this)
-        .viewContract(this)
         .build()
         .inject(this)
 
     initializeBinding()
-    configureRecyclerView()
-  }
 
-  private fun configureRecyclerView() {
-    feedAdapter = FeedAdapter(viewModel.displayedPosts)
-    postsRecyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this).apply {
-      reverseLayout = true
+    val categoriesObserver = Observer<List<Category>> { displayCategories(it) }
+
+    viewModel.categories.observe(this, categoriesObserver)
+
+    val postsObserver = Observer<MutableMap<Int, List<Post>>> {
+      updateSelectedPosts(currentSelectedMenuItemId)
     }
-    postsRecyclerView.setHasFixedSize(true)
-    postsRecyclerView.adapter = feedAdapter
+
+    viewModel.posts.observe(this, postsObserver)
   }
 
   private fun initializeBinding() {
     homeActivityBinding.viewModel = viewModel
   }
 
-  override fun onResume() {
-    super.onResume()
-    viewModel.onResume()
-  }
-
-  override fun onPause() {
-    super.onPause()
-    viewModel.onPause()
-  }
+  override fun onSupportNavigateUp(): Boolean = NavigationUI.navigateUp(
+      findNavController(R.id.nav_host_fragment),
+      homeActivityBinding.drawerLayout
+  )
 
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
-    viewModel.onCategorySelected(item.itemId, item.itemId == R.id.archive_menu_item)
-    item.isChecked = true
+    currentSelectedMenuItemId = item.itemId
+
+    if (item.itemId == R.id.archive_menu_item) {
+      findNavController(R.id.nav_host_fragment).navigate(R.id.action_global_archivesFragment)
+    } else {
+      updateSelectedPosts(currentSelectedMenuItemId)
+    }
+
+    //item.isChecked = true
     homeActivityBinding.drawerLayout.closeDrawer(GravityCompat.START)
     return true
   }
 
-  override fun onCategoriesDownloaded(categories: List<Category>) {
+  private fun updateSelectedPosts(categoryId: Int) {
+    if (sharedViewModel.categoryId.value != categoryId && categoryId >= 0) {
+      val posts = viewModel.getPostsByCategory(categoryId)
+      if (posts.isNotEmpty()) {
+        sharedViewModel.categoryId.value = categoryId
+        sharedViewModel.posts.value = posts
+      }
+    }
+  }
+
+  private fun displayCategories(categories: List<Category>) {
     createDrawerItemsFromCategories(categories)
   }
 
@@ -117,18 +139,18 @@ class HomeActivity : AppCompatActivity(), ViewContract,
         menu.add(R.id.main_group, it.id, Menu.NONE, it.name)
       }
 
-      if (categories.isNotEmpty()) {
-        menu.setGroupCheckable(R.id.main_group, true, true)
-        menu.getItem(0).isChecked = true
-        viewModel.onCategorySelected(menu.getItem(0).itemId)
-      }
+      menu.setGroupCheckable(R.id.main_group, true, true)
+      menu.getItem(1).isChecked = true
+      currentSelectedMenuItemId = menu.getItem(1).itemId
     }
   }
 
-  override fun onPostsDownloaded(posts: List<Post>) {
+  private fun setupNavigationMenu(navController: NavController) {
+    val sideNavView = findViewById<NavigationView>(R.id.nav_view)
+    sideNavView?.setupWithNavController(navController)
   }
 
-  override fun notifyDatasetChanged() {
-    feedAdapter.notifyDataSetChanged()
+  private fun setupActionBar(navController: NavController) {
+    setupActionBarWithNavController(navController, homeActivityBinding.drawerLayout)
   }
 }
