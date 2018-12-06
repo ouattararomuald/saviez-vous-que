@@ -7,4 +7,7 @@
   <string name="title_home_activity" translatable="false">@string/app_name</string>
 
   <string name="archives_menu_item">Archives</string>
+
+  <!-- TODO: Remove or change this placeholder text -->
+  <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -12,15 +12,28 @@ buildscript {
     'androidPlugin': '3.3.0-rc01',
     'arch': '2.0.0',
     'dagger': '2.19',
+    'groupie': '2.3.0',
     'kotlin': '1.3.10',
+    'nav': '1.0.0-alpha07',
+    'paging': '2.1.0-beta01',
     'retrofit': '2.5.0',
     'room': '2.1.0-alpha03',
   ]
 
   ext.deps = [
+    'android': [
+      'arch': [
+        'navigation': [
+          'fragment': "android.arch.navigation:navigation-fragment-ktx:${versions.nav}",
+          'ui': "android.arch.navigation:navigation-ui-ktx:${versions.nav}",
+          'testing': "android.arch.navigation:navigation-testing:${versions.nav}",
+        ],
+      ],
+    ],
     'androidx': [
       'appcompat': "androidx.appcompat:appcompat:${versions.androidx}",
       'constraintlayout': 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2',
+      'legacy': "androidx.legacy:legacy-support-v4:${versions.androidx}",
       'material': "com.google.android.material:material:${versions.androidx}",
       'recyclerview': "androidx.recyclerview:recyclerview:${versions.androidx}",
       'annotation': "androidx.annotation:annotation:${versions.androidx}",
@@ -28,7 +41,8 @@ buildscript {
       'arch': [
         'lifecycle': [
           'extensions': "androidx.lifecycle:lifecycle-extensions:${versions.arch}",
-          'viewModel': "androidx.lifecycle:lifecycle-viewmodel:${versions.arch}",
+          'java8': "androidx.lifecycle:lifecycle-common-java8:${versions.arch}",
+          'reactivestreams': "androidx.lifecycle:lifecycle-reactivestreams:${versions.arch}",
         ],
         'core': [
           'ktx': 'androidx.core:core-ktx:1.0.1',
@@ -44,6 +58,11 @@ buildscript {
       'databinding': [
         'compiler': "androidx.databinding:databinding-compiler:${versions.androidPlugin}",
         'library': "androidx.databinding:databinding-runtime:${versions.androidPlugin}",
+      ],
+      'paging': [
+        'runtime': "androidx.paging:paging-runtime-ktx:${versions.paging}",
+        'rxjava2': "androidx.paging:paging-rxjava2-ktx:${versions.paging}",
+        'testing': "androidx.paging:paging-common-ktx:${versions.paging}",
       ],
       'test': [
         'ext': [
@@ -70,6 +89,11 @@ buildscript {
       'rxjavaCallAdapter': "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}",
       'gsonConverter': "com.squareup.retrofit2:converter-gson:${versions.retrofit}"
     ],
+    'groupie': [
+      'runtime': "com.xwray:groupie:${versions.groupie}",
+      'extensions': "com.xwray:groupie-kotlin-android-extensions:${versions.groupie}",
+      'databinding': "com.xwray:groupie-databinding:${versions.groupie}",
+    ],
     'fresco': 'com.facebook.fresco:fresco:1.11.0',
     'gson': 'com.google.code.gson:gson:2.8.5',
     'rxAndroid': 'io.reactivex.rxjava2:rxandroid:2.1.0',
@@ -88,6 +112,7 @@ buildscript {
   dependencies {
     classpath "com.android.tools.build:gradle:${versions.androidPlugin}"
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
+    classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:${versions.nav}"
 
     // NOTE: Do not place your application dependencies here; they belong
     // in the individual module build.gradle files

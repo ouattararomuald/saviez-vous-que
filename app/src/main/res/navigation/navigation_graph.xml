@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/navigation_graph"
+    app:startDestination="@id/dailyFeedFragment">
+
+  <fragment android:id="@+id/dailyFeedFragment"
+      android:name="com.ouattararomuald.saviezvousque.posts.feeds.DailyFeedFragment"
+      android:label="fragment_daily_feed" tools:layout="@layout/fragment_daily_feed"/>
+  <fragment android:id="@+id/archivesFragment"
+      android:name="com.ouattararomuald.saviezvousque.posts.archives.ArchivesFragment"
+      android:label="fragment_archives" tools:layout="@layout/fragment_archives"/>
+  <action android:id="@+id/action_global_archivesFragment" app:destination="@id/archivesFragment"/>
+
+</navigation>

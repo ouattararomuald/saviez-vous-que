@@ -9,16 +9,14 @@ import javax.inject.Inject
 /** Factory for ViewModels */
 class ViewModelFactory @Inject constructor(
     private val feedDownloader: FeedDownloader,
-    private val feedRepository: FeedRepository,
-    private val viewContract: ViewContract
-)
-  : ViewModelProvider.Factory {
+  private val feedRepository: FeedRepository
+) : ViewModelProvider.Factory {
 
   @Suppress("UnsafeCast")
   override fun <T : ViewModel> create(modelClass: Class<T>): T {
     if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
       @Suppress("UNCHECKED_CAST")
-      return HomeViewModel(feedDownloader, feedRepository, viewContract) as T
+      return HomeViewModel(feedDownloader, feedRepository) as T
     }
     throw IllegalArgumentException("Unknown ViewModel class")
   }

@@ -12,6 +12,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'androidx.navigation.safeargs'
 
 android {
   compileSdkVersion buildConfig.compileSdk
@@ -65,6 +66,10 @@ android {
       buildConfigField 'String', FEED_BASE_URL_KEY, FEED_BASE_URL
     }
   }
+
+  androidExtensions {
+    experimental = true
+  }
 }
 
 dependencies {
@@ -76,8 +81,12 @@ dependencies {
   implementation deps.dagger.runtime
   kapt deps.dagger.compiler
 
+  implementation deps.android.arch.navigation.fragment
+  implementation deps.android.arch.navigation.ui
+
   implementation deps.androidx.appcompat
   implementation deps.androidx.constraintlayout
+  implementation deps.androidx.legacy
   implementation deps.androidx.material
   implementation deps.androidx.recyclerview
   implementation deps.androidx.annotation
@@ -87,7 +96,15 @@ dependencies {
   kapt deps.androidx.databinding.compiler
 
   implementation deps.androidx.arch.lifecycle.extensions
-  implementation deps.androidx.arch.lifecycle.viewModel
+  implementation deps.androidx.arch.lifecycle.java8
+  implementation deps.androidx.arch.lifecycle.reactivestreams
+
+  implementation deps.groupie.runtime
+  implementation deps.groupie.extensions
+  implementation deps.groupie.databinding
+
+  implementation deps.androidx.paging.runtime
+  implementation deps.androidx.paging.rxjava2
 
   implementation deps.fresco
 
@@ -108,7 +125,10 @@ dependencies {
   androidTestImplementation deps.androidx.test.ext.junit
   androidTestImplementation deps.androidx.test.espresso.runner
   androidTestImplementation deps.androidx.test.espresso.core
+  androidTestImplementation deps.android.arch.navigation.testing
+  androidTestImplementation deps.androidx.paging.testing
   androidTestImplementation deps.truth
+  implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha07'
 }
 
 apply plugin: 'com.getkeepsafe.dexcount'
