@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -17,6 +19,7 @@ import com.ouattararomuald.saviezvousque.downloaders.FeedDownloader
 import com.ouattararomuald.saviezvousque.util.getDbComponent
 import com.ouattararomuald.saviezvousque.util.getDownloaderComponent
 import kotlinx.android.synthetic.main.fragment_archives.postsRecyclerView
+import kotlinx.android.synthetic.main.fragment_archives.progressBar
 
 class ArchivesFragment : Fragment() {
 
@@ -54,32 +57,28 @@ class ArchivesFragment : Fragment() {
 
     // initial page size to fetch can also be configured here too
     val config = PagedList.Config.Builder()
-        .setPrefetchDistance(PostBoundaryCallback.PREFETCH_DISTANCE)
-        .setPageSize(PostBoundaryCallback.PAGE_SIZE)
+        .setPrefetchDistance(ArchivePostDataSourceFactory.NETWORK_PAGE_SIZE)
+        .setPageSize(2 * ArchivePostDataSourceFactory.NETWORK_PAGE_SIZE)
+        .setInitialLoadSizeHint(3 * ArchivePostDataSourceFactory.NETWORK_PAGE_SIZE)
         .setEnablePlaceholders(true)
         .build()
 
-    //val factory = ArchivePostDataSourceFactory(feedDownloader, feedRepository)
-    val boundaryCallback = PostBoundaryCallback(feedDownloader, feedRepository)
-    val databaseSource = feedRepository.getItems(R.id.archive_menu_item)
+    val factory = ArchivePostDataSourceFactory(feedDownloader, feedRepository)
 
-//    factory.requestState.observe(this, Observer<RequestState> {
-//       when (it) {
-//         RequestState.ERROR , RequestState.DONE -> {
-//           progressBar.isGone = true
-//         }
-//         RequestState.LOADING -> {
-//           progressBar.isVisible = true
-//         }
-//       }
-//    })
+    factory.requestState.observe(this, Observer<RequestState> {
+      when (it) {
+        RequestState.LOADING -> {
+          progressBar.isVisible = true
+        }
+        RequestState.ERROR, RequestState.DONE -> {
+          progressBar.isGone = true
+        }
+      }
+    })
 
-    posts = LivePagedListBuilder(databaseSource, config)
-        .setBoundaryCallback(boundaryCallback)
-        .build()
+    posts = LivePagedListBuilder(factory, config).build()
 
     posts.observe(this, Observer<PagedList<Post>> {
-      //boundaryCallback.pageIndex = it.size / PostBoundaryCallback.PAGE_SIZE
       postsAdapter.submitList(it)
     })
   }

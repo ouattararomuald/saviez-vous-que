@@ -52,9 +52,13 @@ class FeedRepository @Inject constructor(
     })
   }
 
-  fun savePostsInTransaction(categoryId: Int, posts: List<Post>): Completable {
+  fun savePostsInTransaction(
+    categoryId: Int,
+    itemsToDelete: List<Int>,
+    posts: List<Post>
+  ): Completable {
     return CompletableFromAction(Action {
-      feedItemDao.addPosts(categoryId, posts.toFeedItems(categoryId))
+      feedItemDao.addPosts(categoryId, itemsToDelete, posts.toFeedItems(categoryId))
     })
   }
 

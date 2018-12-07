@@ -11,6 +11,10 @@ class ArchivePostDataSourceFactory(
   private val feedRepository: FeedRepository
 ) : DataSource.Factory<Int, Post>() {
 
+  companion object {
+    internal const val NETWORK_PAGE_SIZE = 10
+  }
+
   var requestState: MutableLiveData<RequestState> = MutableLiveData()
 
   override fun create(): DataSource<Int, Post> {

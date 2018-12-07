@@ -27,12 +27,12 @@ interface FeedItemDao {
   @Query("DELETE FROM FeedItem")
   fun deleteAll()
 
-  @Query("DELETE FROM FeedItem WHERE categoryId = :categoryId")
-  fun deleteByCategory(categoryId: Int)
+  @Query("DELETE FROM FeedItem WHERE categoryId = :categoryId AND id in (:itemsToDelete)")
+  fun deleteByCategory(categoryId: Int, itemsToDelete: List<Int>)
 
   @Transaction
-  fun addPosts(categoryId: Int, feedItems: List<FeedItem>) {
-    deleteByCategory(categoryId)
+  fun addPosts(categoryId: Int, itemsToDelete: List<Int>, feedItems: List<FeedItem>) {
+    //deleteByCategory(categoryId, itemsToDelete)
     insert(feedItems)
   }
 }
