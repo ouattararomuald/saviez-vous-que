@@ -54,16 +54,32 @@ class ArchivesFragment : Fragment() {
 
     // initial page size to fetch can also be configured here too
     val config = PagedList.Config.Builder()
-        .setInitialLoadSizeHint(10)
-        .setPrefetchDistance(5)
-        .setPageSize(10)
+        .setPrefetchDistance(PostBoundaryCallback.PREFETCH_DISTANCE)
+        .setPageSize(PostBoundaryCallback.PAGE_SIZE)
+        .setEnablePlaceholders(true)
         .build()
 
-    val factory = ArchivePostDataSourceFactory(feedDownloader, feedRepository)
+    //val factory = ArchivePostDataSourceFactory(feedDownloader, feedRepository)
+    val boundaryCallback = PostBoundaryCallback(feedDownloader, feedRepository)
+    val databaseSource = feedRepository.getItems(R.id.archive_menu_item)
 
-    posts = LivePagedListBuilder(factory, config).build()
+//    factory.requestState.observe(this, Observer<RequestState> {
+//       when (it) {
+//         RequestState.ERROR , RequestState.DONE -> {
+//           progressBar.isGone = true
+//         }
+//         RequestState.LOADING -> {
+//           progressBar.isVisible = true
+//         }
+//       }
+//    })
+
+    posts = LivePagedListBuilder(databaseSource, config)
+        .setBoundaryCallback(boundaryCallback)
+        .build()
 
     posts.observe(this, Observer<PagedList<Post>> {
+      //boundaryCallback.pageIndex = it.size / PostBoundaryCallback.PAGE_SIZE
       postsAdapter.submitList(it)
     })
   }

@@ -1,5 +1,6 @@
 package com.ouattararomuald.saviezvousque.db
 
+import androidx.paging.DataSource
 import com.ouattararomuald.saviezvousque.common.Category
 import com.ouattararomuald.saviezvousque.common.Post
 import io.reactivex.Completable
@@ -9,8 +10,8 @@ import io.reactivex.internal.operators.completable.CompletableFromAction
 import javax.inject.Inject
 
 class FeedRepository @Inject constructor(
-    private val feedCategoryDao: FeedCategoryDao,
-    private val feedItemDao: FeedItemDao
+  private val feedCategoryDao: FeedCategoryDao,
+  private val feedItemDao: FeedItemDao
 ) {
 
   fun getAllCategories(): Flowable<List<Category>> {
@@ -24,6 +25,11 @@ class FeedRepository @Inject constructor(
     return CompletableFromAction(Action {
       feedCategoryDao.deleteAll()
     })
+  }
+
+  fun getItems(categoryId: Int): DataSource.Factory<Int, Post> = feedItemDao.getItems(
+      categoryId).map { feedItem ->
+    feedItem.toPost()
   }
 
   fun getAllPosts(): Flowable<List<Post>> {
@@ -43,6 +49,12 @@ class FeedRepository @Inject constructor(
   fun deleteAllPosts(): Completable {
     return CompletableFromAction(Action {
       feedItemDao.deleteAll()
+    })
+  }
+
+  fun savePostsInTransaction(categoryId: Int, posts: List<Post>): Completable {
+    return CompletableFromAction(Action {
+      feedItemDao.addPosts(categoryId, posts.toFeedItems(categoryId))
     })
   }
 

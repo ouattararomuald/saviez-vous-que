@@ -44,11 +44,11 @@ class PostView : LinearLayout {
     val a = context.obtainStyledAttributes(attrs, R.styleable.PostView, defStyle, 0)
 
     if (a.hasValue(R.styleable.PostView_postImageUrl)) {
-      postImageUrl = a.getString(R.styleable.PostView_postImageUrl)
+      postImageUrl = a.getString(R.styleable.PostView_postImageUrl) ?: ""
     }
 
     if (a.hasValue(R.styleable.PostView_postImageUrl)) {
-      postTitle = a.getString(R.styleable.PostView_postTitle)
+      postTitle = a.getString(R.styleable.PostView_postTitle) ?: ""
     }
 
     a.recycle()

@@ -52,4 +52,9 @@ class DailyFeedFragment : Fragment() {
       postSection.update(posts.map { post -> PostItem(post) })
     })
   }
+
+  override fun onPause() {
+    super.onPause()
+    groupAdapter.remove(postSection)
+  }
 }

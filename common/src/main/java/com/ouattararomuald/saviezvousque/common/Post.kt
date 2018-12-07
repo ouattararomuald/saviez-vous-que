@@ -18,18 +18,18 @@ data class Post(
 
   val content: Content
 ) : Parcelable {
-  @Suppress("ConvertTwoComparisonsToRangeCheck")
-  fun getImageUrl(): String? {
+
+  fun getImageUrl(): String {
     val src = "src=\""
     val imageSrcIndex = content.value.indexOf(src)
     val imageLinkStartIndex = imageSrcIndex + src.length
     if (imageLinkStartIndex > 0) {
       val imageLinkEndIndex = content.value.indexOf("\"", imageLinkStartIndex)
-      if (imageLinkStartIndex > 0 && imageLinkEndIndex > imageLinkStartIndex) {
+      if (imageLinkStartIndex in 1..(imageLinkEndIndex - 1)) {
         return content.value.substring(imageLinkStartIndex, imageLinkEndIndex)
       }
     }
 
-    return null
+    return ""
   }
 }
