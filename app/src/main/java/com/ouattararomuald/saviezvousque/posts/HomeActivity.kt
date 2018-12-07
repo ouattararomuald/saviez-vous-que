@@ -5,15 +5,11 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.ouattararomuald.saviezvousque.R
 import com.ouattararomuald.saviezvousque.common.Category
@@ -23,6 +19,7 @@ import com.ouattararomuald.saviezvousque.db.DbComponent
 import com.ouattararomuald.saviezvousque.downloaders.DownloaderComponent
 import com.ouattararomuald.saviezvousque.util.getDbComponent
 import com.ouattararomuald.saviezvousque.util.getDownloaderComponent
+import kotlinx.android.synthetic.main.home_app_bar.toolbar
 import kotlinx.android.synthetic.main.home_app_bar.view.toolbar
 import javax.inject.Inject
 
@@ -46,6 +43,7 @@ class HomeActivity : AppCompatActivity(),
 
   private lateinit var navigationView: NavigationView
 
+  private var previousSelectedMenuItemId: Int = -1
   private var currentSelectedMenuItemId: Int = -1
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,9 +51,6 @@ class HomeActivity : AppCompatActivity(),
     homeActivityBinding = DataBindingUtil.setContentView(this, R.layout.home_activity)
 
     setSupportActionBar(homeActivityBinding.drawerLayout.toolbar)
-
-    setupNavigationMenu(findNavController(R.id.nav_host_fragment))
-    setupActionBar(findNavController(R.id.nav_host_fragment))
 
     sharedViewModel = ViewModelProviders.of(this).get(SharedViewModel::class.java)
 
@@ -105,6 +100,10 @@ class HomeActivity : AppCompatActivity(),
   )
 
   override fun onNavigationItemSelected(item: MenuItem): Boolean {
+    if (item.itemId != previousSelectedMenuItemId) {
+      previousSelectedMenuItemId = currentSelectedMenuItemId
+    }
+
     currentSelectedMenuItemId = item.itemId
 
     if (item.itemId == R.id.archive_menu_item) {
@@ -113,9 +112,25 @@ class HomeActivity : AppCompatActivity(),
       updateSelectedPosts(currentSelectedMenuItemId)
     }
 
-    //item.isChecked = true
-    homeActivityBinding.drawerLayout.closeDrawer(GravityCompat.START)
+    item.isChecked = true
+    toolbar.title = item.title
+    homeActivityBinding.drawerLayout.closeDrawers()
     return true
+  }
+
+  override fun onBackPressed() {
+    if (currentSelectedMenuItemId == R.id.archive_menu_item) {
+      previousSelectedMenuItemId = currentSelectedMenuItemId
+      currentSelectedMenuItemId = sharedViewModel.categoryId.value ?: -1
+
+      if (currentSelectedMenuItemId >= 0) {
+        val menu = navigationView.menu
+
+        menu.findItem(currentSelectedMenuItemId).isChecked = true
+        toolbar.title = menu.findItem(currentSelectedMenuItemId).title
+      }
+    }
+    super.onBackPressed()
   }
 
   private fun updateSelectedPosts(categoryId: Int) {
@@ -136,21 +151,14 @@ class HomeActivity : AppCompatActivity(),
     if (categories.isNotEmpty()) {
       val menu = navigationView.menu
       categories.forEach {
-        menu.add(R.id.main_group, it.id, Menu.NONE, it.name)
+        if (menu.findItem(it.id) == null) {
+          menu.add(R.id.main_group, it.id, Menu.NONE, it.name)
+        }
       }
 
       menu.setGroupCheckable(R.id.main_group, true, true)
       menu.getItem(1).isChecked = true
       currentSelectedMenuItemId = menu.getItem(1).itemId
     }
-  }
-
-  private fun setupNavigationMenu(navController: NavController) {
-    val sideNavView = findViewById<NavigationView>(R.id.nav_view)
-    sideNavView?.setupWithNavController(navController)
-  }
-
-  private fun setupActionBar(navController: NavController) {
-    setupActionBarWithNavController(navController, homeActivityBinding.drawerLayout)
   }
 }
