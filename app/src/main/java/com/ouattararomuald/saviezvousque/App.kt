@@ -35,4 +35,5 @@ class App : Application() {
         .feedBaseUrl(BuildConfig.FEED_BASE_URL)
         .build()
   }
+
 }

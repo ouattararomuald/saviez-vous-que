@@ -17,7 +17,14 @@ class ArchivePostDataSourceFactory(
 
   var requestState: MutableLiveData<RequestState> = MutableLiveData()
 
+  private var dataSource: ArchivePostDataSource? = null
+
   override fun create(): DataSource<Int, Post> {
-    return ArchivePostDataSource(feedDownloader, feedRepository, requestState)
+    dataSource = ArchivePostDataSource(feedDownloader, feedRepository, requestState)
+    return dataSource!!
+  }
+
+  fun invalidate() {
+    dataSource?.invalidate()
   }
 }

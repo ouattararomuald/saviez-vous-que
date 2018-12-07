@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="archives_menu_item">Archives</string>
+  <string name="connect_to_internet">Connectez-vous à internet</string>
+  <string name="youre_offline">Vous êtes hors-ligne. Vérifiez votre connexion.</string>
 </resources>
