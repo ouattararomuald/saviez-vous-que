@@ -91,6 +91,7 @@ dependencies {
   implementation deps.androidx.recyclerview
   implementation deps.androidx.annotation
   implementation deps.androidx.vectordrawable
+  implementation deps.androidx.arch.core.ktx
 
   implementation deps.androidx.databinding.library
   kapt deps.androidx.databinding.compiler
@@ -102,9 +103,6 @@ dependencies {
   implementation deps.groupie.runtime
   implementation deps.groupie.extensions
   implementation deps.groupie.databinding
-
-  implementation deps.androidx.paging.runtime
-  implementation deps.androidx.paging.rxjava2
 
   implementation deps.fresco
 
@@ -128,7 +126,6 @@ dependencies {
   androidTestImplementation deps.android.arch.navigation.testing
   androidTestImplementation deps.androidx.paging.testing
   androidTestImplementation deps.truth
-  implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha07'
 }
 
 apply plugin: 'com.getkeepsafe.dexcount'

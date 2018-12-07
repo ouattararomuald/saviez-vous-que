@@ -2,7 +2,6 @@ package com.ouattararomuald.saviezvousque.posts.archives
 
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
-import com.ouattararomuald.saviezvousque.R
 import com.ouattararomuald.saviezvousque.common.Post
 import com.ouattararomuald.saviezvousque.db.FeedRepository
 import com.ouattararomuald.saviezvousque.downloaders.FeedDownloader
@@ -12,10 +11,10 @@ import io.reactivex.schedulers.Schedulers
 
 internal class ArchivePostDataSource(
   private val feedDownloader: FeedDownloader,
-  private val feedRepository: FeedRepository
+  private val feedRepository: FeedRepository,
+  private val requestState: MutableLiveData<RequestState>
 ) : PageKeyedDataSource<Int, Post>() {
 
-  var requestState: MutableLiveData<RequestState> = MutableLiveData()
   private val disposable = CompositeDisposable()
 
   override fun loadInitial(
@@ -28,9 +27,9 @@ internal class ArchivePostDataSource(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ posts ->
-              updateState(RequestState.LOADING)
+              updateState(RequestState.DONE)
               callback.onResult(posts, 0, 2)
-              savePosts(posts, R.id.archive_menu_item)
+              //savePosts(posts, R.id.archive_menu_item)
             }, {
               updateState(RequestState.ERROR)
             })
@@ -57,9 +56,9 @@ internal class ArchivePostDataSource(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ posts ->
-              updateState(RequestState.LOADING)
+              updateState(RequestState.DONE)
               callback.onResult(posts, adjacentPageKey)
-              savePosts(posts, R.id.archive_menu_item)
+              //savePosts(posts, R.id.archive_menu_item)
             }, {
               updateState(RequestState.ERROR)
             })

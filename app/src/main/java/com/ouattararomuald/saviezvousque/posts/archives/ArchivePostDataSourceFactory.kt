@@ -1,5 +1,6 @@
 package com.ouattararomuald.saviezvousque.posts.archives
 
+import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
 import com.ouattararomuald.saviezvousque.common.Post
 import com.ouattararomuald.saviezvousque.db.FeedRepository
@@ -10,7 +11,9 @@ class ArchivePostDataSourceFactory(
   private val feedRepository: FeedRepository
 ) : DataSource.Factory<Int, Post>() {
 
+  var requestState: MutableLiveData<RequestState> = MutableLiveData()
+
   override fun create(): DataSource<Int, Post> {
-    return ArchivePostDataSource(feedDownloader, feedRepository)
+    return ArchivePostDataSource(feedDownloader, feedRepository, requestState)
   }
 }

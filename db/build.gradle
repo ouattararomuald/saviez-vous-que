@@ -52,6 +52,9 @@ dependencies {
   api deps.androidx.arch.room.runtime
   kapt deps.androidx.arch.room.compiler
 
+  api deps.androidx.paging.runtime
+  api deps.androidx.paging.rxjava2
+
   api deps.threetenabp
 
   testImplementation deps.junit
