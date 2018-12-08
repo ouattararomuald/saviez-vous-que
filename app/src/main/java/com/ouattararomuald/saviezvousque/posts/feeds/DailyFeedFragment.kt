@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ouattararomuald.saviezvousque.R
 import com.ouattararomuald.saviezvousque.common.Post
+import com.ouattararomuald.saviezvousque.posts.EmptyPostItem
 import com.ouattararomuald.saviezvousque.posts.PostItem
 import com.ouattararomuald.saviezvousque.posts.SharedViewModel
 import com.xwray.groupie.GroupAdapter
@@ -21,7 +22,9 @@ class DailyFeedFragment : Fragment() {
 
   private lateinit var model: SharedViewModel
 
-  private var postSection = Section()
+  private var postSection = Section().apply {
+    setPlaceholder(EmptyPostItem())
+  }
   private val groupAdapter = GroupAdapter<ViewHolder>()
 
   override fun onCreateView(
