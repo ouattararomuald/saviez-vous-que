@@ -109,6 +109,10 @@ class HomeActivity : AppCompatActivity(),
     if (item.itemId == R.id.archive_menu_item) {
       findNavController(R.id.nav_host_fragment).navigate(R.id.action_global_archivesFragment)
     } else {
+      if (previousSelectedMenuItemId == R.id.archive_menu_item
+          && currentSelectedMenuItemId != R.id.archive_menu_item) {
+        onBackPressed()
+      }
       updateSelectedPosts(currentSelectedMenuItemId)
     }
 
@@ -119,7 +123,7 @@ class HomeActivity : AppCompatActivity(),
   }
 
   override fun onBackPressed() {
-    if (currentSelectedMenuItemId == R.id.archive_menu_item) {
+    if (isArchiveMenuSelected()) {
       previousSelectedMenuItemId = currentSelectedMenuItemId
       currentSelectedMenuItemId = sharedViewModel.categoryId.value ?: -1
 
@@ -132,6 +136,8 @@ class HomeActivity : AppCompatActivity(),
     }
     super.onBackPressed()
   }
+
+  private fun isArchiveMenuSelected(): Boolean = currentSelectedMenuItemId == R.id.archive_menu_item
 
   private fun updateSelectedPosts(categoryId: Int) {
     if (sharedViewModel.categoryId.value != categoryId && categoryId >= 0) {

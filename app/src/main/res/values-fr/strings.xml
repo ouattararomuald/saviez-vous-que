@@ -3,4 +3,5 @@
   <string name="archives_menu_item">Archives</string>
   <string name="connect_to_internet">Connectez-vous à internet</string>
   <string name="youre_offline">Vous êtes hors-ligne. Vérifiez votre connexion.</string>
+  <string name="no_data_available">Pas de données disponible</string>
 </resources>
