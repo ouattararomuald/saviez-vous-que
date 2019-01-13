@@ -8,4 +8,5 @@ internal class SharedViewModel : ViewModel() {
 
   val categoryId = MutableLiveData<Int>()
   val posts = MutableLiveData<List<Post>>()
+  val networkState = MutableLiveData<NetworkState>()
 }

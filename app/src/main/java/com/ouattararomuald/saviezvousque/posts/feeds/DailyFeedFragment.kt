@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ouattararomuald.saviezvousque.R
 import com.ouattararomuald.saviezvousque.common.Post
+import com.ouattararomuald.saviezvousque.posts.AbstractInternetAwareFragment
 import com.ouattararomuald.saviezvousque.posts.EmptyPostItem
+import com.ouattararomuald.saviezvousque.posts.NetworkState
 import com.ouattararomuald.saviezvousque.posts.PostItem
 import com.ouattararomuald.saviezvousque.posts.SharedViewModel
 import com.xwray.groupie.GroupAdapter
@@ -18,7 +19,7 @@ import com.xwray.groupie.Section
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.fragment_daily_feed.postsRecyclerView
 
-class DailyFeedFragment : Fragment() {
+class DailyFeedFragment : AbstractInternetAwareFragment() {
 
   private lateinit var model: SharedViewModel
 
@@ -28,7 +29,8 @@ class DailyFeedFragment : Fragment() {
   private val groupAdapter = GroupAdapter<ViewHolder>()
 
   override fun onCreateView(
-    inflater: LayoutInflater, container: ViewGroup?,
+    inflater: LayoutInflater,
+    container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
     return inflater.inflate(R.layout.fragment_daily_feed, container, false)
@@ -59,5 +61,14 @@ class DailyFeedFragment : Fragment() {
   override fun onPause() {
     super.onPause()
     groupAdapter.remove(postSection)
+  }
+
+  override fun onInternetAvailable() {
+    model.networkState.postValue(NetworkState.AVAILABLE)
+  }
+
+  override fun onInternetLost() {
+    model.categoryId.postValue(-1)
+    model.networkState.postValue(NetworkState.LOST)
   }
 }

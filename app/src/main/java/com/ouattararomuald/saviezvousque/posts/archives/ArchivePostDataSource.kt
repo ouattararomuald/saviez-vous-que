@@ -17,10 +17,17 @@ internal class ArchivePostDataSource(
 
   private val disposable = CompositeDisposable()
 
+  private var initialParams: LoadInitialParams<Int>? = null
+  private var initialCallback: LoadInitialCallback<Int, Post>? = null
+  private var nextPageParams: LoadParams<Int>? = null
+  private var nextPageCallback: LoadCallback<Int, Post>? = null
+
   override fun loadInitial(
     params: LoadInitialParams<Int>,
     callback: LoadInitialCallback<Int, Post>
   ) {
+    initialParams = params
+    initialCallback = callback
     updateState(RequestState.LOADING)
     disposable.add(
         feedDownloader.getPostByPage(pageIndex = 1, pageSize = params.requestedLoadSize)
@@ -37,6 +44,7 @@ internal class ArchivePostDataSource(
   }
 
   override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Post>) {
+    nextPageParams = params
     load(params.key, params.requestedLoadSize, params.key + 1, callback)
   }
 
@@ -50,6 +58,7 @@ internal class ArchivePostDataSource(
     adjacentPageKey: Int,
     callback: LoadCallback<Int, Post>
   ) {
+    this.nextPageCallback = callback
     updateState(RequestState.LOADING)
     disposable.add(
         feedDownloader.getPostByPage(pageIndex, pageSize)
@@ -67,6 +76,14 @@ internal class ArchivePostDataSource(
 
   private fun updateState(state: RequestState) {
     this.requestState.postValue(state)
+  }
+
+  fun loadNextPage() {
+    if (nextPageParams != null && nextPageCallback != null) {
+      loadAfter(nextPageParams!!, nextPageCallback!!)
+    } else if (initialParams != null && initialCallback != null) {
+      loadInitial(initialParams!!, initialCallback!!)
+    }
   }
 
   private fun savePosts(posts: List<Post>, categoryId: Int) {
