@@ -24,6 +24,10 @@ class ArchivePostDataSourceFactory(
     return dataSource!!
   }
 
+  fun loadNextPage() {
+    dataSource?.loadNextPage()
+  }
+
   fun invalidate() {
     dataSource?.invalidate()
   }

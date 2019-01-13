@@ -25,23 +25,26 @@ class HomeViewModel @Inject constructor(
   private val disposable = CompositeDisposable()
 
   init {
-    loadCategories()
+    loadCategoriesFromDatabase()
     downloadCategories()
 
     posts.value = mutableMapOf()
   }
 
-  private fun loadCategories() {
+  fun refreshData() {
+    loadCategoriesFromDatabase()
+    downloadCategories()
+  }
+
+  private fun loadCategoriesFromDatabase() {
     disposable.add(
         feedRepository.getAllCategories()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-              categories.value = getOrderedCategories(it.toMutableList())
+            .subscribe {
+              categories.postValue(getOrderedCategories(it.toMutableList()))
               loadPostsByCategories(it)
-            }, {
-              // TODO: Log error
-            })
+            }
     )
   }
 
@@ -51,7 +54,7 @@ class HomeViewModel @Inject constructor(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-              categories.value = getOrderedCategories(it.toMutableList())
+              //categories.postValue(getOrderedCategories(it.toMutableList()))
               saveCategories(it)
               downloadPostsByCategories(it)
             }, {
@@ -91,10 +94,10 @@ class HomeViewModel @Inject constructor(
               .subscribeOn(Schedulers.io())
               .observeOn(AndroidSchedulers.mainThread())
               .subscribe { posts ->
-                val postMap = mutableMapOf<Int, List<Post>>()
-                postMap[category.id] = posts
-                postMap.putAll(this.posts.value!!)
-                this.posts.value = postMap
+                //val postMap = mutableMapOf<Int, List<Post>>()
+                //postMap[category.id] = posts
+                //postMap.putAll(this.posts.value!!)
+                //this.posts.postValue(postMap)
                 savePosts(posts, category.id)
               }
       )
@@ -112,12 +115,7 @@ class HomeViewModel @Inject constructor(
   }
 
   private fun moveMainCategoryToTop(categories: MutableList<Category>): List<Category> {
-    // Finding the main category this way is bad but we keep it to move fast.
-    // Solution is welcome.
-
-    val mainCategory = categories.findLast { category ->
-      category.slug == "saviezvousque"
-    }
+    val mainCategory = categories.findLast { category -> category.slug == "saviezvousque" }
 
     mainCategory?.let {
       categories.apply {
@@ -137,24 +135,5 @@ class HomeViewModel @Inject constructor(
     }
 
     return emptyList()
-  }
-
-  private fun synchronizeDisplayedPostsWithUi(
-    displayedCategoryId: Int,
-    isArchive: Boolean = false
-  ) {
-//    if (!isArchive && postsByCategory.contains(displayedCategoryId)) {
-//      displayedPosts.clear()
-//      displayedPosts.addAll(postsByCategory[displayedCategoryId]!!)
-//    } else if (isArchive) {
-//      feedDownloader.getPostByPage(page = 1)
-//          .subscribeOn(Schedulers.io())
-//          .observeOn(AndroidSchedulers.mainThread())
-//          .subscribe { posts ->
-//            savePosts(posts, displayedCategoryId)
-//            displayedPosts.clear()
-//            displayedPosts.addAll(posts)
-//          }
-//    }
   }
 }
