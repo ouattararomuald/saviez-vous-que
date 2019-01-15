@@ -2,17 +2,14 @@ package com.ouattararomuald.saviezvousque.db
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.jakewharton.threetenabp.AndroidThreeTen
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.threeten.bp.LocalDateTime
 
-@RunWith(AndroidJUnit4::class)
 class FeedItemDaoTest {
 
   private lateinit var database: AppDatabase

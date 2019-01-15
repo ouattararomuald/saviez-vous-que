@@ -1,5 +1,3 @@
-@file:JvmName("ConvertersUtil")
-
 package com.ouattararomuald.saviezvousque.db
 
 import com.ouattararomuald.saviezvousque.common.Category

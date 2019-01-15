@@ -28,7 +28,8 @@ class FeedRepository @Inject constructor(
   }
 
   fun getItems(categoryId: Int): DataSource.Factory<Int, Post> = feedItemDao.getItems(
-      categoryId).map { feedItem ->
+      categoryId
+  ).map { feedItem ->
     feedItem.toPost()
   }
 
@@ -39,6 +40,7 @@ class FeedRepository @Inject constructor(
         }
   }
 
+  /** Returns the [Post]s of that belongs to the [Category] with the given [categoryId]. */
   fun getAllPostsByCategory(categoryId: Int): Flowable<List<Post>> {
     return feedItemDao.getAllByCategory(categoryId)
         .map { feedItems ->

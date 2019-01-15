@@ -9,8 +9,8 @@ import androidx.room.PrimaryKey
   Index(value = ["numberOfItems"])
 ])
 data class FeedCategory(
-    @PrimaryKey(autoGenerate = true) val id: Int,
-    @ColumnInfo val numberOfItems: Int,
-    @ColumnInfo val name: String,
-    @ColumnInfo val slug: String
+  @PrimaryKey(autoGenerate = true) val id: Int,
+  @ColumnInfo val numberOfItems: Int,
+  @ColumnInfo val name: String,
+  @ColumnInfo val slug: String
 )

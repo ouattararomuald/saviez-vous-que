@@ -15,8 +15,7 @@ import retrofit2.mock.BehaviorDelegate
 import retrofit2.mock.MockRetrofit
 import retrofit2.mock.NetworkBehavior
 import java.io.File
-import java.util.*
-
+import java.util.Random
 
 class FeedDownloaderTest {
 
@@ -86,7 +85,7 @@ class FeedDownloaderTest {
 
     val rand = Random()
 
-    feedDownloader.getPostByPage(rand.nextInt())
+    feedDownloader.getPostByPage(rand.nextInt(), rand.nextInt())
         .test()
         .assertNoErrors()
         .assertValue(posts)
@@ -117,8 +116,8 @@ class FeedDownloaderTest {
       return delegate.returningResponse(generatePosts()).getPosts()
     }
 
-    override fun getPostByPage(page: Int): Single<List<Post>> {
-      return delegate.returningResponse(generatePosts()).getPostByPage(page)
+    override fun getPostByPage(pageIndex: Int, pageSize: Int): Single<List<Post>> {
+      return delegate.returningResponse(generatePosts()).getPostByPage(pageIndex, pageSize)
     }
 
     override fun getCategories(): Single<List<Category>> {

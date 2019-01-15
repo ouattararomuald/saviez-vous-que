@@ -14,13 +14,9 @@ internal object DateTimeConverter {
 
   @JvmStatic
   @TypeConverter
-  fun toLocalDateTime(value: String): LocalDateTime {
-    return formatter.parse(value, LocalDateTime::from)
-  }
+  fun toLocalDateTime(value: String): LocalDateTime = formatter.parse(value, LocalDateTime::from)
 
   @JvmStatic
   @TypeConverter
-  fun fromLocalDateTime(date: LocalDateTime): String {
-    return date.format(formatter)
-  }
+  fun fromLocalDateTime(date: LocalDateTime): String = date.format(formatter)
 }
