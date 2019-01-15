@@ -16,10 +16,10 @@ class HomeViewModel @Inject constructor(
   private val feedRepository: FeedRepository
 ) : ViewModel() {
 
-  /** Observable list of categories */
+  /** Observable list of categories. */
   internal val categories: MutableLiveData<List<Category>> = MutableLiveData()
 
-  /** Observable list of posts grouped by category */
+  /** Observable list of posts grouped by category's ID. */
   internal val posts: MutableLiveData<MutableMap<Int, List<Post>>> = MutableLiveData()
 
   private val disposable = CompositeDisposable()
@@ -54,7 +54,6 @@ class HomeViewModel @Inject constructor(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-              //categories.postValue(getOrderedCategories(it.toMutableList()))
               saveCategories(it)
               downloadPostsByCategories(it)
             }, {
@@ -94,10 +93,6 @@ class HomeViewModel @Inject constructor(
               .subscribeOn(Schedulers.io())
               .observeOn(AndroidSchedulers.mainThread())
               .subscribe { posts ->
-                //val postMap = mutableMapOf<Int, List<Post>>()
-                //postMap[category.id] = posts
-                //postMap.putAll(this.posts.value!!)
-                //this.posts.postValue(postMap)
                 savePosts(posts, category.id)
               }
       )

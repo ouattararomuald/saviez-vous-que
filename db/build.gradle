@@ -58,6 +58,9 @@ dependencies {
   api deps.threetenabp
 
   testImplementation deps.junit
+  testImplementation deps.retrofit.mock
+  testImplementation deps.mockito
+  testImplementation deps.truth
 
   androidTestImplementation deps.androidx.arch.coreTesting
   androidTestImplementation deps.androidx.arch.room.testing

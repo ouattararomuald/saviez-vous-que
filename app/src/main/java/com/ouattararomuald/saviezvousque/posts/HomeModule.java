@@ -12,9 +12,8 @@ abstract class HomeModule {
 
   @Singleton
   @Provides
-  static ViewModelFactory viewModelFactory(
-      FeedDownloader feedDownloader, FeedRepository feedRepository
-  ) {
+  static ViewModelFactory viewModelFactory(FeedDownloader feedDownloader,
+      FeedRepository feedRepository) {
     return new ViewModelFactory(feedDownloader, feedRepository);
   }
 
