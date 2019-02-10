@@ -7,6 +7,16 @@
   </group>
 
   <group
+      android:id="@+id/menu_group"
+      android:checkableBehavior="none"
+  >
+    <item
+        android:id="@+id/choose_theme_menu_item"
+        android:title="Theme"
+    />
+  </group>
+
+  <group
       android:id="@+id/archive_group"
       android:checkableBehavior="single"
   >

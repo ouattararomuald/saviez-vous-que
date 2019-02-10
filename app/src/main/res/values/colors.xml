@@ -6,4 +6,19 @@
 
   <color name="drawer_item_text_color">@color/colorPrimary</color>
   <color name="drawer_item_selected_text_color">@color/colorAccent</color>
+
+  <!-- Deep Purple Theme -->
+  <color name="deepPurple">#512DA8</color>
+  <color name="deepPurpleDark">#140078</color>
+  <color name="deepPurpleAccent">#8559DA</color>
+
+  <!-- Indigo Theme -->
+  <color name="indigo">#303F9F</color>
+  <color name="indigoDark">#001970</color>
+  <color name="indigoAccent">#666AD1</color>
+
+  <!-- Pink Theme -->
+  <color name="pink">#C2185B</color>
+  <color name="pinkDark">#8C0032</color>
+  <color name="pinkAccent">#FA5788</color>
 </resources>
