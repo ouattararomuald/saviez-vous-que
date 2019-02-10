@@ -104,7 +104,7 @@ dependencies {
   implementation deps.groupie.extensions
   implementation deps.groupie.databinding
 
-  implementation deps.fresco
+  implementation deps.picasso
 
   implementation deps.stetho
 

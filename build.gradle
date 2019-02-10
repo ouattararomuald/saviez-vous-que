@@ -9,7 +9,7 @@ buildscript {
 
   ext.versions = [
     'androidx': '1.0.0-beta01',
-    'androidPlugin': '3.3.0',
+    'androidPlugin': '3.5.0-alpha03',
     'arch': '2.0.0',
     'dagger': '2.19',
     'groupie': '2.3.0',
@@ -95,6 +95,7 @@ buildscript {
       'databinding': "com.xwray:groupie-databinding:${versions.groupie}",
     ],
     'fresco': 'com.facebook.fresco:fresco:1.11.0',
+    'picasso': 'com.squareup.picasso:picasso:2.71828',
     'gson': 'com.google.code.gson:gson:2.8.5',
     'rxAndroid': 'io.reactivex.rxjava2:rxandroid:2.1.0',
     'mockito': 'org.mockito:mockito-core:2.23.4',
