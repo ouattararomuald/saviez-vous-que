@@ -7,4 +7,22 @@
     <item name="android:statusBarColor">@android:color/transparent</item>
   </style>
 
+  <style name="AppTheme.NoActionBar.IndigoTheme">
+    <item name="colorPrimaryDark">@color/indigoDark</item>
+    <item name="colorAccent">@color/indigoAccent</item>
+    <item name="themeColorPrimary">@color/indigo</item>
+  </style>
+
+  <style name="AppTheme.NoActionBar.PinkTheme">
+    <item name="colorPrimaryDark">@color/pinkDark</item>
+    <item name="colorAccent">@color/pinkAccent</item>
+    <item name="themeColorPrimary">@color/pink</item>
+  </style>
+
+  <style name="AppTheme.NoActionBar.DeepPurpleTheme">
+    <item name="colorPrimaryDark">@color/deepPurpleDark</item>
+    <item name="colorAccent">@color/deepPurpleAccent</item>
+    <item name="themeColorPrimary">@color/deepPurple</item>
+  </style>
+
 </resources>

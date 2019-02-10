@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -21,6 +22,7 @@ import com.ouattararomuald.saviezvousque.common.Post
 import com.ouattararomuald.saviezvousque.databinding.HomeActivityBinding
 import com.ouattararomuald.saviezvousque.db.DbComponent
 import com.ouattararomuald.saviezvousque.downloaders.DownloaderComponent
+import com.ouattararomuald.saviezvousque.posts.adapters.ThemePickerAdapter
 import com.ouattararomuald.saviezvousque.posts.archives.PaginatedPostView
 import com.ouattararomuald.saviezvousque.posts.views.PostView
 import com.ouattararomuald.saviezvousque.util.getDbComponent
@@ -31,6 +33,8 @@ import kotlinx.android.synthetic.main.home_content.view.content_home
 import kotlinx.android.synthetic.main.home_content.view.paginated_post_view
 import kotlinx.android.synthetic.main.home_content.view.posts_view
 import javax.inject.Inject
+
+
 
 /** Displays the different categories and allow users to navigate between them. */
 class HomeActivity : AppCompatActivity() {
@@ -64,6 +68,7 @@ class HomeActivity : AppCompatActivity() {
   private val connectivityStatusMonitor = ConnectivityStatusMonitor()
 
   override fun onCreate(savedInstanceState: Bundle?) {
+    setTheme(R.style.AppTheme_NoActionBar_DeepPurpleTheme)
     super.onCreate(savedInstanceState)
     homeActivityBinding = DataBindingUtil.setContentView(this, R.layout.home_activity)
 
@@ -100,6 +105,9 @@ class HomeActivity : AppCompatActivity() {
             getDbComponent().feedRepository(),
             this
         )
+      } else if (menuItem.itemId == R.id.choose_theme_menu_item) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Select a Theme")
       } else {
         currentSelectedMenuItem?.let { updateSelectedPosts(it.itemId) }
       }
@@ -228,8 +236,8 @@ class HomeActivity : AppCompatActivity() {
       }
 
       menu.setGroupCheckable(R.id.main_group, true, true)
-      menu.getItem(1).isChecked = true
-      currentSelectedMenuItem = menu.getItem(1)
+      menu.getItem(2).isChecked = true
+      currentSelectedMenuItem = menu.getItem(2)
     }
   }
 
