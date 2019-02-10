@@ -4,4 +4,6 @@
   <string name="connect_to_internet">Connectez-vous à internet</string>
   <string name="youre_offline">Vous êtes hors-ligne. Vérifiez votre connexion.</string>
   <string name="no_data_available">Pas de données disponible</string>
+  <string name="share">Share</string>
+  <string name="share_image">Partager l\'image</string>
 </resources>

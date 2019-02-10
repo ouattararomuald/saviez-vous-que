@@ -1,32 +1,31 @@
 <merge
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 >
 
-  <com.facebook.drawee.view.SimpleDraweeView
+  <androidx.appcompat.widget.AppCompatImageView
       android:id="@+id/post_image_view"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      app:viewAspectRatio="1"
-      app:failureImage="@drawable/ic_broken_image"
-      app:failureImageScaleType="center"
-      app:retryImage="@drawable/ic_file_download"
-      app:retryImageScaleType="center"
-      app:placeholderImage="@drawable/ic_image"
-      app:placeholderImageScaleType="center"
+      android:layout_height="0dp"
+      app:layout_constraintDimensionRatio="1:1"
+      android:scaleType="centerCrop"
   />
 
-  <androidx.appcompat.widget.AppCompatImageButton
-      android:background="@android:color/transparent"
+  <androidx.appcompat.widget.AppCompatButton
+      android:id="@+id/share_image_button"
       android:layout_marginStart="@dimen/share_button_margin_left"
       android:layout_marginTop="@dimen/share_button_margin"
       android:layout_marginEnd="@dimen/share_button_margin"
       android:layout_marginBottom="@dimen/share_button_margin"
-      android:id="@+id/share_image_button"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/post_image_view"
+      android:padding="4dp"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      app:srcCompat="@drawable/ic_share"
+      android:drawableStart="@drawable/ic_share"
+      android:text="@string/share"
+      style="@style/Widget.MaterialComponents.Button.TextButton"
       tools:src="@drawable/ic_share"
   />
 
