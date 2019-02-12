@@ -7,6 +7,24 @@
     <item name="android:statusBarColor">@android:color/transparent</item>
   </style>
 
+  <style name="AppTheme.NoActionBar.BlueTheme">
+    <item name="colorPrimaryDark">@color/blueDark</item>
+    <item name="colorAccent">@color/blueAccent</item>
+    <item name="themeColorPrimary">@color/blue</item>
+  </style>
+
+  <style name="AppTheme.NoActionBar.CyanTheme">
+    <item name="colorPrimaryDark">@color/cyanDark</item>
+    <item name="colorAccent">@color/cyanAccent</item>
+    <item name="themeColorPrimary">@color/cyan</item>
+  </style>
+
+  <style name="AppTheme.NoActionBar.DeepPurpleTheme">
+    <item name="colorPrimaryDark">@color/deepPurpleDark</item>
+    <item name="colorAccent">@color/deepPurpleAccent</item>
+    <item name="themeColorPrimary">@color/deepPurple</item>
+  </style>
+
   <style name="AppTheme.NoActionBar.IndigoTheme">
     <item name="colorPrimaryDark">@color/indigoDark</item>
     <item name="colorAccent">@color/indigoAccent</item>
@@ -19,10 +37,16 @@
     <item name="themeColorPrimary">@color/pink</item>
   </style>
 
-  <style name="AppTheme.NoActionBar.DeepPurpleTheme">
-    <item name="colorPrimaryDark">@color/deepPurpleDark</item>
-    <item name="colorAccent">@color/deepPurpleAccent</item>
-    <item name="themeColorPrimary">@color/deepPurple</item>
+  <style name="AppTheme.NoActionBar.TealTheme">
+    <item name="colorPrimaryDark">@color/tealDark</item>
+    <item name="colorAccent">@color/tealAccent</item>
+    <item name="themeColorPrimary">@color/teal</item>
+  </style>
+
+  <style name="AppTheme.NoActionBar.YellowTheme">
+    <item name="colorPrimaryDark">@color/yellowDark</item>
+    <item name="colorAccent">@color/yellowAccent</item>
+    <item name="themeColorPrimary">@color/yellow</item>
   </style>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.ouattararomuald.saviezvousque.posts.adapters
+package com.ouattararomuald.saviezvousque.posts.theme
 
 data class ThemeData(
   val name: String,
