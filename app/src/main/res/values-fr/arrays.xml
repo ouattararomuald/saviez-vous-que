@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string-array name="theme_name_choice_array">
+    <item>Bleu</item>
+    <item>Cyan</item>
     <item>Violet Foncé</item>
     <item>Indigo</item>
     <item>Rose</item>
+    <item>Sarcelle</item>
+    <item>Jaune</item>
   </string-array>
 </resources>

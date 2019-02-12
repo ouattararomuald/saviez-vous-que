@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -21,9 +20,11 @@ import com.ouattararomuald.saviezvousque.common.Category
 import com.ouattararomuald.saviezvousque.common.Post
 import com.ouattararomuald.saviezvousque.databinding.HomeActivityBinding
 import com.ouattararomuald.saviezvousque.db.DbComponent
+import com.ouattararomuald.saviezvousque.db.SharedPreferenceManager
 import com.ouattararomuald.saviezvousque.downloaders.DownloaderComponent
-import com.ouattararomuald.saviezvousque.posts.adapters.ThemePickerAdapter
+import com.ouattararomuald.saviezvousque.posts.theme.ThemeStyleFactory
 import com.ouattararomuald.saviezvousque.posts.archives.PaginatedPostView
+import com.ouattararomuald.saviezvousque.posts.theme.ThemeDialogPicker
 import com.ouattararomuald.saviezvousque.posts.views.PostView
 import com.ouattararomuald.saviezvousque.util.getDbComponent
 import com.ouattararomuald.saviezvousque.util.getDownloaderComponent
@@ -33,8 +34,6 @@ import kotlinx.android.synthetic.main.home_content.view.content_home
 import kotlinx.android.synthetic.main.home_content.view.paginated_post_view
 import kotlinx.android.synthetic.main.home_content.view.posts_view
 import javax.inject.Inject
-
-
 
 /** Displays the different categories and allow users to navigate between them. */
 class HomeActivity : AppCompatActivity() {
@@ -67,14 +66,26 @@ class HomeActivity : AppCompatActivity() {
   }
   private val connectivityStatusMonitor = ConnectivityStatusMonitor()
 
+  private lateinit var themeDialogPicker: ThemeDialogPicker
+
+  private lateinit var sharedPreferenceManager: SharedPreferenceManager
+
   override fun onCreate(savedInstanceState: Bundle?) {
-    setTheme(R.style.AppTheme_NoActionBar_DeepPurpleTheme)
+    sharedPreferenceManager = SharedPreferenceManager(this)
+    setTheme(ThemeStyleFactory.getStyle(this, sharedPreferenceManager.theme))
     super.onCreate(savedInstanceState)
     homeActivityBinding = DataBindingUtil.setContentView(this, R.layout.home_activity)
 
     setSupportActionBar(homeActivityBinding.drawerLayout.toolbar)
 
     sharedViewModel = ViewModelProviders.of(this).get(SharedViewModel::class.java)
+
+    themeDialogPicker = ThemeDialogPicker(
+        this) { themeStyle, themeName ->
+      sharedPreferenceManager.theme = themeName
+      setTheme(themeStyle)
+      recreate()
+    }
 
     val toggle = ActionBarDrawerToggle(
         this,
@@ -106,8 +117,7 @@ class HomeActivity : AppCompatActivity() {
             this
         )
       } else if (menuItem.itemId == R.id.choose_theme_menu_item) {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Select a Theme")
+        themeDialogPicker.show()
       } else {
         currentSelectedMenuItem?.let { updateSelectedPosts(it.itemId) }
       }

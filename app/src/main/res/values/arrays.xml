@@ -1,15 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string-array name="theme_name_choice_array">
+    <item>Blue</item>
+    <item>Cyan</item>
     <item>Deep Purple</item>
     <item>Indigo</item>
     <item>Pink</item>
+    <item>Teal</item>
+    <item>Yellow</item>
+  </string-array>
+
+  <string-array name="blue_colors_choice_array">
+    <item>#1976D2</item>
+    <item>#004BA0</item>
+    <item>#63A4FF</item>
+  </string-array>
+
+  <string-array name="cyan_colors_choice_array">
+    <item>#0097A7</item>
+    <item>#006978</item>
+    <item>#56C8D8</item>
   </string-array>
 
   <string-array name="deep_purple_colors_choice_array">
-    <item>#512DA8</item>
-    <item>#140078</item>
-    <item>#8559DA</item>
+    <item>#7E57C2</item>
+    <item>#4D2C91</item>
+    <item>#B085F5</item>
   </string-array>
 
   <string-array name="indigo_colors_choice_array">
@@ -22,5 +38,17 @@
     <item>#C2185B</item>
     <item>#8C0032</item>
     <item>#FA5788</item>
+  </string-array>
+
+  <string-array name="teal_colors_choice_array">
+    <item>#00796B</item>
+    <item>#004C40</item>
+    <item>#48A999</item>
+  </string-array>
+
+  <string-array name="yellow_colors_choice_array">
+    <item>#FBC02D</item>
+    <item>#C49000</item>
+    <item>#FFF263</item>
   </string-array>
 </resources>
