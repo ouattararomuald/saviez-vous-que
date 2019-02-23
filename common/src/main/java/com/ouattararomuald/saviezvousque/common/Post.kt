@@ -8,6 +8,8 @@ import kotlinx.android.parcel.Parcelize
 data class Post(
   val id: Int,
 
+  val categoryId: Int,
+
   @SerializedName(value = "date_gmt")
   val publicationDateUtc: String,
 

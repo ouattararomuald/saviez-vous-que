@@ -21,12 +21,11 @@ internal fun Post.toFeedItem(categoryId: Int): FeedItem = FeedItem(
     content.value
 )
 
-internal fun List<FeedItem>.toPosts(): List<Post> = map {
-  it.toPost()
-}
+internal fun List<FeedItem>.toPosts(categoryId: Int): List<Post> = map { it.toPost(categoryId) }
 
-internal fun FeedItem.toPost(): Post = Post(
+internal fun FeedItem.toPost(categoryId: Int): Post = Post(
     id,
+    categoryId,
     publishedOn.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
     updatedOn.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
     Title(value = title),

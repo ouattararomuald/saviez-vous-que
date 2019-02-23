@@ -29,14 +29,12 @@ class FeedRepository @Inject constructor(
 
   fun getItems(categoryId: Int): DataSource.Factory<Int, Post> = feedItemDao.getItems(
       categoryId
-  ).map { feedItem ->
-    feedItem.toPost()
-  }
+  ).map { feedItem -> feedItem.toPost(categoryId) }
 
   fun getAllPosts(): Flowable<List<Post>> {
     return feedItemDao.getAll()
         .map { feedItems ->
-          return@map feedItems.toPosts()
+          return@map feedItems.toPosts(feedItems.first().categoryId)
         }
   }
 
@@ -44,7 +42,7 @@ class FeedRepository @Inject constructor(
   fun getAllPostsByCategory(categoryId: Int): Flowable<List<Post>> {
     return feedItemDao.getAllByCategory(categoryId)
         .map { feedItems ->
-          return@map feedItems.toPosts()
+          return@map feedItems.toPosts(categoryId)
         }
   }
 

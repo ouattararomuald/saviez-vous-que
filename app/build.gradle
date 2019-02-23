@@ -56,6 +56,8 @@ android {
     debug {
       buildConfigField 'String', DATABASE_NAME_KEY, '"HaveFunDebug"'
       buildConfigField 'String', FEED_BASE_URL_KEY, FEED_BASE_URL
+
+      applicationIdSuffix '.debug'
     }
 
     release {
@@ -125,6 +127,7 @@ dependencies {
   androidTestImplementation deps.androidx.test.espresso.core
   androidTestImplementation deps.android.arch.navigation.testing
   androidTestImplementation deps.androidx.paging.testing
+  androidTestImplementation deps.mockito
   androidTestImplementation deps.truth
 }
 
