@@ -6,6 +6,7 @@ import com.ouattararomuald.saviezvousque.common.Category
 import com.ouattararomuald.saviezvousque.common.Post
 import com.ouattararomuald.saviezvousque.db.FeedRepository
 import com.ouattararomuald.saviezvousque.downloaders.FeedDownloader
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -20,7 +21,7 @@ class HomeViewModel @Inject constructor(
   internal val categories: MutableLiveData<List<Category>> = MutableLiveData()
 
   /** Observable list of posts grouped by category's ID. */
-  internal val posts: MutableLiveData<MutableMap<Int, List<Post>>> = MutableLiveData()
+  internal val posts: MutableLiveData<Map<Int, List<Post>>> = MutableLiveData()
 
   private val disposable = CompositeDisposable()
 
@@ -48,6 +49,31 @@ class HomeViewModel @Inject constructor(
     )
   }
 
+  /** Download the [Post]s for all available categories. */
+  private fun loadPostsByCategories(categories: List<Category>) {
+    val singles = ArrayList<Single<List<Post>>>()
+
+    categories.forEach { category ->
+      singles.add(feedRepository.getAllPostsByCategory(category.id)
+          .filter { it.isNotEmpty() }
+          .subscribeOn(Schedulers.io())
+          .firstOrError()
+      )
+    }
+
+    disposable.add(
+        Single.merge(singles)
+            .toList()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { items ->
+              val postItems = mutableListOf<Post>()
+              items.forEach { postItems.addAll(it) }
+              this.posts.postValue(postItems.groupBy { it.categoryId })
+            }
+    )
+  }
+
   private fun downloadCategories() {
     disposable.add(
         feedDownloader.getCategories()
@@ -66,23 +92,6 @@ class HomeViewModel @Inject constructor(
     feedRepository.saveCategories(categories)
         .subscribeOn(Schedulers.io())
         .subscribe()
-  }
-
-  /** Download the [Post]s for all available categories. */
-  private fun loadPostsByCategories(categories: List<Category>) {
-    categories.forEach { category ->
-      disposable.add(
-          feedRepository.getAllPostsByCategory(category.id)
-              .subscribeOn(Schedulers.io())
-              .observeOn(AndroidSchedulers.mainThread())
-              .subscribe { posts ->
-                val postMap = mutableMapOf<Int, List<Post>>()
-                postMap[category.id] = posts
-                postMap.putAll(this.posts.value!!)
-                this.posts.value = postMap
-              }
-      )
-    }
   }
 
   /** Download the [Post]s for all available categories. */

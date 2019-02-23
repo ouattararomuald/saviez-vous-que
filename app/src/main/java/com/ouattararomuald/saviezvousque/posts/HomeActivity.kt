@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.navigation.NavigationView
 import com.ouattararomuald.saviezvousque.R
 import com.ouattararomuald.saviezvousque.common.Category
@@ -22,9 +21,9 @@ import com.ouattararomuald.saviezvousque.databinding.HomeActivityBinding
 import com.ouattararomuald.saviezvousque.db.DbComponent
 import com.ouattararomuald.saviezvousque.db.SharedPreferenceManager
 import com.ouattararomuald.saviezvousque.downloaders.DownloaderComponent
-import com.ouattararomuald.saviezvousque.posts.theme.ThemeStyleFactory
 import com.ouattararomuald.saviezvousque.posts.archives.PaginatedPostView
 import com.ouattararomuald.saviezvousque.posts.theme.ThemeDialogPicker
+import com.ouattararomuald.saviezvousque.posts.theme.ThemeStyleFactory
 import com.ouattararomuald.saviezvousque.posts.views.PostView
 import com.ouattararomuald.saviezvousque.util.getDbComponent
 import com.ouattararomuald.saviezvousque.util.getDownloaderComponent
@@ -42,8 +41,6 @@ class HomeActivity : AppCompatActivity() {
   @Inject
   lateinit var viewModel: HomeViewModel
 
-  private lateinit var sharedViewModel: SharedViewModel
-
   private lateinit var homeActivityBinding: HomeActivityBinding
 
   /** Dagger database component. */
@@ -57,7 +54,6 @@ class HomeActivity : AppCompatActivity() {
   private lateinit var archivePostView: PaginatedPostView
   private lateinit var postsView: PostView
 
-  private var previousSelectedMenuItem: MenuItem? = null
   private var currentSelectedMenuItem: MenuItem? = null
 
   private val intentFilter: IntentFilter = IntentFilter().apply {
@@ -78,10 +74,7 @@ class HomeActivity : AppCompatActivity() {
 
     setSupportActionBar(homeActivityBinding.drawerLayout.toolbar)
 
-    sharedViewModel = ViewModelProviders.of(this).get(SharedViewModel::class.java)
-
-    themeDialogPicker = ThemeDialogPicker(
-        this) { themeStyle, themeName ->
+    themeDialogPicker = ThemeDialogPicker(this) { themeStyle, themeName ->
       sharedPreferenceManager.theme = themeName
       setTheme(themeStyle)
       recreate()
@@ -101,32 +94,6 @@ class HomeActivity : AppCompatActivity() {
     archivePostView = homeActivityBinding.drawerLayout.content_home.paginated_post_view
     postsView = homeActivityBinding.drawerLayout.content_home.posts_view
 
-    navigationView.setNavigationItemSelectedListener { menuItem ->
-      currentSelectedMenuItem = menuItem
-
-      menuItem.isChecked = true
-      toolbar.title = menuItem.title
-
-      archivePostView.isVisible = menuItem.itemId == R.id.archive_menu_item
-      postsView.isVisible = !archivePostView.isVisible
-
-      if (menuItem.itemId == R.id.archive_menu_item) {
-        archivePostView.configureDataSourceFactory(
-            getDownloaderComponent().feedDownloader(),
-            getDbComponent().feedRepository(),
-            this
-        )
-      } else if (menuItem.itemId == R.id.choose_theme_menu_item) {
-        themeDialogPicker.show()
-      } else {
-        currentSelectedMenuItem?.let { updateSelectedPosts(it.itemId) }
-      }
-
-      homeActivityBinding.drawerLayout.closeDrawers()
-
-      return@setNavigationItemSelectedListener true
-    }
-
     dbComponent = getDbComponent()
     downloaderComponent = getDownloaderComponent()
 
@@ -137,28 +104,51 @@ class HomeActivity : AppCompatActivity() {
         .build()
         .inject(this)
 
-    initializeBinding()
+    homeActivityBinding.viewModel = viewModel
 
-    val categoriesObserver = Observer<List<Category>> {
-      displayCategories(it)
-    }
+    observeCategories()
 
-    viewModel.categories.observe(this, categoriesObserver)
+    observePosts()
 
-    val postsObserver = Observer<MutableMap<Int, List<Post>>> {
-      currentSelectedMenuItem?.let { updateSelectedPosts(it.itemId) }
-    }
-
-    viewModel.posts.observe(this, postsObserver)
-    sharedViewModel.networkState.observe(this, Observer {
-      if (it == NetworkState.AVAILABLE) {
-        viewModel.refreshData()
-      }
-    })
+    configureNavigationMenuEventClickListener()
   }
 
-  private fun initializeBinding() {
-    homeActivityBinding.viewModel = viewModel
+  private fun observeCategories() {
+    val categoriesObserver = Observer<List<Category>> { displayCategories(it) }
+    viewModel.categories.observe(this, categoriesObserver)
+  }
+
+  private fun observePosts() {
+    val postsObserver = Observer<Map<Int, List<Post>>> {
+      currentSelectedMenuItem?.let { updateSelectedPosts(it.itemId) }
+    }
+    viewModel.posts.observe(this, postsObserver)
+  }
+
+  private fun configureNavigationMenuEventClickListener() {
+    navigationView.setNavigationItemSelectedListener { menuItem ->
+      currentSelectedMenuItem = menuItem
+
+      menuItem.isChecked = true
+      toolbar.title = menuItem.title
+
+      archivePostView.isVisible = menuItem.itemId == R.id.archive_menu_item
+      postsView.isVisible = !archivePostView.isVisible
+
+      when (menuItem.itemId) {
+        R.id.archive_menu_item -> archivePostView.configureDataSourceFactory(
+            getDownloaderComponent().feedDownloader(),
+            getDbComponent().feedRepository(),
+            this
+        )
+        R.id.choose_theme_menu_item -> themeDialogPicker.show()
+        else -> currentSelectedMenuItem?.let { updateSelectedPosts(it.itemId) }
+      }
+
+      homeActivityBinding.drawerLayout.closeDrawers()
+
+      return@setNavigationItemSelectedListener true
+    }
   }
 
   override fun onResume() {
@@ -171,65 +161,11 @@ class HomeActivity : AppCompatActivity() {
     unregisterReceiver(connectivityStatusMonitor)
   }
 
-  /*override fun onSupportNavigateUp(): Boolean = NavigationUI.navigateUp(
-      findNavController(R.id.nav_host_fragment),
-      homeActivityBinding.drawerLayout
-  )*/
-
-  /*override fun onNavigationItemSelected(item: MenuItem): Boolean {
-    previousSelectedMenuItem = currentSelectedMenuItem
-    currentSelectedMenuItem = item
-
-    if (item.itemId == R.id.archive_menu_item) {
-      findNavController(R.id.nav_host_fragment).navigate(R.id.action_global_archivesFragment)
-    } else {
-      if (previousSelectedMenuItem?.itemId == R.id.archive_menu_item
-          && currentSelectedMenuItem?.itemId != R.id.archive_menu_item) {
-
-      }
-      currentSelectedMenuItem?.let { updateSelectedPosts(it.itemId) }
-    }
-
-    item.isChecked = true
-    toolbar.title = item.title
-    homeActivityBinding.drawerLayout.closeDrawers()
-    return true
-  }*/
-
-  /*override fun onBackPressed() {
-    if (isArchiveMenuSelected()) {
-      val temp = currentSelectedMenuItem
-      currentSelectedMenuItem = previousSelectedMenuItem
-      previousSelectedMenuItem = temp
-      //currentSelectedMenuItem?.itemId = sharedViewModel.categoryId.value ?: -1
-
-      currentSelectedMenuItem?.let {
-        //val menu = navigationView.menu
-        //menu.findItem(it.itemId).isChecked = true
-        it.isChecked = true
-        toolbar.title = it.title
-      }
-      //onSupportNavigateUp()
-    } else {
-      super.onBackPressed()
-    }
-  }*/
-
-  /*override fun onBackPressed() {
-    findNavController(R.id.nav_host_fragment).popBackStack()
-  }*/
-
-  private fun isArchiveMenuSelected(): Boolean = currentSelectedMenuItem?.itemId == R.id.archive_menu_item
-
   private fun updateSelectedPosts(categoryId: Int) {
-    //if (sharedViewModel.categoryId.value != categoryId && categoryId >= 0) {
     val posts = viewModel.getPostsByCategory(categoryId)
     if (posts.isNotEmpty()) {
-      sharedViewModel.categoryId.postValue(categoryId)
-      sharedViewModel.posts.postValue(posts)
       postsView.displayPosts(categoryId, posts)
     }
-    //}
   }
 
   private fun displayCategories(categories: List<Category>) {

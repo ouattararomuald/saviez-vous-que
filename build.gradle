@@ -9,7 +9,7 @@ buildscript {
 
   ext.versions = [
     'androidx': '1.0.0-beta01',
-    'androidPlugin': '3.5.0-alpha03',
+    'androidPlugin': '3.5.0-alpha05',
     'arch': '2.0.0',
     'dagger': '2.19',
     'groupie': '2.3.0',
