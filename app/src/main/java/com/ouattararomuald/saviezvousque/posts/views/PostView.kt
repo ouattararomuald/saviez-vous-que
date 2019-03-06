@@ -32,7 +32,7 @@ class PostView: FrameLayout {
 
     postsRecyclerView.apply {
       layoutManager = LinearLayoutManager(context).apply {
-        reverseLayout = true
+        stackFromEnd = true
       }
       setHasFixedSize(true)
       adapter = groupAdapter

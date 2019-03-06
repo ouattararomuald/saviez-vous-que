@@ -7,6 +7,7 @@ import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -159,6 +160,23 @@ class HomeActivity : AppCompatActivity() {
   override fun onPause() {
     super.onPause()
     unregisterReceiver(connectivityStatusMonitor)
+  }
+
+  override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    val inflater: MenuInflater = menuInflater
+    inflater.inflate(R.menu.home, menu)
+    return true
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    // Handle item selection
+    return when (item.itemId) {
+      R.id.refresh_menu_item -> {
+        viewModel.refreshData()
+        true
+      }
+      else -> super.onOptionsItemSelected(item)
+    }
   }
 
   private fun updateSelectedPosts(categoryId: Int) {

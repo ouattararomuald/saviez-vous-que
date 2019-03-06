@@ -38,6 +38,13 @@ class FeedRepository @Inject constructor(
         }
   }
 
+  fun getRecentPosts(categoryId: Int): Flowable<List<Post>> {
+    return feedItemDao.getRecentPosts()
+        .map { feedItems ->
+          return@map feedItems.toPosts(categoryId)
+        }
+  }
+
   /** Returns the [Post]s of that belongs to the [Category] with the given [categoryId]. */
   fun getAllPostsByCategory(categoryId: Int): Flowable<List<Post>> {
     return feedItemDao.getAllByCategory(categoryId)
