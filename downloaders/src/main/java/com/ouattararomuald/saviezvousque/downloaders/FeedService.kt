@@ -7,18 +7,18 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface FeedService {
-  @GET("posts/")
+  @GET("posts")
   fun getPosts(): Single<List<Post>>
 
-  @GET("posts/")
+  @GET("posts")
   fun getPostByPage(
     @Query("page") pageIndex: Int,
     @Query("per_page") pageSize: Int
   ): Single<List<Post>>
 
-  @GET("categories/")
+  @GET("categories")
   fun getCategories(): Single<List<Category>>
 
-  @GET("posts/")
+  @GET("posts")
   fun getPostsByCategory(@Query("categories") categoryId: Int): Single<List<Post>>
 }

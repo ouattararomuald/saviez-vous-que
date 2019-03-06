@@ -1,17 +1,15 @@
 <resources>
   <string name="app_name" translatable="false">Saviez Vous Que?</string>
-
   <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
   <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
-
   <string name="title_home_activity" translatable="false">@string/app_name</string>
 
   <string name="archives_menu_item">Archives</string>
-
   <string name="connect_to_internet">Connect to internet</string>
   <string name="youre_offline">You\'re offline. Verify you connection.</string>
   <string name="no_data_available">No data available</string>
   <string name="share">Share</string>
   <string name="share_image">Share Image</string>
   <string name="select_a_theme">Select a theme</string>
+  <string name="refresh_menu_item">Refresh</string>
 </resources>

@@ -44,7 +44,7 @@ class HomeViewModel @Inject constructor(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
               categories.postValue(getOrderedCategories(it.toMutableList()))
-              loadPostsByCategories(it)
+              loadPostsByCategories(getOrderedCategories(it.toMutableList()))
             }
     )
   }
@@ -69,7 +69,16 @@ class HomeViewModel @Inject constructor(
             .subscribe { items ->
               val postItems = mutableListOf<Post>()
               items.forEach { postItems.addAll(it) }
-              this.posts.postValue(postItems.groupBy { it.categoryId })
+              postItems.sortBy { it.lastUpdateUtc }
+
+              val postGroupedByCategory = postItems.groupBy { it.categoryId }
+              val map = mutableMapOf<Int, List<Post>>()
+              postGroupedByCategory.keys.forEach { k ->
+                map[k] = postGroupedByCategory.getValue(k)
+              }
+              map[categories.first().id] = postItems.takeLast(10)
+
+              this.posts.postValue(map)
             }
     )
   }
@@ -134,7 +143,7 @@ class HomeViewModel @Inject constructor(
   fun getPostsByCategory(categoryId: Int): List<Post> {
     posts.value?.let {
       if (it.containsKey(categoryId)) {
-        return it[categoryId]!!
+        return it.getValue(categoryId)
       }
     }
 
