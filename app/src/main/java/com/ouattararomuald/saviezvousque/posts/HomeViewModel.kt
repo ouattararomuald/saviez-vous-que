@@ -76,7 +76,10 @@ class HomeViewModel @Inject constructor(
               postGroupedByCategory.keys.forEach { k ->
                 map[k] = postGroupedByCategory.getValue(k)
               }
-              map[categories.first().id] = postItems.takeLast(10)
+
+              if (categories.isNotEmpty()) {
+                map[categories.first().id] = postItems.takeLast(10)
+              }
 
               this.posts.postValue(map)
             }
