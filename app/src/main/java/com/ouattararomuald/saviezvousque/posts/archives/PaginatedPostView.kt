@@ -61,8 +61,6 @@ class PaginatedPostView : FrameLayout {
         .setInitialLoadSizeHint(3 * ArchivePostDataSourceFactory.NETWORK_PAGE_SIZE)
         .setEnablePlaceholders(true)
         .build()
-
-    // TODO: not items view must be the default to be display here
   }
 
   fun notifyInternetAvailable() {
@@ -111,7 +109,6 @@ class PaginatedPostView : FrameLayout {
   private fun observePageLoading(lifecycleOwner: LifecycleOwner) {
     posts.observe(lifecycleOwner, Observer<PagedList<Post>> {
       postsAdapter.submitList(it)
-      // TODO: display non-empty view: RecyclerView
     })
   }
 }

@@ -30,7 +30,7 @@ class FeedRepositoryDelegationTest {
   fun allCategoriesDelegateToCategoriesDao() {
     given(feedCategoryDao.getAll()).willReturn(FlowableFromArray(emptyArray()))
 
-    feedRepository.getAllCategories()
+    feedRepository.categoryStream()
 
     verify(feedCategoryDao, times(1)).getAll()
   }
@@ -39,7 +39,7 @@ class FeedRepositoryDelegationTest {
   fun allPostsByCategoryDelegateToFeedItemDao() {
     given(feedItemDao.getAllByCategory(categoryId = 1)).willReturn(FlowableFromArray(emptyArray()))
 
-    feedRepository.getAllPostsByCategory(categoryId = 1)
+    feedRepository.postsByCategoryStream(categoryId = 1)
 
     verify(feedItemDao, times(1)).getAllByCategory(categoryId = 1)
   }

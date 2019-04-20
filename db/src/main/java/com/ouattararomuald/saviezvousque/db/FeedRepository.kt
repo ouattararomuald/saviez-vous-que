@@ -1,6 +1,5 @@
 package com.ouattararomuald.saviezvousque.db
 
-import androidx.paging.DataSource
 import com.ouattararomuald.saviezvousque.common.Category
 import com.ouattararomuald.saviezvousque.common.Post
 import io.reactivex.Completable
@@ -14,59 +13,19 @@ class FeedRepository @Inject constructor(
   private val feedItemDao: FeedItemDao
 ) {
 
-  fun getAllCategories(): Flowable<List<Category>> {
+  fun categoryStream(): Flowable<List<Category>> {
     return feedCategoryDao.getAll()
         .map { feedCategories ->
           return@map feedCategories.toCategories()
         }
   }
 
-  fun deleteAllCategories(): Completable {
-    return CompletableFromAction(Action {
-      feedCategoryDao.deleteAll()
-    })
-  }
-
-  fun getItems(categoryId: Int): DataSource.Factory<Int, Post> = feedItemDao.getItems(
-      categoryId
-  ).map { feedItem -> feedItem.toPost(categoryId) }
-
-  fun getAllPosts(): Flowable<List<Post>> {
-    return feedItemDao.getAll()
-        .map { feedItems ->
-          return@map feedItems.toPosts(feedItems.first().categoryId)
-        }
-  }
-
-  fun getRecentPosts(categoryId: Int): Flowable<List<Post>> {
-    return feedItemDao.getRecentPosts()
-        .map { feedItems ->
-          return@map feedItems.toPosts(categoryId)
-        }
-  }
-
   /** Returns the [Post]s of that belongs to the [Category] with the given [categoryId]. */
-  fun getAllPostsByCategory(categoryId: Int): Flowable<List<Post>> {
+  fun postsByCategoryStream(categoryId: Int): Flowable<List<Post>> {
     return feedItemDao.getAllByCategory(categoryId)
         .map { feedItems ->
           return@map feedItems.toPosts(categoryId)
         }
-  }
-
-  fun deleteAllPosts(): Completable {
-    return CompletableFromAction(Action {
-      feedItemDao.deleteAll()
-    })
-  }
-
-  fun savePostsInTransaction(
-    categoryId: Int,
-    itemsToDelete: List<Int>,
-    posts: List<Post>
-  ): Completable {
-    return CompletableFromAction(Action {
-      feedItemDao.addPosts(categoryId, itemsToDelete, posts.toFeedItems(categoryId))
-    })
   }
 
   /**

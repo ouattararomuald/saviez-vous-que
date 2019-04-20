@@ -39,7 +39,7 @@ class HomeViewModel @Inject constructor(
 
   private fun loadCategoriesFromDatabase() {
     disposable.add(
-        feedRepository.getAllCategories()
+        feedRepository.categoryStream()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
@@ -54,7 +54,7 @@ class HomeViewModel @Inject constructor(
     val singles = ArrayList<Single<List<Post>>>()
 
     categories.forEach { category ->
-      singles.add(feedRepository.getAllPostsByCategory(category.id)
+      singles.add(feedRepository.postsByCategoryStream(category.id)
           .filter { it.isNotEmpty() }
           .subscribeOn(Schedulers.io())
           .firstOrError()

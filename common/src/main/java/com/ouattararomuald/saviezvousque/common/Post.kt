@@ -27,7 +27,7 @@ data class Post(
     val imageLinkStartIndex = imageSrcIndex + src.length
     if (imageLinkStartIndex > 0) {
       val imageLinkEndIndex = content.value.indexOf("\"", imageLinkStartIndex)
-      if (imageLinkStartIndex in 1..(imageLinkEndIndex - 1)) {
+      if (imageLinkStartIndex in 1 until imageLinkEndIndex) {
         return content.value.substring(imageLinkStartIndex, imageLinkEndIndex)
       }
     }
