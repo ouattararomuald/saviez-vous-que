@@ -9,15 +9,15 @@ buildscript {
 
   ext.versions = [
     'androidx': '1.1.0-alpha02',
-    'androidPlugin': '3.5.0-alpha12',
+    'androidPlugin': '3.6.0-alpha03',
     'arch': '2.1.0-alpha02',
-    'dagger': '2.21',
+    'dagger': '2.23.1',
     'groupie': '2.4.0-alpha1',
-    'kotlin': '1.3.21',
-    'nav': '1.0.0-rc01',
+    'kotlin': '1.3.31',
+    'nav': '1.0.0',
     'paging': '2.1.0',
-    'retrofit': '2.5.0',
-    'room': '2.1.0-alpha04',
+    'retrofit': '2.6.0',
+    'room': '2.1.0',
   ]
 
   ext.deps = [
@@ -31,21 +31,21 @@ buildscript {
       ],
     ],
     'androidx': [
-      'appcompat': "androidx.appcompat:appcompat:${versions.androidx}",
-      'constraintlayout': 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3',
+      'appcompat': 'androidx.appcompat:appcompat:1.1.0-beta01',
+      'constraintlayout': 'androidx.constraintlayout:constraintlayout:2.0.0-beta2',
       'legacy': 'androidx.legacy:legacy-support-v4:1.0.0',
-      'material': 'com.google.android.material:material:1.1.0-alpha03',
-      'recyclerview': "androidx.recyclerview:recyclerview:${versions.androidx}",
-      'annotation': 'androidx.annotation:annotation:1.1.0-alpha01',
-      'vectordrawable': 'androidx.vectordrawable:vectordrawable:1.1.0-alpha01',
+      'material': 'com.google.android.material:material:1.1.0-alpha07',
+      'recyclerview': 'androidx.recyclerview:recyclerview:1.1.0-alpha06',
+      'annotation': 'androidx.annotation:annotation:1.1.0',
+      'vectordrawable': 'androidx.vectordrawable:vectordrawable:1.1.0-beta02',
       'arch': [
         'lifecycle': [
-          'extensions': "androidx.lifecycle:lifecycle-extensions:${versions.arch}",
-          'java8': "androidx.lifecycle:lifecycle-common-java8:${versions.arch}",
-          'reactivestreams': "androidx.lifecycle:lifecycle-reactivestreams:${versions.arch}",
+          'extensions': 'androidx.lifecycle:lifecycle-extensions:2.2.0-alpha01',
+          'java8': 'androidx.lifecycle:lifecycle-common-java8:2.2.0-alpha01',
+          'reactivestreams': 'androidx.lifecycle:lifecycle-reactivestreams:2.2.0-alpha01',
         ],
         'core': [
-          'ktx': 'androidx.core:core-ktx:1.1.0-alpha04',
+          'ktx': 'androidx.core:core-ktx:1.2.0-alpha02',
         ],
         'room': [
           'rxjava2': "androidx.room:room-rxjava2:${versions.room}",
@@ -53,7 +53,7 @@ buildscript {
           'compiler': "androidx.room:room-compiler:${versions.room}",
           'testing': "androidx.room:room-testing:${versions.room}"
         ],
-        'coreTesting': 'androidx.arch.core:core-testing:2.0.0'
+        'coreTesting': 'androidx.arch.core:core-testing:2.1.0-beta01'
       ],
       'databinding': [
         'compiler': "androidx.databinding:databinding-compiler:${versions.androidPlugin}",
@@ -66,11 +66,11 @@ buildscript {
       ],
       'test': [
         'ext': [
-          'junit': 'androidx.test.ext:junit:1.1.1-alpha01'
+          'junit': 'androidx.test.ext:junit:1.1.2-alpha01'
         ],
         'espresso': [
-          'runner': 'androidx.test:runner:1.1.2-alpha01',
-          'core': 'androidx.test.espresso:espresso-core:3.1.2-alpha01',
+          'runner': 'androidx.test:runner:1.3.0-alpha01',
+          'core': 'androidx.test.espresso:espresso-core:3.3.0-alpha01',
         ],
       ],
     ],
@@ -98,9 +98,9 @@ buildscript {
     'picasso': 'com.squareup.picasso:picasso:2.71828',
     'gson': 'com.google.code.gson:gson:2.8.5',
     'rxAndroid': 'io.reactivex.rxjava2:rxandroid:2.1.1',
-    'mockito': 'org.mockito:mockito-core:2.24.5',
-    'stetho': 'com.facebook.stetho:stetho:1.5.0',
-    'threetenabp': 'com.jakewharton.threetenabp:threetenabp:1.1.2',
+    'mockito': 'org.mockito:mockito-core:2.28.2',
+    'stetho': 'com.facebook.stetho:stetho:1.5.1',
+    'threetenabp': 'com.jakewharton.threetenabp:threetenabp:1.2.1',
     'truth': 'com.google.truth:truth:0.42',
     'jsr305': 'com.google.code.findbugs:jsr305:3.0.2',
   ]
@@ -122,14 +122,14 @@ buildscript {
 }
 
 plugins {
-  id 'io.gitlab.arturbosch.detekt' version '1.0.0.RC9.2'
-  id 'com.github.ben-manes.versions' version '0.20.0'
+  //id 'io.gitlab.arturbosch.detekt' version '1.0.0.RC9.2'
+  id 'com.github.ben-manes.versions' version '0.21.0'
 }
 
 allprojects {
   repositories {
-    google()
     mavenCentral()
+    google()
     jcenter()
   }
 }
@@ -137,8 +137,8 @@ allprojects {
 subprojects { project ->
 
   repositories {
-    google()
     mavenCentral()
+    google()
     jcenter()
   }
 
@@ -158,9 +158,9 @@ task clean(type: Delete) {
   delete rootProject.buildDir
 }
 
-detekt {
-  toolVersion = "1.0.0.RC9.2"
-  input = files("$projectDir/app/src/main/java")
-  config = files("$projectDir/code-analysis/detekt.yml")
-  filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
-}
+//detekt {
+//  toolVersion = "1.0.0.RC9.2"
+//  input = files("$projectDir/app/src/main/java")
+//  config = files("$projectDir/code-analysis/detekt.yml")
+//  filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
+//}
