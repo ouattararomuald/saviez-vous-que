@@ -39,15 +39,14 @@ import javax.inject.Inject
 class HomeActivity : AppCompatActivity() {
 
   /** The [HomeViewModel] bound to this activity. */
-  @Inject
-  lateinit var viewModel: HomeViewModel
+  @Inject lateinit var viewModel: HomeViewModel
 
   private lateinit var homeActivityBinding: HomeActivityBinding
 
   /** Dagger database component. */
   private lateinit var dbComponent: DbComponent
 
-  /** Downloader component. */
+  /** Dagger downloader component. */
   private lateinit var downloaderComponent: DownloaderComponent
 
   private lateinit var navigationView: NavigationView
