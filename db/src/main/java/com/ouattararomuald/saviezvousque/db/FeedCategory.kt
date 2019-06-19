@@ -1,6 +1,5 @@
 package com.ouattararomuald.saviezvousque.db
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
@@ -10,7 +9,7 @@ import androidx.room.PrimaryKey
 ])
 data class FeedCategory(
   @PrimaryKey(autoGenerate = true) val id: Int,
-  @ColumnInfo val numberOfItems: Int,
-  @ColumnInfo val name: String,
-  @ColumnInfo val slug: String
+  val numberOfItems: Int,
+  val name: String,
+  val slug: String
 )
