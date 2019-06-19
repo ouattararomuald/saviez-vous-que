@@ -6,7 +6,7 @@ import android.widget.FrameLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ouattararomuald.saviezvousque.R
 import com.ouattararomuald.saviezvousque.common.Post
-import com.ouattararomuald.saviezvousque.posts.EmptyPostItem
+import com.ouattararomuald.saviezvousque.posts.NoDataAvailablePlaceholder
 import com.ouattararomuald.saviezvousque.posts.PostItem
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.post_view.view.postsRecyclerView
 
 class PostView: FrameLayout {
 
-  private var postSection = Section().apply { setPlaceholder(EmptyPostItem()) }
+  private var postSection = Section().apply { setPlaceholder(NoDataAvailablePlaceholder()) }
   private val groupAdapter = GroupAdapter<ViewHolder>()
 
   private var categoryId: Int = -1

@@ -3,16 +3,11 @@ package com.ouattararomuald.saviezvousque.posts.archives
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
 import com.ouattararomuald.saviezvousque.common.Post
-import com.ouattararomuald.saviezvousque.db.FeedRepository
 import com.ouattararomuald.saviezvousque.downloaders.FeedDownloader
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -20,11 +15,8 @@ import kotlin.coroutines.CoroutineContext
 
 internal class ArchivePostDataSource(
   private val feedDownloader: FeedDownloader,
-  private val feedRepository: FeedRepository,
   private val requestState: MutableLiveData<RequestState>
 ) : PageKeyedDataSource<Int, Post>(), CoroutineScope {
-
-  private val disposable = CompositeDisposable()
 
   private val supervisorJob = SupervisorJob()
 
@@ -51,19 +43,6 @@ internal class ArchivePostDataSource(
     } catch (ex: Exception) {
       updateState(RequestState.ERROR)
     }
-
-//    disposable.add(
-//        feedDownloader.getPostByPage(pageIndex = 1, pageSize = params.requestedLoadSize)
-//            .subscribeOn(Schedulers.io())
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribe({ posts ->
-//              updateState(RequestState.DONE)
-//              callback.onResult(posts, 0, 2)
-//              //savePosts(posts, R.id.archive_menu_item)
-//            }, {
-//              updateState(RequestState.ERROR)
-//            })
-//    )
   }
 
   private suspend fun getPostByPage(
@@ -106,18 +85,6 @@ internal class ArchivePostDataSource(
     } catch (ex: Exception) {
       updateState(RequestState.ERROR)
     }
-//    disposable.add(
-//        feedDownloader.getPostByPage(pageIndex, pageSize)
-//            .subscribeOn(Schedulers.io())
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribe({ posts ->
-//              updateState(RequestState.DONE)
-//              callback.onResult(posts, adjacentPageKey)
-//              //savePosts(posts, R.id.archive_menu_item)
-//            }, {
-//              updateState(RequestState.ERROR)
-//            })
-//    )
   }
 
   private suspend fun updateState(state: RequestState) {
@@ -130,11 +97,5 @@ internal class ArchivePostDataSource(
     } else if (initialParams != null && initialCallback != null) {
       loadInitial(initialParams!!, initialCallback!!)
     }
-  }
-
-  private fun savePosts(posts: List<Post>, categoryId: Int) {
-    feedRepository.savePosts(posts, categoryId)
-        .subscribeOn(Schedulers.io())
-        .subscribe()
   }
 }

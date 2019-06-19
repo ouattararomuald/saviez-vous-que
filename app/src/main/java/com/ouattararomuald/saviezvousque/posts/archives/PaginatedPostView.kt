@@ -88,7 +88,7 @@ class PaginatedPostView : FrameLayout {
       this.feedDownloader = feedDownloader
       this.feedRepository = feedRepository
       this.lifecycleOwner = lifecycleOwner
-      factory = ArchivePostDataSourceFactory(feedDownloader, feedRepository)
+      factory = ArchivePostDataSourceFactory(feedDownloader)
       posts = LivePagedListBuilder(factory, config).build()
     }
 
