@@ -1,5 +1,6 @@
 *.iml
 *.apk
+release/
 .gradle
 /local.properties
 /.idea/

@@ -89,6 +89,7 @@ class TestsUtil {
       (1..quantity).forEach { index ->
         val post = Post(
             id = index,
+            categoryId = index,
             publicationDateUtc = "2018-02-17T10:36:22",
             lastUpdateUtc = "2018-02-18T11:36:22",
             title = Title(value = "title"),
