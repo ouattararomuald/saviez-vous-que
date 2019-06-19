@@ -1,9 +1,11 @@
 package com.ouattararomuald.saviezvousque.db
 
+//import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
 import com.jakewharton.threetenabp.AndroidThreeTen
+import com.ouattararomuald.saviezvousque.db.daos.FeedItemDao
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.ouattararomuald.saviezvousque.db.daos.FeedCategoryDao
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

@@ -10,12 +10,18 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 class HomeViewModel @Inject constructor(
   private val feedDownloader: FeedDownloader,
   private val feedRepository: FeedRepository
-) : ViewModel() {
+) : ViewModel(), CoroutineScope {
 
   /** Observable list of categories. */
   internal val categories: MutableLiveData<List<Category>> = MutableLiveData()
@@ -25,16 +31,21 @@ class HomeViewModel @Inject constructor(
 
   private val disposable = CompositeDisposable()
 
+  private val supervisorJob = SupervisorJob()
+
+  override val coroutineContext: CoroutineContext
+    get() = Dispatchers.IO + supervisorJob
+
   init {
     loadCategoriesFromDatabase()
-    downloadCategories()
+    launch { downloadCategories() }
 
     posts.value = mutableMapOf()
   }
 
   fun refreshData() {
     loadCategoriesFromDatabase()
-    downloadCategories()
+    launch { downloadCategories() }
   }
 
   private fun loadCategoriesFromDatabase() {
@@ -86,8 +97,12 @@ class HomeViewModel @Inject constructor(
     )
   }
 
-  private fun downloadCategories() {
-    disposable.add(
+  private suspend fun downloadCategories() {
+    val categories = feedDownloader.getCategories()
+    saveCategories(categories)
+    downloadPostsByCategories(categories)
+
+    /*disposable.add(
         feedDownloader.getCategories()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -97,7 +112,7 @@ class HomeViewModel @Inject constructor(
             }, {
               // TODO: Log error
             })
-    )
+    )*/
   }
 
   private fun saveCategories(categories: List<Category>) {
@@ -107,16 +122,20 @@ class HomeViewModel @Inject constructor(
   }
 
   /** Download the [Post]s for all available categories. */
-  private fun downloadPostsByCategories(categories: List<Category>) {
+  private suspend fun downloadPostsByCategories(categories: List<Category>) = runBlocking {
     categories.forEach { category ->
-      disposable.add(
+      launch {
+        val posts = feedDownloader.getPostsByCategory(category.id)
+        savePosts(posts, category.id)
+      }
+      /*disposable.add(
           feedDownloader.getPostsByCategory(category.id)
               .subscribeOn(Schedulers.io())
               .observeOn(AndroidSchedulers.mainThread())
               .subscribe { posts ->
                 savePosts(posts, category.id)
               }
-      )
+      )*/
     }
   }
 

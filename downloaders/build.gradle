@@ -41,6 +41,8 @@ dependencies {
   implementation deps.kotlin.stdlib.jdk8
   api project(':common')
 
+  api deps.okhttp
+
   api deps.dagger.runtime
   kapt deps.dagger.compiler
 
@@ -50,6 +52,7 @@ dependencies {
   api deps.gson
 
   testImplementation deps.junit
+  testImplementation deps.coroutines.test
   testImplementation deps.retrofit.mock
   testImplementation deps.truth
 

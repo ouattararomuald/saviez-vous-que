@@ -2,6 +2,8 @@ package com.ouattararomuald.saviezvousque.db;
 
 import android.content.Context;
 import androidx.room.Room;
+import com.ouattararomuald.saviezvousque.db.daos.FeedCategoryDao;
+import com.ouattararomuald.saviezvousque.db.daos.FeedItemDao;
 import dagger.Module;
 import dagger.Provides;
 
