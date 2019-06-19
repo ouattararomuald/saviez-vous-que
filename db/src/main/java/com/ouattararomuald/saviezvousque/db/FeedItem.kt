@@ -1,6 +1,5 @@
 package com.ouattararomuald.saviezvousque.db
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import org.threeten.bp.LocalDateTime
@@ -14,9 +13,9 @@ import org.threeten.bp.LocalDateTime
 data class FeedItem(
   val id: Int,
   val categoryId: Int,
-  @ColumnInfo val imageUrl: String?,
-  @ColumnInfo val publishedOn: LocalDateTime,
-  @ColumnInfo val updatedOn: LocalDateTime,
-  @ColumnInfo val title: String,
-  @ColumnInfo val content: String
+  val imageUrl: String?,
+  val publishedOn: LocalDateTime,
+  val updatedOn: LocalDateTime,
+  val title: String,
+  val content: String
 )
