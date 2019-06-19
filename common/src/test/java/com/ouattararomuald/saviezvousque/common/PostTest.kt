@@ -9,6 +9,7 @@ class PostTest {
   fun validContentShouldReturnImageUrl() {
     val post = Post(
         id = 1,
+        categoryId = 1,
         publicationDateUtc = "2018-02-17T20:20:20",
         lastUpdateUtc = "2018-02-17T20:20:20",
         title = Title(value = "title"),
@@ -23,6 +24,7 @@ class PostTest {
   fun invalidContentShouldReturnNullImageUrl() {
     val post = Post(
         id = 1,
+        categoryId = 1,
         publicationDateUtc = "2018-02-17T20:20:20",
         lastUpdateUtc = "2018-02-17T20:20:20",
         title = Title(value = "title"),
