@@ -1,9 +1,10 @@
-package com.ouattararomuald.saviezvousque.db
+package com.ouattararomuald.saviezvousque.db.daos
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.ouattararomuald.saviezvousque.db.FeedCategory
 import io.reactivex.Flowable
 
 @Dao

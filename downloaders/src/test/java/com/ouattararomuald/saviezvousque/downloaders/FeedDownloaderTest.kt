@@ -1,21 +1,26 @@
 package com.ouattararomuald.saviezvousque.downloaders
 
+import com.google.common.truth.Truth.assertThat
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.ouattararomuald.saviezvousque.common.Category
 import com.ouattararomuald.saviezvousque.common.Post
-import io.reactivex.Single
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.mock.BehaviorDelegate
 import retrofit2.mock.MockRetrofit
 import retrofit2.mock.NetworkBehavior
 import java.io.File
 import java.util.Random
+import java.util.concurrent.Executors
 
 class FeedDownloaderTest {
 
@@ -25,6 +30,8 @@ class FeedDownloaderTest {
   private lateinit var mockRetrofit: MockRetrofit
   private lateinit var retrofit: Retrofit
   private lateinit var mockFeedService: MockFeedService
+
+  private val mainThreadSurrogate = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
   @Before
   fun setUp() {
@@ -40,101 +47,93 @@ class FeedDownloaderTest {
         .networkBehavior(behavior)
         .build()
 
-    val delegate: BehaviorDelegate<FeedService> = mockRetrofit.create(FeedService::class.java)
-    mockFeedService = MockFeedService(delegate)
+    mockFeedService = MockFeedService()
 
     feedDownloader = FeedDownloader.create(mockFeedService)
+    Dispatchers.setMain(mainThreadSurrogate)
   }
 
   @After
   fun tearDown() {
+    Dispatchers.resetMain() // reset main dispatcher to the original Main dispatcher
+    mainThreadSurrogate.close()
   }
 
   @Test
-  fun getPostShouldSuccess() {
+  fun getPost() = runBlocking {
     val file = TestsUtil.loadFileFromResources(TestsUtil.POSTS_JSON_FILE)
-    val postListType = object : TypeToken<List<Post>>() {
-    }.type
+    val postListType = object : TypeToken<List<Post>>() {}.type
     val posts: List<Post> = gson.fromJson(file.toText(), postListType)
 
-    feedDownloader.getPosts()
-        .test()
-        .assertNoErrors()
-        .assertValue(posts)
+    val downloadedPosts = feedDownloader.getPosts()
+    assertThat(downloadedPosts).isEqualTo(posts)
   }
 
   @Test
-  fun getCategoriesShouldSuccess() {
+  fun getCategories() = runBlocking {
     val file = TestsUtil.loadFileFromResources(TestsUtil.CATEGORIES_JSON_FILE)
-    val categoriesListType = object : TypeToken<List<Category>>() {
-    }.type
+    val categoriesListType = object : TypeToken<List<Category>>() {}.type
     val categories: List<Category> = gson.fromJson(file.toText(), categoriesListType)
 
-    feedDownloader.getCategories()
-        .test()
-        .assertNoErrors()
-        .assertValue(categories)
+    val downloadedCategories = feedDownloader.getCategories()
+    assertThat(downloadedCategories).isEqualTo(categories)
   }
 
   @Test
-  fun getPostByPage() {
+  fun getPostByPage() = runBlocking {
     val file = TestsUtil.loadFileFromResources(TestsUtil.POSTS_JSON_FILE)
-    val postListType = object : TypeToken<List<Post>>() {
-    }.type
+    val postListType = object : TypeToken<List<Post>>() {}.type
+    val posts: List<Post> = gson.fromJson(file.toText(), postListType)
+
+    var downloadedPostByPage = feedDownloader.getPostByPage(pageIndex = 0, pageSize = 5)
+    assertThat(downloadedPostByPage).isEqualTo(posts)
+
+    downloadedPostByPage = feedDownloader.getPostByPage(pageIndex = 0, pageSize = 2)
+    assertThat(downloadedPostByPage).isEqualTo(posts.subList(fromIndex = 0, toIndex = 2))
+  }
+
+  @Test
+  fun getPostsByCategory() = runBlocking {
+    val file = TestsUtil.loadFileFromResources(TestsUtil.POSTS_JSON_FILE)
+    val postListType = object : TypeToken<List<Post>>() {}.type
     val posts: List<Post> = gson.fromJson(file.toText(), postListType)
 
     val rand = Random()
 
-    feedDownloader.getPostByPage(rand.nextInt(), rand.nextInt())
-        .test()
-        .assertNoErrors()
-        .assertValue(posts)
+    val downloadedPostByCategory = feedDownloader.getPostsByCategory(rand.nextInt())
+    assertThat(downloadedPostByCategory).isEqualTo(posts)
   }
 
-  @Test
-  fun getPostsByCategoryShouldSuccess() {
-    val file = TestsUtil.loadFileFromResources(TestsUtil.POSTS_JSON_FILE)
-    val postListType = object : TypeToken<List<Post>>() {
-    }.type
-    val posts: List<Post> = gson.fromJson(file.toText(), postListType)
-
-    val rand = Random()
-
-    feedDownloader.getPostsByCategory(rand.nextInt())
-        .test()
-        .assertNoErrors()
-        .assertValue(posts)
-  }
-
-  private inner class MockFeedService(
-      private val delegate: BehaviorDelegate<FeedService>
-  ) : FeedService {
+  private inner class MockFeedService : FeedService {
     private val postFile: File = TestsUtil.loadFileFromResources(TestsUtil.POSTS_JSON_FILE)
-    private val categoriesFile: File = TestsUtil.loadFileFromResources(TestsUtil.CATEGORIES_JSON_FILE)
+    private val categoriesFile: File =
+        TestsUtil.loadFileFromResources(TestsUtil.CATEGORIES_JSON_FILE)
 
-    override fun getPosts(): Single<List<Post>> {
-      return delegate.returningResponse(generatePosts()).getPosts()
+    override suspend fun getPosts(): List<Post> = generatePosts()
+
+    override suspend fun getPostByPage(pageIndex: Int, pageSize: Int): List<Post> {
+      val fromIndex = pageIndex * pageSize
+      val toIndexExclusive = fromIndex + pageSize
+      val posts = generatePosts()
+
+      return if (fromIndex >= 0 && toIndexExclusive <= posts.size && fromIndex <= toIndexExclusive) {
+        generatePosts().subList(fromIndex, toIndexExclusive)
+      } else {
+        throw IllegalArgumentException() // should raise HttpException normally
+      }
     }
 
-    override fun getPostByPage(pageIndex: Int, pageSize: Int): Single<List<Post>> {
-      return delegate.returningResponse(generatePosts()).getPostByPage(pageIndex, pageSize)
+    override suspend fun getCategories(): List<Category> {
+      val categoriesListType = object : TypeToken<List<Category>>() {}.type
+      return gson.fromJson(categoriesFile.toText(), categoriesListType)
     }
 
-    override fun getCategories(): Single<List<Category>> {
-      val categoriesListType = object : TypeToken<List<Category>>() {
-      }.type
-      val categories: List<Category> = gson.fromJson(categoriesFile.toText(), categoriesListType)
-
-      return delegate.returningResponse(categories).getCategories()
-    }
-
-    override fun getPostsByCategory(categoryId: Int): Single<List<Post>> {
-      return delegate.returningResponse(generatePosts()).getPostsByCategory(categoryId)
+    override suspend fun getPostsByCategory(categoryId: Int): List<Post> {
+      return generatePosts()
     }
 
     private fun generatePosts(): List<Post> {
-      val postListType = object : TypeToken<List<Post>>() {
-      }.type
+      val postListType = object : TypeToken<List<Post>>() {}.type
       return gson.fromJson(postFile.toText(), postListType)
     }
   }

@@ -2,6 +2,8 @@ package com.ouattararomuald.saviezvousque.db
 
 import com.ouattararomuald.saviezvousque.common.Category
 import com.ouattararomuald.saviezvousque.common.Post
+import com.ouattararomuald.saviezvousque.db.daos.FeedCategoryDao
+import com.ouattararomuald.saviezvousque.db.daos.FeedItemDao
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.functions.Action

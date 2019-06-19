@@ -2,23 +2,22 @@ package com.ouattararomuald.saviezvousque.downloaders
 
 import com.ouattararomuald.saviezvousque.common.Category
 import com.ouattararomuald.saviezvousque.common.Post
-import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface FeedService {
   @GET("posts")
-  fun getPosts(): Single<List<Post>>
+  suspend fun getPosts(): List<Post>
 
   @GET("posts")
-  fun getPostByPage(
+  suspend fun getPostByPage(
     @Query("page") pageIndex: Int,
     @Query("per_page") pageSize: Int
-  ): Single<List<Post>>
+  ): List<Post>
 
   @GET("categories")
-  fun getCategories(): Single<List<Category>>
+  suspend fun getCategories(): List<Category>
 
   @GET("posts")
-  fun getPostsByCategory(@Query("categories") categoryId: Int): Single<List<Post>>
+  suspend fun getPostsByCategory(@Query("categories") categoryId: Int): List<Post>
 }

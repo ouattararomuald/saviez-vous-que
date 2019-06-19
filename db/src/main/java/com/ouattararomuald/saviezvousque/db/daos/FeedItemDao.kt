@@ -1,4 +1,4 @@
-package com.ouattararomuald.saviezvousque.db
+package com.ouattararomuald.saviezvousque.db.daos
 
 import androidx.paging.DataSource
 import androidx.room.Dao
@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import com.ouattararomuald.saviezvousque.db.FeedItem
 import io.reactivex.Flowable
 
 @Dao
