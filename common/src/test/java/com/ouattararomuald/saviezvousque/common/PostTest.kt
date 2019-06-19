@@ -31,6 +31,6 @@ class PostTest {
         content = Content(value = "<p>")
     )
 
-    assertThat(post.getImageUrl()).isNull()
+    assertThat(post.getImageUrl()).isEmpty()
   }
 }
