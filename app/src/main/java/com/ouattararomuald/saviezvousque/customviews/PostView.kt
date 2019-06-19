@@ -39,44 +39,12 @@ class PostView : ConstraintLayout {
     get() = imageUrl
     set(value) {
       imageUrl = value
-      //FIXME: fix error below
-//      java.lang.IllegalArgumentException: Path must not be empty.
-//      at com.squareup.picasso.Picasso.load(Picasso.java:332)
-//      at com.ouattararomuald.saviezvousque.customviews.PostView.setPostImageUrl(PostView.kt:42)
-//      at com.ouattararomuald.saviezvousque.databinding.PostItemViewBindingImpl.executeBindings(PostItemViewBindingImpl.java:119)
-//      at androidx.databinding.ViewDataBinding.executeBindingsInternal(ViewDataBinding.java:473)
-//      at androidx.databinding.ViewDataBinding.executePendingBindings(ViewDataBinding.java:445)
-//      at com.ouattararomuald.saviezvousque.posts.PostViewHolder.bind(PostViewHolder.kt:18)
-//      at com.ouattararomuald.saviezvousque.posts.archives.PagedPostAdapter.onBindViewHolder(PagedPostAdapter.kt:26)
-//      at com.ouattararomuald.saviezvousque.posts.archives.PagedPostAdapter.onBindViewHolder(PagedPostAdapter.kt:12)
-//      at androidx.recyclerview.widget.RecyclerView$Adapter.onBindViewHolder(RecyclerView.java:6979)
-//      at androidx.recyclerview.widget.RecyclerView$Adapter.bindViewHolder(RecyclerView.java:7021)
-//      at androidx.recyclerview.widget.RecyclerView$Recycler.tryBindViewHolderByDeadline(RecyclerView.java:5938)
-//      at androidx.recyclerview.widget.RecyclerView$Recycler.tryGetViewHolderForPositionByDeadline(RecyclerView.java:6205)
-//      at androidx.recyclerview.widget.RecyclerView$Recycler.getViewForPosition(RecyclerView.java:6044)
-//      at androidx.recyclerview.widget.RecyclerView$Recycler.getViewForPosition(RecyclerView.java:6040)
-//      at androidx.recyclerview.widget.LinearLayoutManager$LayoutState.next(LinearLayoutManager.java:2303)
-//      at androidx.recyclerview.widget.LinearLayoutManager.layoutChunk(LinearLayoutManager.java:1627)
-//      at androidx.recyclerview.widget.LinearLayoutManager.fill(LinearLayoutManager.java:1587)
-//      at androidx.recyclerview.widget.LinearLayoutManager.scrollBy(LinearLayoutManager.java:1391)
-//      at androidx.recyclerview.widget.LinearLayoutManager.scrollVerticallyBy(LinearLayoutManager.java:1128)
-//      at androidx.recyclerview.widget.RecyclerView.scrollStep(RecyclerView.java:1847)
-//      at androidx.recyclerview.widget.RecyclerView$ViewFlinger.run(RecyclerView.java:5229)
-//      at android.view.Choreographer$CallbackRecord.run(Choreographer.java:1172)
-//      at android.view.Choreographer.doCallbacks(Choreographer.java:984)
-//      at android.view.Choreographer.doFrame(Choreographer.java:806)
-//      at android.view.Choreographer$FrameDisplayEventReceiver.run(Choreographer.java:1158)
-//      at android.os.Handler.handleCallback(Handler.java:873)
-//      at android.os.Handler.dispatchMessage(Handler.java:99)
-//      at android.os.Looper.loop(Looper.java:193)
-//      at android.app.ActivityThread.main(ActivityThread.java:6863)
-//      at java.lang.reflect.Method.invoke(Native Method)
-//      at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:537)
-//      at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:858)
-      Picasso.get().load(imageUrl)
-          .placeholder(R.drawable.ic_image)
-          .error(R.drawable.ic_broken_image)
-          .into(imageView)
+      if (imageUrl.isNotEmpty()) {
+        Picasso.get().load(imageUrl)
+            .placeholder(R.drawable.ic_image)
+            .error(R.drawable.ic_broken_image)
+            .into(imageView)
+      }
     }
 
   /** Title of the post. */
