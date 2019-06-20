@@ -10,7 +10,7 @@ import io.reactivex.Flowable
 @Dao
 interface FeedCategoryDao {
   @Query("SELECT * FROM FeedCategory ORDER BY name ASC")
-  fun getAll(): Flowable<List<FeedCategory>>
+  fun feedCategoriesStream(): Flowable<List<FeedCategory>>
 
   @Insert(onConflict = OnConflictStrategy.IGNORE)
   fun insert(feedCategories: List<FeedCategory>)

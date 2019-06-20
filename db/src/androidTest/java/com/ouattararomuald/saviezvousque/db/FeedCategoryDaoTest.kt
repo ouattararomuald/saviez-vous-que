@@ -44,7 +44,7 @@ class FeedCategoryDaoTest {
   fun getAllCategories() {
     val feedCategories = insertFeedCategories(quantity = 10)
 
-    feedCategoryDao.getAll()
+    feedCategoryDao.feedCategoriesStream()
         .test()
         .assertNoErrors()
         .assertNotComplete()
@@ -58,7 +58,7 @@ class FeedCategoryDaoTest {
 
     feedCategoryDao.insert(listOf(feedCategory))
 
-    feedCategoryDao.getAll()
+    feedCategoryDao.feedCategoriesStream()
         .test()
         .assertNoErrors()
         .assertNotComplete()
@@ -72,7 +72,7 @@ class FeedCategoryDaoTest {
     feedCategoryDao.insert(listOf(feedCategory))
     feedCategoryDao.insert(listOf(feedCategory))
 
-    feedCategoryDao.getAll()
+    feedCategoryDao.feedCategoriesStream()
         .test()
         .assertNoErrors()
         .assertNotComplete()
@@ -84,7 +84,7 @@ class FeedCategoryDaoTest {
   fun deleteAllFeedCategoriesShouldSuccess() {
     val feedCategories = insertFeedCategories(quantity = 10)
 
-    feedCategoryDao.getAll()
+    feedCategoryDao.feedCategoriesStream()
         .test()
         .assertNoErrors()
         .assertNotComplete()
@@ -93,7 +93,7 @@ class FeedCategoryDaoTest {
 
     feedCategoryDao.deleteAll()
 
-    feedCategoryDao.getAll()
+    feedCategoryDao.feedCategoriesStream()
         .test()
         .assertNoErrors()
         .assertNotComplete()

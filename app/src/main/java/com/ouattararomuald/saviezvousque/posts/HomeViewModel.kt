@@ -13,6 +13,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
@@ -26,7 +27,7 @@ class HomeViewModel @Inject constructor(
   /** Observable list of categories. */
   internal val categories: MutableLiveData<List<Category>> = MutableLiveData()
 
-  /** Observable list of posts grouped by category's ID. */
+  /** Observable list of posts grouped by category ID. */
   internal val posts: MutableLiveData<Map<Int, List<Post>>> = MutableLiveData()
 
   private val disposable = CompositeDisposable()
@@ -39,8 +40,12 @@ class HomeViewModel @Inject constructor(
   init {
     loadCategoriesFromDatabase()
     launch { downloadCategories() }
-
     posts.value = mutableMapOf()
+  }
+
+  fun onDestroy() {
+    disposable.dispose()
+    coroutineContext.cancelChildren()
   }
 
   fun refreshData() {
@@ -54,8 +59,10 @@ class HomeViewModel @Inject constructor(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-              categories.postValue(getOrderedCategories(it.toMutableList()))
-              loadPostsByCategories(getOrderedCategories(it.toMutableList()))
+              val mutableCategories = it.toMutableList()
+              val orderedCategories = sortCategories(mutableCategories)
+              categories.postValue(orderedCategories)
+              loadPostsByCategories(orderedCategories)
             }
     )
   }
@@ -65,7 +72,7 @@ class HomeViewModel @Inject constructor(
     val singles = ArrayList<Single<List<Post>>>()
 
     categories.forEach { category ->
-      singles.add(feedRepository.postsByCategoryStream(category.id)
+      singles.add(feedRepository.feedItemsByCategoryStream(category.id)
           .filter { it.isNotEmpty() }
           .subscribeOn(Schedulers.io())
           .firstOrError()
@@ -101,18 +108,6 @@ class HomeViewModel @Inject constructor(
     val categories = feedDownloader.getCategories()
     saveCategories(categories)
     downloadPostsByCategories(categories)
-
-    /*disposable.add(
-        feedDownloader.getCategories()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-              saveCategories(it)
-              downloadPostsByCategories(it)
-            }, {
-              // TODO: Log error
-            })
-    )*/
   }
 
   private fun saveCategories(categories: List<Category>) {
@@ -128,14 +123,6 @@ class HomeViewModel @Inject constructor(
         val posts = feedDownloader.getPostsByCategory(category.id)
         savePosts(posts, category.id)
       }
-      /*disposable.add(
-          feedDownloader.getPostsByCategory(category.id)
-              .subscribeOn(Schedulers.io())
-              .observeOn(AndroidSchedulers.mainThread())
-              .subscribe { posts ->
-                savePosts(posts, category.id)
-              }
-      )*/
     }
   }
 
@@ -145,7 +132,7 @@ class HomeViewModel @Inject constructor(
         .subscribe()
   }
 
-  private fun getOrderedCategories(categories: MutableList<Category>): List<Category> {
+  private fun sortCategories(categories: MutableList<Category>): List<Category> {
     return moveMainCategoryToTop(categories)
   }
 

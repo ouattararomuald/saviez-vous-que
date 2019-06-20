@@ -16,15 +16,15 @@ class FeedRepository @Inject constructor(
 ) {
 
   fun categoryStream(): Flowable<List<Category>> {
-    return feedCategoryDao.getAll()
+    return feedCategoryDao.feedCategoriesStream()
         .map { feedCategories ->
           return@map feedCategories.toCategories()
         }
   }
 
   /** Returns the [Post]s of that belongs to the [Category] with the given [categoryId]. */
-  fun postsByCategoryStream(categoryId: Int): Flowable<List<Post>> {
-    return feedItemDao.getAllByCategory(categoryId)
+  fun feedItemsByCategoryStream(categoryId: Int): Flowable<List<Post>> {
+    return feedItemDao.feedItemsByCategoryStream(categoryId)
         .map { feedItems ->
           return@map feedItems.toPosts(categoryId)
         }

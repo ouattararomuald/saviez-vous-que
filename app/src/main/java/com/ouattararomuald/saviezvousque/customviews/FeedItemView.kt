@@ -22,12 +22,8 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-/** Displays a *single* [FeedItem]. */
-class PostView : ConstraintLayout {
-
-  companion object {
-    private const val SHARED_IMAGE_NAME = "pic_to_share.jpg"
-  }
+/** Custom View for [FeedItem]. */
+class FeedItemView : ConstraintLayout {
 
   private lateinit var imageView: AppCompatImageView
   private lateinit var shareImageButton: AppCompatButton
@@ -67,14 +63,14 @@ class PostView : ConstraintLayout {
     shareImageButton.setOnClickListener { launchSharingDialog() }
 
     // Load attributes
-    val a = context.obtainStyledAttributes(attrs, R.styleable.PostView, defStyle, 0)
+    val a = context.obtainStyledAttributes(attrs, R.styleable.FeedItemView, defStyle, 0)
 
-    if (a.hasValue(R.styleable.PostView_postImageUrl)) {
-      postImageUrl = a.getString(R.styleable.PostView_postImageUrl) ?: ""
+    if (a.hasValue(R.styleable.FeedItemView_postImageUrl)) {
+      postImageUrl = a.getString(R.styleable.FeedItemView_postImageUrl) ?: ""
     }
 
-    if (a.hasValue(R.styleable.PostView_postImageUrl)) {
-      postTitle = a.getString(R.styleable.PostView_postTitle) ?: ""
+    if (a.hasValue(R.styleable.FeedItemView_postImageUrl)) {
+      postTitle = a.getString(R.styleable.FeedItemView_postTitle) ?: ""
     }
 
     a.recycle()
@@ -83,7 +79,8 @@ class PostView : ConstraintLayout {
   private fun launchSharingDialog() {
     // Extract Bitmap from ImageView drawable
     val drawable = imageView.drawable
-    var bmp: Bitmap? = null
+    val bmp: Bitmap?
+
     if (drawable is BitmapDrawable) {
       bmp = (imageView.drawable as BitmapDrawable).bitmap
     } else {
@@ -91,8 +88,8 @@ class PostView : ConstraintLayout {
     }
 
     SingleFromCallable {
-      getLocalBitmapUri(bmp)
-    }.subscribeOn(Schedulers.io())
+      getBitmapUri(bmp)
+    }.subscribeOn(Schedulers.computation())
         .observeOn(AndroidSchedulers.mainThread())
         .doAfterSuccess {
           it?.let {
@@ -109,16 +106,17 @@ class PostView : ConstraintLayout {
   }
 
   @SuppressLint("WrongThread")
-  private fun getLocalBitmapUri(bmp: Bitmap?): Uri? {
+  private fun getBitmapUri(bmp: Bitmap?): Uri? {
     // Store image to default external storage directory
     var bmpUri: Uri? = null
+
     try {
       val file = File(
           context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
           SHARED_IMAGE_NAME
       )
       val out = FileOutputStream(file)
-      bmp!!.compress(Bitmap.CompressFormat.JPEG, 100, out)
+      bmp!!.compress(Bitmap.CompressFormat.JPEG, COMPRESSION_QUALITY, out)
       out.close()
       bmpUri = FileProvider.getUriForFile(
           context,
@@ -130,5 +128,10 @@ class PostView : ConstraintLayout {
     }
 
     return bmpUri
+  }
+
+  companion object {
+    private const val SHARED_IMAGE_NAME = "pic_to_share.jpg"
+    private const val COMPRESSION_QUALITY = 100
   }
 }

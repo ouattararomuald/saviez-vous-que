@@ -2,7 +2,7 @@
   <attr name="themeColorPrimary" format="reference"/>
   <attr name="themeColorAccent" format="reference"/>
 
-  <declare-styleable name="PostView">
+  <declare-styleable name="FeedItemView">
     <attr name="postImageUrl" format="string"/>
     <attr name="postTitle" format="string"/>
   </declare-styleable>
