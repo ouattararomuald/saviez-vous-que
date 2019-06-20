@@ -1,6 +1,5 @@
 <resources>
 
-  <!-- Base application theme. -->
   <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
     <!-- Customize your theme here. -->
     <item name="colorPrimary">?themeColorPrimary</item>
@@ -11,6 +10,57 @@
   <style name="AppTheme.NoActionBar">
     <item name="windowActionBar">false</item>
     <item name="windowNoTitle">true</item>
+    <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    <item name="android:statusBarColor">@android:color/transparent</item>
+  </style>
+
+  <style name="AppTheme.NoActionBar.BlueTheme">
+    <item name="colorPrimaryDark">@color/blueDark</item>
+    <item name="colorAccent">@color/blueAccent</item>
+    <item name="themeColorPrimary">@color/blue</item>
+    <item name="themeColorAccent">@color/blueAccent</item>
+  </style>
+
+  <style name="AppTheme.NoActionBar.CyanTheme">
+    <item name="colorPrimaryDark">@color/cyanDark</item>
+    <item name="colorAccent">@color/cyanAccent</item>
+    <item name="themeColorPrimary">@color/cyan</item>
+    <item name="themeColorAccent">@color/cyanAccent</item>
+  </style>
+
+  <style name="AppTheme.NoActionBar.DeepPurpleTheme">
+    <item name="colorPrimaryDark">@color/deepPurpleDark</item>
+    <item name="colorAccent">@color/deepPurpleAccent</item>
+    <item name="themeColorPrimary">@color/deepPurple</item>
+    <item name="themeColorAccent">@color/deepPurpleAccent</item>
+  </style>
+
+  <style name="AppTheme.NoActionBar.IndigoTheme">
+    <item name="colorPrimaryDark">@color/indigoDark</item>
+    <item name="colorAccent">@color/indigoAccent</item>
+    <item name="themeColorPrimary">@color/indigo</item>
+    <item name="themeColorAccent">@color/indigoAccent</item>
+  </style>
+
+  <style name="AppTheme.NoActionBar.PinkTheme">
+    <item name="colorPrimaryDark">@color/pinkDark</item>
+    <item name="colorAccent">@color/pinkAccent</item>
+    <item name="themeColorPrimary">@color/pink</item>
+    <item name="themeColorAccent">@color/pinkAccent</item>
+  </style>
+
+  <style name="AppTheme.NoActionBar.TealTheme">
+    <item name="colorPrimaryDark">@color/tealDark</item>
+    <item name="colorAccent">@color/tealAccent</item>
+    <item name="themeColorPrimary">@color/teal</item>
+    <item name="themeColorAccent">@color/tealAccent</item>
+  </style>
+
+  <style name="AppTheme.NoActionBar.YellowTheme">
+    <item name="colorPrimaryDark">@color/yellowDark</item>
+    <item name="colorAccent">@color/yellowAccent</item>
+    <item name="themeColorPrimary">@color/yellow</item>
+    <item name="themeColorAccent">@color/yellowAccent</item>
   </style>
 
   <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
