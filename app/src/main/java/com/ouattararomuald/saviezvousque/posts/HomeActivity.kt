@@ -58,6 +58,7 @@ class HomeActivity : AppCompatActivity() {
   private lateinit var postListView: PostListView
 
   private var currentSelectedMenuItem: MenuItem? = null
+  private var refreshMenuItem: MenuItem? = null
 
   private val intentFilter: IntentFilter = IntentFilter().apply {
     @Suppress("DEPRECATION")
@@ -142,13 +143,19 @@ class HomeActivity : AppCompatActivity() {
       chooseViewToDisplay(menuItem)
 
       when (menuItem.itemId) {
-        R.id.archive_menu_item -> archivePostView.configureDataSourceFactory(
-            getDownloaderComponent().feedDownloader(),
-            getDbComponent().feedRepository(),
-            this
-        )
+        R.id.archive_menu_item -> {
+          refreshMenuItem?.isVisible = false
+          archivePostView.configureDataSourceFactory(
+              getDownloaderComponent().feedDownloader(),
+              getDbComponent().feedRepository(),
+              this
+          )
+        }
         R.id.choose_theme_menu_item -> themeDialogPicker.show()
-        else -> currentSelectedMenuItem?.let { displayPostsOfCategory(categoryId =  it.itemId) }
+        else -> {
+          refreshMenuItem?.isVisible = true
+          currentSelectedMenuItem?.let { displayPostsOfCategory(categoryId =  it.itemId) }
+        }
       }
 
       homeActivityBinding.drawerLayout.closeDrawers()
@@ -189,6 +196,7 @@ class HomeActivity : AppCompatActivity() {
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     val inflater: MenuInflater = menuInflater
     inflater.inflate(R.menu.home, menu)
+    refreshMenuItem = menu.findItem(R.id.refresh_menu_item)
     return true
   }
 
