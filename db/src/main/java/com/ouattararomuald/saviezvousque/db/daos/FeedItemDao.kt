@@ -10,32 +10,32 @@ import com.ouattararomuald.saviezvousque.db.FeedItem
 import io.reactivex.Flowable
 
 @Dao
-interface FeedItemDao {
+abstract class FeedItemDao {
   @Query(
       "SELECT * FROM FeedItem WHERE categoryId = :categoryId ORDER BY updatedOn, publishedOn ASC")
-  fun getItems(categoryId: Int): DataSource.Factory<Int, FeedItem>
+  abstract fun getItems(categoryId: Int): DataSource.Factory<Int, FeedItem>
 
   @Query("SELECT * FROM FeedItem ORDER BY updatedOn, publishedOn DESC")
-  fun feedItemsStream(): Flowable<List<FeedItem>>
+  abstract fun feedItemsStream(): Flowable<List<FeedItem>>
 
   @Query("SELECT * FROM FeedItem ORDER BY updatedOn, publishedOn DESC LIMIT 10")
-  fun recentFeedItemsStream(): Flowable<List<FeedItem>>
+  abstract fun recentFeedItemsStream(): Flowable<List<FeedItem>>
 
   @Query(
       "SELECT * FROM FeedItem WHERE categoryId = :categoryId ORDER BY updatedOn, publishedOn DESC")
-  fun feedItemsByCategoryStream(categoryId: Int): Flowable<List<FeedItem>>
+  abstract fun feedItemsByCategoryStream(categoryId: Int): Flowable<List<FeedItem>>
 
   @Insert(onConflict = OnConflictStrategy.IGNORE)
-  fun insert(feedItems: List<FeedItem>)
+  abstract fun insert(feedItems: List<FeedItem>)
 
   @Query("DELETE FROM FeedItem")
-  fun deleteAll()
+  abstract fun deleteAll()
 
   @Query("DELETE FROM FeedItem WHERE categoryId = :categoryId AND id in (:itemsToDelete)")
-  fun deleteByCategory(categoryId: Int, itemsToDelete: List<Int>)
+  abstract fun deleteByCategory(categoryId: Int, itemsToDelete: List<Int>)
 
   @Transaction
-  fun addPosts(categoryId: Int, itemsToDelete: List<Int>, feedItems: List<FeedItem>) {
+  open fun addPosts(categoryId: Int, itemsToDelete: List<Int>, feedItems: List<FeedItem>) {
     //deleteByCategory(categoryId, itemsToDelete)
     insert(feedItems)
   }
