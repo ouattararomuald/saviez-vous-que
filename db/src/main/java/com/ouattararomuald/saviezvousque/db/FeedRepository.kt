@@ -53,7 +53,7 @@ class FeedRepository @Inject constructor(
    */
   fun saveCategories(categories: List<Category>): Completable {
     return CompletableFromAction(Action {
-      feedCategoryDao.insert(categories.toFeedCategories())
+      feedCategoryDao.deleteAndInsertCategories(categories.toFeedCategories())
     })
   }
 }
