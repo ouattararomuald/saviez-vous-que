@@ -36,6 +36,12 @@ android {
     targetCompatibility JavaVersion.VERSION_1_8
   }
 
+  testOptions {
+    unitTests {
+      includeAndroidResources = true
+    }
+  }
+
   dataBinding {
     enabled = true
   }
@@ -85,9 +91,6 @@ dependencies {
   implementation deps.dagger.runtime
   kapt deps.dagger.compiler
 
-  implementation deps.android.arch.navigation.fragment
-  implementation deps.android.arch.navigation.ui
-
   implementation deps.androidx.appcompat
   implementation deps.androidx.constraintlayout
   implementation deps.androidx.legacy
@@ -124,11 +127,14 @@ dependencies {
 
   testImplementation deps.junit
   testImplementation deps.coroutines.test
+  testImplementation deps.robolectric
+  testImplementation deps.truth
 
+  androidTestImplementation deps.junit
   androidTestImplementation deps.androidx.test.ext.junit
+  androidTestImplementation deps.androidx.test.ext.junitKtx
   androidTestImplementation deps.androidx.test.espresso.runner
   androidTestImplementation deps.androidx.test.espresso.core
-  androidTestImplementation deps.android.arch.navigation.testing
   androidTestImplementation deps.androidx.paging.testing
   androidTestImplementation deps.mockito
   androidTestImplementation deps.truth

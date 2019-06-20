@@ -19,7 +19,7 @@
         android:layout_height="match_parent"
         android:visibility="gone"
     />
-    <com.ouattararomuald.saviezvousque.posts.views.PostView
+    <com.ouattararomuald.saviezvousque.posts.views.PostListView
         android:id="@+id/posts_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

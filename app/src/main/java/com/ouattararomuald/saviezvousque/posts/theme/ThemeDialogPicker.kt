@@ -32,12 +32,6 @@ internal class ThemeDialogPicker(
 
   private val dialogView = LayoutInflater.from(context)
       .inflate(R.layout.theme_selector_dialog, null, false)
-  private val themesRecyclerView =
-      dialogView.findViewById<RecyclerView>(R.id.themesRecyclerView).apply {
-        layoutManager = LinearLayoutManager(context)
-        setHasFixedSize(true)
-        adapter = themesGroupAdapter
-      }
 
   private val alertDialogBuilder = AlertDialog.Builder(context).apply {
     setTitle(context.getString(R.string.select_a_theme))

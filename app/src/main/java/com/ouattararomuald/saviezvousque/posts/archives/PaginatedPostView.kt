@@ -16,10 +16,13 @@ import com.ouattararomuald.saviezvousque.common.Post
 import com.ouattararomuald.saviezvousque.db.FeedRepository
 import com.ouattararomuald.saviezvousque.downloaders.FeedDownloader
 import kotlinx.android.synthetic.main.paginated_post_view.view.noInternetLayout
-import kotlinx.android.synthetic.main.paginated_post_view.view.postsRecyclerView
+import kotlinx.android.synthetic.main.paginated_post_view.view.posts_recycler_view
 import kotlinx.android.synthetic.main.paginated_post_view.view.progressBar
 import kotlinx.android.synthetic.main.paginated_post_view.view.viewLayout
 
+/**
+ * Displays a list of [Post]s in an infinite scroll view.
+ */
 class PaginatedPostView : FrameLayout {
 
   private lateinit var feedDownloader: FeedDownloader
@@ -32,6 +35,9 @@ class PaginatedPostView : FrameLayout {
   private lateinit var posts: LiveData<PagedList<Post>>
 
   private var lifecycleOwner: LifecycleOwner? = null
+
+  internal val isNotVisible: Boolean
+    get() = !isVisible
 
   constructor(context: Context) : super(context) {
     initialize()
@@ -46,7 +52,7 @@ class PaginatedPostView : FrameLayout {
 
     postsAdapter = PagedPostAdapter()
 
-    postsRecyclerView.apply {
+    posts_recycler_view.apply {
       layoutManager = LinearLayoutManager(context).apply {
         reverseLayout = true
       }

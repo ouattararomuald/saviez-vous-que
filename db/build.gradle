@@ -62,6 +62,7 @@ dependencies {
   testImplementation deps.mockito
   testImplementation deps.truth
 
+  androidTestImplementation deps.junit
   androidTestImplementation deps.androidx.arch.coreTesting
   androidTestImplementation deps.androidx.arch.room.testing
   androidTestImplementation deps.androidx.test.ext.junit

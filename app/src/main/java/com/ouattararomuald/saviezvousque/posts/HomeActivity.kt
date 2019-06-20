@@ -25,7 +25,7 @@ import com.ouattararomuald.saviezvousque.downloaders.DownloaderComponent
 import com.ouattararomuald.saviezvousque.posts.archives.PaginatedPostView
 import com.ouattararomuald.saviezvousque.posts.theme.ThemeDialogPicker
 import com.ouattararomuald.saviezvousque.posts.theme.ThemeStyleFactory
-import com.ouattararomuald.saviezvousque.posts.views.PostView
+import com.ouattararomuald.saviezvousque.posts.views.PostListView
 import com.ouattararomuald.saviezvousque.util.getDbComponent
 import com.ouattararomuald.saviezvousque.util.getDownloaderComponent
 import kotlinx.android.synthetic.main.home_app_bar.toolbar
@@ -51,8 +51,11 @@ class HomeActivity : AppCompatActivity() {
 
   private lateinit var navigationView: NavigationView
 
+  /** View used to display list of [Post]s in a paginated view. */
   private lateinit var archivePostView: PaginatedPostView
-  private lateinit var postsView: PostView
+
+  /** View used to display list of [Post]s for one category at a time. */
+  private lateinit var postListView: PostListView
 
   private var currentSelectedMenuItem: MenuItem? = null
 
@@ -65,6 +68,11 @@ class HomeActivity : AppCompatActivity() {
   private lateinit var themeDialogPicker: ThemeDialogPicker
 
   private lateinit var sharedPreferenceManager: SharedPreferenceManager
+
+  private val menuManager: MenuManager by lazy {
+    val menu = navigationView.menu
+    MenuManager(menu, DEFAULT_SELECTED_MENU_ITEM_INDEX)
+  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     sharedPreferenceManager = SharedPreferenceManager(this)
@@ -92,7 +100,7 @@ class HomeActivity : AppCompatActivity() {
 
     navigationView = homeActivityBinding.navView
     archivePostView = homeActivityBinding.drawerLayout.content_home.paginated_post_view
-    postsView = homeActivityBinding.drawerLayout.content_home.posts_view
+    postListView = homeActivityBinding.drawerLayout.content_home.posts_view
 
     dbComponent = getDbComponent()
     downloaderComponent = getDownloaderComponent()
@@ -107,7 +115,6 @@ class HomeActivity : AppCompatActivity() {
     homeActivityBinding.viewModel = viewModel
 
     observeCategories()
-
     observePosts()
 
     configureNavigationMenuEventClickListener()
@@ -120,7 +127,7 @@ class HomeActivity : AppCompatActivity() {
 
   private fun observePosts() {
     val postsObserver = Observer<Map<Int, List<Post>>> {
-      currentSelectedMenuItem?.let { updateSelectedPosts(it.itemId) }
+      currentSelectedMenuItem?.let { displayPostsOfCategory(it.itemId) }
     }
     viewModel.posts.observe(this, postsObserver)
   }
@@ -132,8 +139,7 @@ class HomeActivity : AppCompatActivity() {
       menuItem.isChecked = true
       toolbar.title = menuItem.title
 
-      archivePostView.isVisible = menuItem.itemId == R.id.archive_menu_item
-      postsView.isVisible = !archivePostView.isVisible
+      chooseViewToDisplay(menuItem)
 
       when (menuItem.itemId) {
         R.id.archive_menu_item -> archivePostView.configureDataSourceFactory(
@@ -142,7 +148,7 @@ class HomeActivity : AppCompatActivity() {
             this
         )
         R.id.choose_theme_menu_item -> themeDialogPicker.show()
-        else -> currentSelectedMenuItem?.let { updateSelectedPosts(it.itemId) }
+        else -> currentSelectedMenuItem?.let { displayPostsOfCategory(categoryId =  it.itemId) }
       }
 
       homeActivityBinding.drawerLayout.closeDrawers()
@@ -150,6 +156,20 @@ class HomeActivity : AppCompatActivity() {
       return@setNavigationItemSelectedListener true
     }
   }
+
+  /**
+   * Choose the view to display.
+   * Two views can be displayed:
+   *
+   * - **Archives View** used to display old posts in an infinite scroll view.
+   * - **Posts View** used to display posts of the selected category.
+   */
+  private fun chooseViewToDisplay(menuItem: MenuItem) {
+    archivePostView.isVisible = menuItem.isArchive()
+    postListView.isVisible = archivePostView.isNotVisible
+  }
+
+  private fun MenuItem.isArchive(): Boolean = this.itemId == R.id.archive_menu_item
 
   override fun onResume() {
     super.onResume()
@@ -159,6 +179,11 @@ class HomeActivity : AppCompatActivity() {
   override fun onPause() {
     super.onPause()
     unregisterReceiver(connectivityStatusMonitor)
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    viewModel.onDestroy()
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -178,30 +203,25 @@ class HomeActivity : AppCompatActivity() {
     }
   }
 
-  private fun updateSelectedPosts(categoryId: Int) {
+  /**
+   * Displays the [Post]s of the [Category] with the given [categoryId].
+   *
+   * @param categoryId id of the category to display.
+   */
+  private fun displayPostsOfCategory(categoryId: Int) {
     val posts = viewModel.getPostsByCategory(categoryId)
     if (posts.isNotEmpty()) {
-      postsView.displayPosts(categoryId, posts)
+      postListView.updateDisplayedPosts(categoryId, posts)
     }
   }
 
+  /**
+   * Displays the given [categories] in the Drawer Menu.
+   *
+   * @param categories list of [categories] to display.
+   */
   private fun displayCategories(categories: List<Category>) {
-    createDrawerItemsFromCategories(categories)
-  }
-
-  private fun createDrawerItemsFromCategories(categories: List<Category>) {
-    if (categories.isNotEmpty()) {
-      val menu = navigationView.menu
-      categories.forEach { category ->
-        if (menu.findItem(category.id) == null) {
-          menu.add(R.id.main_group, category.id, Menu.NONE, category.name)
-        }
-      }
-
-      menu.setGroupCheckable(R.id.main_group, true, true)
-      menu.getItem(2).isChecked = true
-      currentSelectedMenuItem = menu.getItem(2)
-    }
+    currentSelectedMenuItem = menuManager.generateMenuFromCategories(categories)
   }
 
   inner class ConnectivityStatusMonitor : BroadcastReceiver() {
@@ -225,5 +245,9 @@ class HomeActivity : AppCompatActivity() {
         }
       }
     }
+  }
+
+  companion object {
+    private const val DEFAULT_SELECTED_MENU_ITEM_INDEX = 2
   }
 }

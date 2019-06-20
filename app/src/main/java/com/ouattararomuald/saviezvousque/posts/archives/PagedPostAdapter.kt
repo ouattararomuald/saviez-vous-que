@@ -6,20 +6,20 @@ import androidx.databinding.DataBindingUtil
 import androidx.paging.PagedListAdapter
 import com.ouattararomuald.saviezvousque.R
 import com.ouattararomuald.saviezvousque.common.Post
-import com.ouattararomuald.saviezvousque.databinding.PostItemViewBinding
-import com.ouattararomuald.saviezvousque.posts.PostViewHolder
+import com.ouattararomuald.saviezvousque.databinding.FeedItemViewBinding
+import com.ouattararomuald.saviezvousque.customviews.FeedItemViewHolder
 
-class PagedPostAdapter : PagedListAdapter<Post, PostViewHolder>(PostDiffUtilCallback) {
+class PagedPostAdapter : PagedListAdapter<Post, FeedItemViewHolder>(PostDiffUtilCallback) {
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
-    val itemBinding: PostItemViewBinding = DataBindingUtil.inflate(
-        LayoutInflater.from(parent.context), R.layout.post_item_view, parent, false
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedItemViewHolder {
+    val itemBinding: FeedItemViewBinding = DataBindingUtil.inflate(
+        LayoutInflater.from(parent.context), R.layout.feed_item_view, parent, false
     )
 
-    return PostViewHolder(itemBinding)
+    return FeedItemViewHolder(itemBinding)
   }
 
-  override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
+  override fun onBindViewHolder(holder: FeedItemViewHolder, position: Int) {
     val post = getItem(position)
 
     if (post != null) {

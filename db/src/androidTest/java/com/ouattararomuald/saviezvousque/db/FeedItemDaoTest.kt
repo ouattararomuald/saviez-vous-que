@@ -48,7 +48,7 @@ class FeedItemDaoTest {
   fun getAllFeedItems() {
     val feedItems = insertFeedItems(quantity = 10)
 
-    feedItemDao.getAll()
+    feedItemDao.feedItemsStream()
         .test()
         .assertNoErrors()
         .assertNotComplete()
@@ -62,7 +62,7 @@ class FeedItemDaoTest {
 
     feedItemDao.insert(listOf(feedItem))
 
-    feedItemDao.getAll()
+    feedItemDao.feedItemsStream()
         .test()
         .assertNoErrors()
         .assertNotComplete()
@@ -76,7 +76,7 @@ class FeedItemDaoTest {
     feedItemDao.insert(listOf(feed))
     feedItemDao.insert(listOf(feed))
 
-    feedItemDao.getAll()
+    feedItemDao.feedItemsStream()
         .test()
         .assertNoErrors()
         .assertNotComplete()
@@ -88,7 +88,7 @@ class FeedItemDaoTest {
   fun deleteAllFeedItemsShouldSuccess() {
     val feeds = insertFeedItems(quantity = 10)
 
-    feedItemDao.getAll()
+    feedItemDao.feedItemsStream()
         .test()
         .assertNoErrors()
         .assertNotComplete()
@@ -97,7 +97,7 @@ class FeedItemDaoTest {
 
     feedItemDao.deleteAll()
 
-    feedItemDao.getAll()
+    feedItemDao.feedItemsStream()
         .test()
         .assertNoErrors()
         .assertNotComplete()

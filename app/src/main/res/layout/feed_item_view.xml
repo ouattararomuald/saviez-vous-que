@@ -9,7 +9,7 @@
     <variable name="post" type="Post"/>
   </data>
 
-  <com.ouattararomuald.saviezvousque.customviews.PostView
+  <com.ouattararomuald.saviezvousque.customviews.FeedItemView
       android:background="@drawable/post_item_background"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
