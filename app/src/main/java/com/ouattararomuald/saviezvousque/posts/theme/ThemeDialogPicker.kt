@@ -12,7 +12,7 @@ import com.xwray.groupie.ViewHolder
 
 internal class ThemeDialogPicker(
   private val context: Context,
-  onThemeSelectedPicker: (themeStyle: Int, themeName: String) -> Unit
+  onThemeSelectedListener: (themeStyle: Int, themeName: String) -> Unit
 ) {
 
   private var themeNames: Array<String> =
@@ -26,12 +26,13 @@ internal class ThemeDialogPicker(
       context.resources.getStringArray(R.array.teal_colors_choice_array),
       context.resources.getStringArray(R.array.yellow_colors_choice_array)
   )
-  private val themeDatas: Array<ThemeData>
+  private val themesData: Array<ThemeData>
   private val themesSection = Section()
   private val themesGroupAdapter = GroupAdapter<ViewHolder>().apply { add(themesSection) }
 
-  private val dialogView = LayoutInflater.from(context)
-      .inflate(R.layout.theme_selector_dialog, null, false)
+  private var dialogView = LayoutInflater.from(context).inflate(
+      R.layout.theme_selector_dialog, null, false
+  )
 
   private val alertDialogBuilder = AlertDialog.Builder(context).apply {
     setTitle(context.getString(R.string.select_a_theme))
@@ -40,33 +41,53 @@ internal class ThemeDialogPicker(
   private val alertDialog = alertDialogBuilder.create()
 
   init {
-    themeDatas = arrayOf(
-        ThemeData(themeNames[0], themeColorsArrays[0][0], themeColorsArrays[0][1],
-            themeColorsArrays[0][2]),
-        ThemeData(themeNames[1], themeColorsArrays[1][0], themeColorsArrays[1][1],
-            themeColorsArrays[1][2]),
-        ThemeData(themeNames[2], themeColorsArrays[2][0], themeColorsArrays[2][1],
-            themeColorsArrays[2][2]),
-        ThemeData(themeNames[3], themeColorsArrays[3][0], themeColorsArrays[3][1],
-            themeColorsArrays[3][2]),
-        ThemeData(themeNames[4], themeColorsArrays[4][0], themeColorsArrays[4][1],
-            themeColorsArrays[4][2]),
-        ThemeData(themeNames[5], themeColorsArrays[5][0], themeColorsArrays[5][1],
-            themeColorsArrays[5][2]),
-        ThemeData(themeNames[6], themeColorsArrays[6][0], themeColorsArrays[6][1],
-            themeColorsArrays[6][2])
-    )
-    themesSection.addAll(themeDatas.map {
+    dialogView.findViewById<RecyclerView>(R.id.themesRecyclerView).apply {
+      layoutManager = LinearLayoutManager(context)
+      setHasFixedSize(true)
+      adapter = themesGroupAdapter
+    }
+
+    themesData = getThemesData(numberOfThemes = themeNames.size)
+    themesSection.addAll(themesData.map {
       ThemeItem(context, it)
     })
-    themesGroupAdapter.setOnItemClickListener { item, view ->
+    themesGroupAdapter.setOnItemClickListener { item, _ ->
       if (item is ThemeItem) {
-        onThemeSelectedPicker(item.getThemeStyle(), item.themeData.name)
+        onThemeSelectedListener(item.getThemeStyle(), item.themeData.name)
       }
     }
   }
 
+  private fun getThemesData(numberOfThemes: Int): Array<ThemeData> {
+    val themes = mutableListOf<ThemeData>()
+
+    repeat(numberOfThemes) { index ->
+      themes.add(ThemeData(
+          themeNames[index],
+          themeColorsArrays.getThemeColors(index).getColorPrimary(),
+          themeColorsArrays.getThemeColors(index).getColorPrimaryDark(),
+          themeColorsArrays.getThemeColors(index).getColorAccent()
+      ))
+    }
+
+    return themes.toTypedArray()
+  }
+
+  private fun Array<Array<String>>.getThemeColors(position: Int): Array<String> = this[position]
+
+  private fun Array<String>.getColorPrimary(): String = this[COLOR_PRIMARY_INDEX]
+
+  private fun Array<String>.getColorPrimaryDark(): String = this[COLOR_PRIMARY_DARK_INDEX]
+
+  private fun Array<String>.getColorAccent(): String = this[COLOR_ACCENT_INDEX]
+
   fun show() {
     alertDialog.show()
+  }
+
+  companion object {
+    private const val COLOR_PRIMARY_INDEX = 0
+    private const val COLOR_PRIMARY_DARK_INDEX = 1
+    private const val COLOR_ACCENT_INDEX = 2
   }
 }

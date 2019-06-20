@@ -138,7 +138,10 @@ class HomeActivity : AppCompatActivity() {
       currentSelectedMenuItem = menuItem
 
       menuItem.isChecked = true
-      toolbar.title = menuItem.title
+
+      if (menuItem.itemId != R.id.choose_theme_menu_item) {
+        toolbar.title = menuItem.title
+      }
 
       chooseViewToDisplay(menuItem)
 
@@ -154,7 +157,7 @@ class HomeActivity : AppCompatActivity() {
         R.id.choose_theme_menu_item -> themeDialogPicker.show()
         else -> {
           refreshMenuItem?.isVisible = true
-          currentSelectedMenuItem?.let { displayPostsOfCategory(categoryId =  it.itemId) }
+          currentSelectedMenuItem?.let { displayPostsOfCategory(categoryId = it.itemId) }
         }
       }
 
