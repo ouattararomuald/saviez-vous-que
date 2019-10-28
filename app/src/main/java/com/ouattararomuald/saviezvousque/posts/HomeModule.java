@@ -1,5 +1,6 @@
 package com.ouattararomuald.saviezvousque.posts;
 
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import com.ouattararomuald.saviezvousque.db.FeedRepository;
 import com.ouattararomuald.saviezvousque.downloaders.FeedDownloader;
@@ -20,6 +21,6 @@ abstract class HomeModule {
   @Singleton
   @Provides
   static HomeViewModel homeViewModel(HomeActivity activity, ViewModelFactory viewModelFactory) {
-    return ViewModelProviders.of(activity, viewModelFactory).get(HomeViewModel.class);
+    return new ViewModelProvider(activity, viewModelFactory).get(HomeViewModel.class);
   }
 }

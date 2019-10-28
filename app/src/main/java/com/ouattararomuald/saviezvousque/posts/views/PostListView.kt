@@ -9,14 +9,14 @@ import com.ouattararomuald.saviezvousque.common.Post
 import com.ouattararomuald.saviezvousque.customviews.FeedItem
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
-import com.xwray.groupie.ViewHolder
+import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.post_list_view.view.posts_recycler_view
 
 /** Displays a fixed list of [Post]s. */
 class PostListView : FrameLayout {
 
   private val postSection = Section().apply { setPlaceholder(NoDataPlaceholder()) }
-  private val groupAdapter = GroupAdapter<ViewHolder>()
+  private val groupAdapter = GroupAdapter<GroupieViewHolder>()
 
   private val posts = mutableListOf<Post>()
   private var currentCategoryId: Int = -1
