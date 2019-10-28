@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ouattararomuald.saviezvousque.R
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
-import com.xwray.groupie.ViewHolder
+import com.xwray.groupie.GroupieViewHolder
 
 internal class ThemeDialogPicker(
   private val context: Context,
@@ -28,7 +28,7 @@ internal class ThemeDialogPicker(
   )
   private val themesData: Array<ThemeData>
   private val themesSection = Section()
-  private val themesGroupAdapter = GroupAdapter<ViewHolder>().apply { add(themesSection) }
+  private val themesGroupAdapter = GroupAdapter<GroupieViewHolder>().apply { add(themesSection) }
 
   private var dialogView = LayoutInflater.from(context).inflate(
       R.layout.theme_selector_dialog, null, false

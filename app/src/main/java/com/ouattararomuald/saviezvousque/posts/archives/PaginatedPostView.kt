@@ -106,6 +106,9 @@ class PaginatedPostView : FrameLayout {
         RequestState.ERROR, RequestState.DONE -> {
           progressBar.isGone = true
         }
+        else -> {
+          progressBar.isGone = true
+        }
       }
     })
 
