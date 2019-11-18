@@ -13,16 +13,18 @@ abstract class DbModule {
   @Provides
   public static AppDatabase database(Context context, String databaseName) {
     return Room.databaseBuilder(context, AppDatabase.class, databaseName)
+        //.addMigrations(MigrationsUtil.getMIGRATION_2_3())
+        //.fallbackToDestructiveMigration()
         .build();
   }
 
   @Provides
-  public static FeedCategoryDao feedCategoryDao(AppDatabase database) {
+  static FeedCategoryDao feedCategoryDao(AppDatabase database) {
     return database.feedCategoryDao();
   }
 
   @Provides
-  public static FeedItemDao feedItemDao(AppDatabase database) {
+  static FeedItemDao feedItemDao(AppDatabase database) {
     return database.feedItemDao();
   }
 
