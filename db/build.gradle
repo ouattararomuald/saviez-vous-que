@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.squareup.sqldelight'
 
 android {
   compileSdkVersion buildConfig.compileSdk
@@ -55,6 +56,9 @@ dependencies {
   api deps.androidx.arch.room.runtime
   kapt deps.androidx.arch.room.compiler
   api deps.androidx.arch.room.rxjava2
+
+  api deps.sqlDelight.driver
+  api deps.sqlDelight.rxjava
 
   api deps.androidx.paging.runtime
   api deps.androidx.paging.rxjava2

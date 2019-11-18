@@ -1,0 +1,48 @@
+-- IMPORTS
+import org.threeten.bp.LocalDateTime;
+
+CREATE TABLE IF NOT EXISTS post(
+  id INTEGER AS Int NOT NULL PRIMARY KEY,
+  categoryId INTEGER AS Int NOT NULL,
+  title TEXT NOT NULL,
+  content TEXT NOT NULL,
+  imageUrl TEXT,
+  publishedOn TEXT AS LocalDateTime NOT NULL,
+  updatedOn TEXT AS LocalDateTime NOT NULL,
+  FOREIGN KEY(categoryId) REFERENCES category(id)
+);
+
+CREATE VIEW postWithCategory
+AS
+  SELECT
+    post.id, title, content, imageUrl, categoryId,
+    category.name AS categoryName, category.slug AS categorySlug,
+    publishedOn, updatedOn
+  FROM post
+  INNER JOIN category ON categoryId = category.id
+  ORDER BY updatedOn, publishedOn DESC;
+
+-- INSERTIONS
+
+createPost:
+INSERT INTO post(id, title, content, categoryId, imageUrl, publishedOn, updatedOn) VALUES(?, ?, ?, ?, ?, ?, ?);
+
+-- UPDATES
+
+updatePostWithId:
+UPDATE post SET title = ?, content = ?, categoryId = ?, imageUrl = ?, publishedOn = ?, updatedOn = ? WHERE id = :id;
+
+-- SELECTIONS
+
+getPosts:
+SELECT * FROM postWithCategory;
+
+getPostsByCategory:
+SELECT * FROM postWithCategory WHERE categoryId = :categoryId;
+
+-- DELETIONS
+deletePosts:
+DELETE FROM post;
+
+deletePostsByCategory:
+DELETE FROM post WHERE categoryId = :categoryId;
