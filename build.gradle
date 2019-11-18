@@ -17,7 +17,7 @@ buildscript {
     'nav': '1.0.0',
     'paging': '2.1.0',
     'retrofit': '2.6.2',
-    'room': '2.1.0',
+    'room': '2.2.1', // https://developer.android.com/jetpack/androidx/releases/room#2.2.0-alpha01
   ]
 
   ext.deps = [
