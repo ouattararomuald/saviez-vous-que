@@ -1,0 +1,30 @@
+CREATE TABLE IF NOT EXISTS category(
+  id INTEGER AS Int NOT NULL PRIMARY KEY,
+  numberOfItems INTEGER AS Int NOT NULL,
+  name TEXT NOT NULL,
+  slug TEXT NOT NULL
+);
+
+-- INSERTIONS
+
+createCategory:
+INSERT INTO category(id, numberOfItems, name, slug) VALUES(?, ?, ?, ?);
+
+-- UPDATES
+
+updateCategoryWithId:
+UPDATE category SET name = :name, slug = :slug, numberOfItems = :numberOfItems WHERE id = :categoryId;
+
+-- SELECTIONS
+countItemsInCategory:
+SELECT COUNT(*) FROM category WHERE id = :categoryId;
+
+categoryIdAndName:
+SELECT id, name FROM category ORDER BY name ASC;
+
+countCategoryWithId:
+SELECT COUNT(*) FROM category WHERE id = :categoryId;
+
+-- DELETIONS
+deleteCategories:
+DELETE FROM category;

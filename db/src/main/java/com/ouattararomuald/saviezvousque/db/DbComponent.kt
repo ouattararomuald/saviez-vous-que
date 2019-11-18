@@ -1,6 +1,8 @@
 package com.ouattararomuald.saviezvousque.db
 
 import android.content.Context
+import com.ouattararomuald.saviezvousque.db.daos.CategoryDao
+import com.ouattararomuald.saviezvousque.db.daos.PostDao
 import dagger.BindsInstance
 import dagger.Component
 
@@ -10,6 +12,10 @@ import dagger.Component
 interface DbComponent {
 
   fun feedRepository(): FeedRepository
+
+  fun categoryDao(): CategoryDao
+
+  fun postDao(): PostDao
 
   @Component.Builder
   interface Builder {
