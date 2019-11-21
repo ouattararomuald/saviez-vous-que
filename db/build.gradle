@@ -57,8 +57,8 @@ dependencies {
   kapt deps.androidx.arch.room.compiler
   api deps.androidx.arch.room.rxjava2
 
-  api deps.sqlDelight.driver
-  api deps.sqlDelight.rxjava
+  api deps.sqlDelight.androidDriver
+  api deps.sqlDelight.coroutines
 
   api deps.androidx.paging.runtime
   api deps.androidx.paging.rxjava2
@@ -66,11 +66,14 @@ dependencies {
   api deps.threetenabp
 
   testImplementation deps.junit
-  testImplementation deps.retrofit.mock
   testImplementation deps.mockito
+  testImplementation deps.retrofit.mock
+  testImplementation deps.robolectric
+  testImplementation deps.sqlDelight.jdbcDriver
   testImplementation deps.truth
 
   androidTestImplementation deps.junit
+  androidTestImplementation deps.truth
   androidTestImplementation deps.androidx.arch.coreTesting
   androidTestImplementation deps.androidx.arch.room.testing
   androidTestImplementation deps.androidx.test.ext.junit
