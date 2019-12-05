@@ -2,6 +2,7 @@ package com.ouattararomuald.saviezvousque
 
 import android.app.Application
 import com.facebook.stetho.Stetho
+import com.jakewharton.threetenabp.AndroidThreeTen
 import com.ouattararomuald.saviezvousque.db.DaggerDbComponent
 import com.ouattararomuald.saviezvousque.db.DbComponent
 import com.ouattararomuald.saviezvousque.downloaders.DaggerDownloaderComponent
@@ -23,6 +24,8 @@ class App : Application() {
     if (BuildConfig.DEBUG) {
       Stetho.initializeWithDefaults(this)
     }
+
+    AndroidThreeTen.init(this)
 
     dbComponent = DaggerDbComponent.builder()
         .appContext(this)

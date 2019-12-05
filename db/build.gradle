@@ -70,6 +70,7 @@ dependencies {
   testImplementation deps.retrofit.mock
   testImplementation deps.robolectric
   testImplementation deps.sqlDelight.jdbcDriver
+  testImplementation deps.jvmThreetenabp
   testImplementation deps.truth
 
   androidTestImplementation deps.junit
