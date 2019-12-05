@@ -10,7 +10,6 @@ import com.squareup.sqldelight.sqlite.driver.JdbcSqliteDriver
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito.never
@@ -47,7 +46,7 @@ class CategoryDaoTest {
   }
 
   @Test
-  fun `verify calls for createCategory() for new category`() {
+  fun `create new category should success`() {
     val category = createCategory(id = 1)
 
     categoryDao.createCategory(category)
@@ -60,7 +59,7 @@ class CategoryDaoTest {
   }
 
   @Test
-  fun `verify calls for createCategory() for existing category`() {
+  fun `create category with an existing one does nothing`() {
     val category = createCategory(id = 1)
 
     categoryDao.createCategory(category)
@@ -75,13 +74,15 @@ class CategoryDaoTest {
 
   @Test
   fun `createCategories() should delegate to createCategory()`() {
-    val categories = listOf(createCategory(id = 1), createCategory(id = 1), createCategory(id = 1))
+    val categories = listOf(createCategory(id = 1), createCategory(id = 2), createCategory(id = 3))
 
     val spyCategoryDao = spy(categoryDao)
     spyCategoryDao.createCategories(categories)
 
     verify(spyCategoryDao, times(1)).createCategories(categories)
-    verify(spyCategoryDao, times(categories.size)).createCategory(category = categories.first())
+    categories.forEach { category ->
+      verify(spyCategoryDao, times(1)).createCategory(category = category)
+    }
   }
 
   @Test
@@ -97,7 +98,7 @@ class CategoryDaoTest {
   }
 
   @Test
-  fun `verify calls for categoryExists()`() {
+  fun `categoryExists(category) should delegate to categoryExists(categoryId)`() {
     val category = createCategory(id = 2)
 
     val spyCategoryDao = spy(categoryDao)
@@ -116,7 +117,7 @@ class CategoryDaoTest {
   }
 
   @Test
-  fun `verify calls for deleteCategories()`() {
+  fun `deleteCategories() should success`() {
     categoryDao.deleteCategories()
 
     verify(categoryQueries, never()).countCategoryWithId(categoryId = anyInt())
