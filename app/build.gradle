@@ -31,6 +31,10 @@ android {
     resConfigs 'fr'
   }
 
+  packagingOptions {
+    exclude 'META-INF/kotlinx-coroutines-core.kotlin_module'
+  }
+
   compileOptions {
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
@@ -42,8 +46,8 @@ android {
     }
   }
 
-  dataBinding {
-    enabled = true
+  buildFeatures {
+    dataBinding = true
   }
 
   lintOptions {
@@ -60,7 +64,7 @@ android {
     def FEED_BASE_URL_KEY = 'FEED_BASE_URL'
 
     debug {
-      buildConfigField 'String', DATABASE_NAME_KEY, '"HaveFunDebug"'
+      buildConfigField 'String', DATABASE_NAME_KEY, '"svqDbDebug"'
       buildConfigField 'String', FEED_BASE_URL_KEY, FEED_BASE_URL
 
       applicationIdSuffix '.debug'

@@ -23,7 +23,7 @@ class PagedPostAdapter : PagedListAdapter<Post, FeedItemViewHolder>(PostDiffUtil
     val post = getItem(position)
 
     if (post != null) {
-      holder.bind(post)
+      //holder.bind(post)
     }
   }
 }

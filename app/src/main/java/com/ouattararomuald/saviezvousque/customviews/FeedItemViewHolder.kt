@@ -3,6 +3,7 @@ package com.ouattararomuald.saviezvousque.customviews
 import androidx.recyclerview.widget.RecyclerView
 import com.ouattararomuald.saviezvousque.common.Post
 import com.ouattararomuald.saviezvousque.databinding.FeedItemViewBinding
+import com.ouattararomuald.saviezvousque.db.PostWithCategory
 
 class FeedItemViewHolder(
     private val itemBinding: FeedItemViewBinding
@@ -13,7 +14,7 @@ class FeedItemViewHolder(
    *
    * @param post [Post] to bind to this [FeedItemViewHolder].
    */
-  fun bind(post: Post) {
+  fun bind(post: PostWithCategory) {
     itemBinding.post = post
     itemBinding.executePendingBindings()
   }

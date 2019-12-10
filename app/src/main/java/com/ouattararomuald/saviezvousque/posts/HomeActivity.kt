@@ -17,9 +17,11 @@ import androidx.lifecycle.Observer
 import com.google.android.material.navigation.NavigationView
 import com.ouattararomuald.saviezvousque.R
 import com.ouattararomuald.saviezvousque.common.Category
-import com.ouattararomuald.saviezvousque.common.Post
+import com.ouattararomuald.saviezvousque.db.Post
 import com.ouattararomuald.saviezvousque.databinding.HomeActivityBinding
+import com.ouattararomuald.saviezvousque.db.CategoryIdAndName
 import com.ouattararomuald.saviezvousque.db.DbComponent
+import com.ouattararomuald.saviezvousque.db.PostWithCategory
 import com.ouattararomuald.saviezvousque.db.SharedPreferenceManager
 import com.ouattararomuald.saviezvousque.downloaders.DownloaderComponent
 import com.ouattararomuald.saviezvousque.posts.archives.PaginatedPostView
@@ -122,12 +124,12 @@ class HomeActivity : AppCompatActivity() {
   }
 
   private fun observeCategories() {
-    val categoriesObserver = Observer<List<Category>> { displayCategories(it) }
+    val categoriesObserver = Observer<List<CategoryIdAndName>> { displayCategories(it) }
     viewModel.categories.observe(this, categoriesObserver)
   }
 
   private fun observePosts() {
-    val postsObserver = Observer<Map<Int, List<Post>>> {
+    val postsObserver = Observer<Map<Int, List<PostWithCategory>>> {
       currentSelectedMenuItem?.let { displayPostsOfCategory(it.itemId) }
     }
     viewModel.posts.observe(this, postsObserver)
@@ -231,7 +233,7 @@ class HomeActivity : AppCompatActivity() {
    *
    * @param categories list of [categories] to display.
    */
-  private fun displayCategories(categories: List<Category>) {
+  private fun displayCategories(categories: List<CategoryIdAndName>) {
     currentSelectedMenuItem = menuManager.generateMenuFromCategories(categories)
   }
 

@@ -8,6 +8,7 @@ import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
+import com.ouattararomuald.saviezvousque.common.Category as CategoryAdapter
 
 class CategoryDao @Inject constructor(private val categoryQueries: CategoryQueries) {
 
@@ -20,19 +21,34 @@ class CategoryDao @Inject constructor(private val categoryQueries: CategoryQueri
    *
    * @param categories list of categories to create.
    */
-  fun createCategories(categories: List<Category>) {
-    categories.forEach { category -> createCategory(category) }
+  fun createCategories(categories: List<CategoryAdapter>) {
+    val sortedCategories = sortCategories(categories)
+    sortedCategories.toCategories().forEachIndexed { displayOrder, category ->
+      createCategory(category, displayOrder)
+    }
+  }
+
+  private fun sortCategories(categories: List<CategoryAdapter>): List<CategoryAdapter> {
+    val mainCategory = categories.findLast { it.slug == "saviezvousque" }
+    val mutableCategories = categories.toMutableList()
+    mutableCategories.sortBy { it.name }
+    mainCategory?.let {
+      mutableCategories.remove(it)
+      mutableCategories.add(0, it)
+    }
+    return mutableCategories
   }
 
   /**
    * Creates the given [category] if it does not exists.
    *
    * @param category value for category.
+   * @param displayOrder display order for the category.
    */
-  fun createCategory(category: Category) {
+  fun createCategory(category: Category, displayOrder: Int = 0) {
     if (!categoryExists(category.id)) {
       categoryQueries.createCategory(category.id, category.numberOfItems, category.name,
-          category.slug)
+          category.slug, displayOrder)
     }
   }
 
@@ -66,4 +82,8 @@ class CategoryDao @Inject constructor(private val categoryQueries: CategoryQueri
 
   fun categoryExists(categoryId: Int): Boolean = categoryQueries.countCategoryWithId(
       categoryId).executeAsOne() > 0
+
+  private fun List<CategoryAdapter>.toCategories(): List<Category> = mapIndexed { index, category ->
+    Category.Impl(category.id, category.count, category.name, category.slug, index)
+  }
 }

@@ -3,7 +3,7 @@ package com.ouattararomuald.saviezvousque.posts
 import android.view.Menu
 import android.view.MenuItem
 import com.ouattararomuald.saviezvousque.R
-import com.ouattararomuald.saviezvousque.common.Category
+import com.ouattararomuald.saviezvousque.db.CategoryIdAndName
 
 /**
  * Manages a menu.
@@ -19,7 +19,7 @@ class MenuManager(private val menu: Menu, private val selectedMenuItemIndex: Int
    * @param categories list of [categories] to display in the drawer.
    * @return the selected [MenuItem] or null if the list of [categories] is empty.
    */
-  fun generateMenuFromCategories(categories: List<Category>): MenuItem? {
+  fun generateMenuFromCategories(categories: List<CategoryIdAndName>): MenuItem? {
     if (categories.isNotEmpty()) {
       categories.forEach { category ->
         if (menu.findItem(category.id) == null) {
