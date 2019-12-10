@@ -40,6 +40,9 @@ SELECT * FROM postWithCategory;
 getPostsByCategory:
 SELECT * FROM postWithCategory WHERE categoryId = :categoryId;
 
+countPostWithId:
+SELECT COUNT(*) FROM post WHERE id = :postId;
+
 -- DELETIONS
 deletePosts:
 DELETE FROM post;

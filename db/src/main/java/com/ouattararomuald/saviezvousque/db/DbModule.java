@@ -3,8 +3,10 @@ package com.ouattararomuald.saviezvousque.db;
 import android.content.Context;
 import androidx.room.Room;
 import com.ouattararomuald.saviezvousque.db.adapters.LocalDateTimeAdapter;
+import com.ouattararomuald.saviezvousque.db.daos.CategoryDao;
 import com.ouattararomuald.saviezvousque.db.daos.FeedCategoryDao;
 import com.ouattararomuald.saviezvousque.db.daos.FeedItemDao;
+import com.ouattararomuald.saviezvousque.db.daos.PostDao;
 import com.squareup.sqldelight.android.AndroidSqliteDriver;
 import com.squareup.sqldelight.db.SqlDriver;
 import dagger.Module;
@@ -15,7 +17,7 @@ abstract class DbModule {
 
   @Provides
   public static AppDatabase database(Context context, String databaseName) {
-    return Room.databaseBuilder(context, AppDatabase.class, databaseName)
+    return Room.databaseBuilder(context, AppDatabase.class, "databaseName")
         //.addMigrations(MigrationsUtil.getMIGRATION_2_3())
         //.fallbackToDestructiveMigration()
         .build();
@@ -47,6 +49,16 @@ abstract class DbModule {
   }
 
   @Provides
+  static CategoryDao categoryDao(CategoryQueries categoryQueries) {
+    return new CategoryDao(categoryQueries);
+  }
+
+  @Provides
+  static PostDao postDao(PostQueries postQueries) {
+    return new PostDao(postQueries);
+  }
+
+  @Provides
   static FeedCategoryDao feedCategoryDao(AppDatabase database) {
     return database.feedCategoryDao();
   }
@@ -59,8 +71,10 @@ abstract class DbModule {
   @Provides
   public static FeedRepository feedRepository(
       FeedCategoryDao feedCategoryDao,
-      FeedItemDao feedItemDao
+      FeedItemDao feedItemDao,
+      CategoryDao categoryDao,
+      PostDao postDao
   ) {
-    return new FeedRepository(feedCategoryDao, feedItemDao);
+    return new FeedRepository(feedCategoryDao, feedItemDao, categoryDao, postDao);
   }
 }

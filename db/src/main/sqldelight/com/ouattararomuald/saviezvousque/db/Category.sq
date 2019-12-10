@@ -2,13 +2,14 @@ CREATE TABLE IF NOT EXISTS category(
   id INTEGER AS Int NOT NULL PRIMARY KEY,
   numberOfItems INTEGER AS Int NOT NULL,
   name TEXT NOT NULL,
-  slug TEXT NOT NULL
+  slug TEXT NOT NULL,
+  displayOrder INTEGER AS Int NOT NULL
 );
 
 -- INSERTIONS
 
 createCategory:
-INSERT INTO category(id, numberOfItems, name, slug) VALUES(?, ?, ?, ?);
+INSERT INTO category(id, numberOfItems, name, slug, displayOrder) VALUES(?, ?, ?, ?, ?);
 
 -- UPDATES
 
@@ -20,7 +21,7 @@ countItemsInCategory:
 SELECT COUNT(*) FROM category WHERE id = :categoryId;
 
 categoryIdAndName:
-SELECT id, name FROM category ORDER BY name ASC;
+SELECT id, name FROM category ORDER BY displayOrder, name ASC;
 
 countCategoryWithId:
 SELECT COUNT(*) FROM category WHERE id = :categoryId;

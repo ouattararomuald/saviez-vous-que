@@ -3,8 +3,10 @@ package com.ouattararomuald.saviezvousque.posts
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ouattararomuald.saviezvousque.common.Category
-import com.ouattararomuald.saviezvousque.common.Post
+import com.ouattararomuald.saviezvousque.db.CategoryIdAndName
 import com.ouattararomuald.saviezvousque.db.FeedRepository
+import com.ouattararomuald.saviezvousque.db.Post
+import com.ouattararomuald.saviezvousque.db.PostWithCategory
 import com.ouattararomuald.saviezvousque.downloaders.FeedDownloader
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -14,10 +16,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
+import com.ouattararomuald.saviezvousque.common.Post as PostAdapter
 
 class HomeViewModel @Inject constructor(
   private val feedDownloader: FeedDownloader,
@@ -25,10 +30,12 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel(), CoroutineScope {
 
   /** Observable list of categories. */
-  internal val categories: MutableLiveData<List<Category>> = MutableLiveData()
+  internal val categories: MutableLiveData<List<CategoryIdAndName>> = MutableLiveData()
 
   /** Observable list of posts grouped by category ID. */
-  internal val posts: MutableLiveData<Map<Int, List<Post>>> = MutableLiveData()
+  internal val posts: MutableLiveData<Map<Int, List<PostWithCategory>>> = MutableLiveData()
+
+  private val categoriesDatabaseObserver: Flow<List<CategoryIdAndName>> = feedRepository.categoriesFlow()
 
   private val disposable = CompositeDisposable()
 
@@ -38,7 +45,7 @@ class HomeViewModel @Inject constructor(
     get() = Dispatchers.IO + supervisorJob
 
   init {
-    loadCategoriesFromDatabase()
+    launch { observeCategoriesFromDatabase() }
     launch { downloadCategories() }
     posts.value = mutableMapOf()
   }
@@ -49,27 +56,18 @@ class HomeViewModel @Inject constructor(
   }
 
   fun refreshData() {
-    loadCategoriesFromDatabase()
+    launch { observeCategoriesFromDatabase() }
     launch { downloadCategories() }
   }
 
-  private fun loadCategoriesFromDatabase() {
-    disposable.add(
-        feedRepository.categoryStream()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-              val mutableCategories = it.toMutableList()
-              val orderedCategories = sortCategories(mutableCategories)
-              categories.postValue(orderedCategories)
-              loadPostsByCategories(orderedCategories)
-            }
-    )
+  private suspend fun observeCategoriesFromDatabase() {
+    categoriesDatabaseObserver.collect { categories.postValue(it) }
   }
+
 
   /** Download the [Post]s for all available categories. */
   private fun loadPostsByCategories(categories: List<Category>) {
-    val singles = ArrayList<Single<List<Post>>>()
+    val singles = ArrayList<Single<List<PostAdapter>>>()
 
     categories.forEach { category ->
       singles.add(feedRepository.feedItemsByCategoryStream(category.id)
@@ -85,12 +83,12 @@ class HomeViewModel @Inject constructor(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { items ->
-              val postItems = mutableListOf<Post>()
+              val postItems = mutableListOf<PostAdapter>()
               items.forEach { postItems.addAll(it) }
               postItems.sortBy { it.lastUpdateUtc }
 
               val postGroupedByCategory = postItems.groupBy { it.categoryId }
-              val map = mutableMapOf<Int, List<Post>>()
+              val map = mutableMapOf<Int, List<PostAdapter>>()
               postGroupedByCategory.keys.forEach { k ->
                 map[k] = postGroupedByCategory.getValue(k)
               }
@@ -99,7 +97,8 @@ class HomeViewModel @Inject constructor(
                 map[categories.first().id] = postItems.takeLast(10)
               }
 
-              this.posts.postValue(map)
+              TODO("type check")
+              //this.posts.postValue(map)
             }
     )
   }
@@ -126,14 +125,10 @@ class HomeViewModel @Inject constructor(
     }
   }
 
-  private fun savePosts(posts: List<Post>, categoryId: Int) {
+  private fun savePosts(posts: List<PostAdapter>, categoryId: Int) {
     feedRepository.savePosts(posts, categoryId)
         .subscribeOn(Schedulers.io())
         .subscribe()
-  }
-
-  private fun sortCategories(categories: MutableList<Category>): List<Category> {
-    return moveMainCategoryToTop(categories)
   }
 
   private fun moveMainCategoryToTop(categories: MutableList<Category>): List<Category> {
@@ -149,7 +144,7 @@ class HomeViewModel @Inject constructor(
     return categories
   }
 
-  fun getPostsByCategory(categoryId: Int): List<Post> {
+  fun getPostsByCategory(categoryId: Int): List<PostWithCategory> {
     posts.value?.let {
       if (it.containsKey(categoryId)) {
         return it.getValue(categoryId)
