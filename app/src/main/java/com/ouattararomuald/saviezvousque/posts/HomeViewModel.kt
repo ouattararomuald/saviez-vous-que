@@ -8,18 +8,16 @@ import com.ouattararomuald.saviezvousque.db.FeedRepository
 import com.ouattararomuald.saviezvousque.db.Post
 import com.ouattararomuald.saviezvousque.db.PostWithCategory
 import com.ouattararomuald.saviezvousque.downloaders.FeedDownloader
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 import com.ouattararomuald.saviezvousque.common.Post as PostAdapter
@@ -33,8 +31,11 @@ class HomeViewModel @Inject constructor(
   internal val categories: MutableLiveData<List<CategoryIdAndName>> = MutableLiveData()
 
   /** Observable list of posts grouped by category ID. */
-  internal val posts: MutableLiveData<Map<Int, List<PostWithCategory>>> = MutableLiveData()
+  //internal val posts: MutableLiveData<Map<Int, List<PostWithCategory>>> = MutableLiveData()
+  /** Observable list of posts. */
+  internal val posts: MutableLiveData<List<PostWithCategory>> = MutableLiveData()
 
+  private val postsDatabaseObserver: Flow<List<PostWithCategory>> = feedRepository.postsFlow()
   private val categoriesDatabaseObserver: Flow<List<CategoryIdAndName>> = feedRepository.categoriesFlow()
 
   private val disposable = CompositeDisposable()
@@ -46,8 +47,8 @@ class HomeViewModel @Inject constructor(
 
   init {
     launch { observeCategoriesFromDatabase() }
+    launch { observePostsFromDatabase() }
     launch { downloadCategories() }
-    posts.value = mutableMapOf()
   }
 
   fun onDestroy() {
@@ -56,7 +57,8 @@ class HomeViewModel @Inject constructor(
   }
 
   fun refreshData() {
-    launch { observeCategoriesFromDatabase() }
+    /*launch { observeCategoriesFromDatabase() }
+    launch { observePostsFromDatabase() }*/
     launch { downloadCategories() }
   }
 
@@ -64,10 +66,24 @@ class HomeViewModel @Inject constructor(
     categoriesDatabaseObserver.collect { categories.postValue(it) }
   }
 
+  private suspend fun observePostsFromDatabase() {
+    postsDatabaseObserver.collect { postsWithCategories ->
+      posts.postValue(postsWithCategories)
+      /*val postsGroupedByCategory = postsWithCategories.groupBy { it.categoryId }
+      val map = mutableMapOf<Int, List<PostWithCategory>>()
+      postsGroupedByCategory.keys.forEach { k ->
+        map[k] = postsGroupedByCategory.getValue(k)
+      }
+
+      posts.postValue(map)*/
+    }
+  }
+
 
   /** Download the [Post]s for all available categories. */
   private fun loadPostsByCategories(categories: List<Category>) {
-    val singles = ArrayList<Single<List<PostAdapter>>>()
+
+    /*val singles = ArrayList<Single<List<PostAdapter>>>()
 
     categories.forEach { category ->
       singles.add(feedRepository.feedItemsByCategoryStream(category.id)
@@ -100,7 +116,7 @@ class HomeViewModel @Inject constructor(
               TODO("type check")
               //this.posts.postValue(map)
             }
-    )
+    )*/
   }
 
   private suspend fun downloadCategories() {
@@ -116,7 +132,7 @@ class HomeViewModel @Inject constructor(
   }
 
   /** Download the [Post]s for all available categories. */
-  private suspend fun downloadPostsByCategories(categories: List<Category>) = runBlocking {
+  private suspend fun downloadPostsByCategories(categories: List<Category>) = coroutineScope {
     categories.forEach { category ->
       launch {
         val posts = feedDownloader.getPostsByCategory(category.id)
@@ -146,9 +162,10 @@ class HomeViewModel @Inject constructor(
 
   fun getPostsByCategory(categoryId: Int): List<PostWithCategory> {
     posts.value?.let {
-      if (it.containsKey(categoryId)) {
+      /*if (it.containsKey(categoryId)) {
         return it.getValue(categoryId)
-      }
+      }*/
+      return it.filter { postWithCategory ->  postWithCategory.categoryId == categoryId }
     }
 
     return emptyList()
