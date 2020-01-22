@@ -40,6 +40,10 @@ android {
     targetCompatibility JavaVersion.VERSION_1_8
   }
 
+  kotlinOptions {
+    jvmTarget = "1.8"
+  }
+
   testOptions {
     unitTests {
       includeAndroidResources = true
@@ -120,9 +124,6 @@ dependencies {
   implementation deps.stetho
 
   implementation deps.rxAndroid
-  implementation deps.androidx.arch.room.rxjava2
-  implementation deps.androidx.arch.room.runtime
-  kapt deps.androidx.arch.room.compiler
 
   implementation deps.retrofit.rxjavaCallAdapter
   implementation deps.retrofit.gsonConverter

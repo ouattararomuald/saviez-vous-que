@@ -53,7 +53,7 @@ class CategoryDaoTest {
 
     verify(categoryQueries, times(1)).countCategoryWithId(categoryId = category.id)
     verify(categoryQueries, times(1)).createCategory(category.id, category.numberOfItems,
-        category.name, category.slug)
+        category.name, category.slug, displayOrder = 1)
     verify(categoryQueries, never()).updateCategoryWithId(anyString(), anyString(), anyInt(),
         anyInt())
   }
@@ -67,7 +67,7 @@ class CategoryDaoTest {
 
     verify(categoryQueries, times(2)).countCategoryWithId(categoryId = category.id)
     verify(categoryQueries, times(1)).createCategory(category.id, category.numberOfItems,
-        category.name, category.slug)
+        category.name, category.slug, displayOrder = 0)
     verify(categoryQueries, never()).updateCategoryWithId(anyString(), anyString(), anyInt(),
         anyInt())
   }
@@ -144,6 +144,8 @@ class CategoryDaoTest {
         get() = "Category $id"
       override val slug: String
         get() = "category-slug-$id"
+      override val displayOrder: Int
+        get() = 0
     }
   }
 }

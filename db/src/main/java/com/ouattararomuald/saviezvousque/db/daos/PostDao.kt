@@ -31,7 +31,6 @@ class PostDao @Inject constructor(private val postQueries: PostQueries) {
     }
   }
 
-
   fun postExists(post: Post): Boolean = postExists(post.id)
 
   fun postExists(postId: Int): Boolean = postQueries.countPostWithId(postId).executeAsOne() > 0

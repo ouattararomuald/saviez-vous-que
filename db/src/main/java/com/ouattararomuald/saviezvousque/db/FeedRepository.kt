@@ -3,19 +3,14 @@ package com.ouattararomuald.saviezvousque.db
 import com.ouattararomuald.saviezvousque.common.Category
 import com.ouattararomuald.saviezvousque.common.Post
 import com.ouattararomuald.saviezvousque.db.daos.CategoryDao
-import com.ouattararomuald.saviezvousque.db.daos.FeedCategoryDao
-import com.ouattararomuald.saviezvousque.db.daos.FeedItemDao
 import com.ouattararomuald.saviezvousque.db.daos.PostDao
 import io.reactivex.Completable
-import io.reactivex.Flowable
 import io.reactivex.functions.Action
 import io.reactivex.internal.operators.completable.CompletableFromAction
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class FeedRepository @Inject constructor(
-  private val feedCategoryDao: FeedCategoryDao,
-  private val feedItemDao: FeedItemDao,
   private val categoryDao: CategoryDao,
   private val postDao: PostDao
 ) {
@@ -25,21 +20,6 @@ class FeedRepository @Inject constructor(
   fun postsFlow(): Flow<List<PostWithCategory>> = postDao.getPosts()
 
   fun postsByCategoryFlow(categoryId: Int): Flow<List<PostWithCategory>> = postDao.getPostsByCategory(categoryId)
-
-  fun categoryStream(): Flowable<List<Category>> {
-    return feedCategoryDao.feedCategoriesStream()
-        .map { feedCategories ->
-          return@map feedCategories.toCategories()
-        }
-  }
-
-  /** Returns the [Post]s of that belongs to the [Category] with the given [categoryId]. */
-  fun feedItemsByCategoryStream(categoryId: Int): Flowable<List<Post>> {
-    return feedItemDao.feedItemsByCategoryStream(categoryId)
-        .map { feedItems ->
-          return@map feedItems.toPosts(categoryId)
-        }
-  }
 
   /**
    * Saves the given [Post]s.
