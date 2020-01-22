@@ -8,6 +8,8 @@ import com.ouattararomuald.saviezvousque.R
 import com.ouattararomuald.saviezvousque.common.Post
 import com.ouattararomuald.saviezvousque.databinding.FeedItemViewBinding
 import com.ouattararomuald.saviezvousque.customviews.FeedItemViewHolder
+import com.ouattararomuald.saviezvousque.db.DateTimeConverter
+import com.ouattararomuald.saviezvousque.db.PostWithCategory
 
 class PagedPostAdapter : PagedListAdapter<Post, FeedItemViewHolder>(PostDiffUtilCallback) {
 
@@ -23,7 +25,21 @@ class PagedPostAdapter : PagedListAdapter<Post, FeedItemViewHolder>(PostDiffUtil
     val post = getItem(position)
 
     if (post != null) {
-      //holder.bind(post)
+      holder.bind(post.toPostWithCategory())
     }
+  }
+
+  private fun Post.toPostWithCategory(): PostWithCategory {
+    return PostWithCategory.Impl(
+        this.id,
+        this.title.value,
+        this.content.value,
+        this.getImageUrl(),
+        this.categoryId,
+        "",
+        "",
+        DateTimeConverter.toLocalDateTime(this.publicationDateUtc),
+        DateTimeConverter.toLocalDateTime(this.lastUpdateUtc)
+    )
   }
 }

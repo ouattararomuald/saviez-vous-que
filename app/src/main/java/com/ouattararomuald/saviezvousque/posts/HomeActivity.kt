@@ -129,7 +129,10 @@ class HomeActivity : AppCompatActivity() {
   }
 
   private fun observePosts() {
-    val postsObserver = Observer<Map<Int, List<PostWithCategory>>> {
+    /*val postsObserver = Observer<Map<Int, List<PostWithCategory>>> {
+      currentSelectedMenuItem?.let { displayPostsOfCategory(it.itemId) }
+    }*/
+    val postsObserver = Observer<List<PostWithCategory>> {
       currentSelectedMenuItem?.let { displayPostsOfCategory(it.itemId) }
     }
     viewModel.posts.observe(this, postsObserver)

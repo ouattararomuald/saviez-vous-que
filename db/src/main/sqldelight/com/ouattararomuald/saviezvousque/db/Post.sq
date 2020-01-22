@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS post(
 CREATE VIEW postWithCategory
 AS
   SELECT
-    post.id, title, content, imageUrl, categoryId,
+    post.id AS postId, title, content, imageUrl, categoryId,
     category.name AS categoryName, category.slug AS categorySlug,
     publishedOn, updatedOn
   FROM post
@@ -26,6 +26,9 @@ AS
 
 createPost:
 INSERT INTO post(id, title, content, categoryId, imageUrl, publishedOn, updatedOn) VALUES(?, ?, ?, ?, ?, ?, ?);
+
+--createPostWithCategory:
+--INSERT INTO postWithCategory(postId, title, content, imageUrl, categoryId, categoryName, categorySlug, publishedOn, updatedOn) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 -- UPDATES
 
