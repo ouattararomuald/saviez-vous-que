@@ -30,6 +30,10 @@ android {
     targetCompatibility JavaVersion.VERSION_1_8
   }
 
+  kotlinOptions {
+    jvmTarget = "1.8"
+  }
+
   lintOptions {
     textReport true
     textOutput 'stdout'
@@ -53,10 +57,6 @@ dependencies {
   api deps.dagger.runtime
   kapt deps.dagger.compiler
 
-  api deps.androidx.arch.room.runtime
-  kapt deps.androidx.arch.room.compiler
-  api deps.androidx.arch.room.rxjava2
-
   api deps.sqlDelight.androidDriver
   api deps.sqlDelight.coroutines
 
@@ -76,7 +76,6 @@ dependencies {
   androidTestImplementation deps.junit
   androidTestImplementation deps.truth
   androidTestImplementation deps.androidx.arch.coreTesting
-  androidTestImplementation deps.androidx.arch.room.testing
   androidTestImplementation deps.androidx.test.ext.junit
   androidTestImplementation deps.androidx.test.espresso.runner
   androidTestImplementation deps.androidx.test.espresso.core

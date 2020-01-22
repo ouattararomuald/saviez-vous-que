@@ -1,11 +1,8 @@
 package com.ouattararomuald.saviezvousque.db;
 
 import android.content.Context;
-import androidx.room.Room;
 import com.ouattararomuald.saviezvousque.db.adapters.LocalDateTimeAdapter;
 import com.ouattararomuald.saviezvousque.db.daos.CategoryDao;
-import com.ouattararomuald.saviezvousque.db.daos.FeedCategoryDao;
-import com.ouattararomuald.saviezvousque.db.daos.FeedItemDao;
 import com.ouattararomuald.saviezvousque.db.daos.PostDao;
 import com.squareup.sqldelight.android.AndroidSqliteDriver;
 import com.squareup.sqldelight.db.SqlDriver;
@@ -14,14 +11,6 @@ import dagger.Provides;
 
 @Module
 abstract class DbModule {
-
-  @Provides
-  public static AppDatabase database(Context context, String databaseName) {
-    return Room.databaseBuilder(context, AppDatabase.class, "databaseName")
-        //.addMigrations(MigrationsUtil.getMIGRATION_2_3())
-        //.fallbackToDestructiveMigration()
-        .build();
-  }
 
   @Provides
   static PostQueries postQueries(Database database) {
@@ -59,22 +48,10 @@ abstract class DbModule {
   }
 
   @Provides
-  static FeedCategoryDao feedCategoryDao(AppDatabase database) {
-    return database.feedCategoryDao();
-  }
-
-  @Provides
-  static FeedItemDao feedItemDao(AppDatabase database) {
-    return database.feedItemDao();
-  }
-
-  @Provides
   public static FeedRepository feedRepository(
-      FeedCategoryDao feedCategoryDao,
-      FeedItemDao feedItemDao,
       CategoryDao categoryDao,
       PostDao postDao
   ) {
-    return new FeedRepository(feedCategoryDao, feedItemDao, categoryDao, postDao);
+    return new FeedRepository(categoryDao, postDao);
   }
 }

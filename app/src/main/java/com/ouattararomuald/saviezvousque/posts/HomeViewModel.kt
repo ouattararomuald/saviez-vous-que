@@ -29,9 +29,6 @@ class HomeViewModel @Inject constructor(
 
   /** Observable list of categories. */
   internal val categories: MutableLiveData<List<CategoryIdAndName>> = MutableLiveData()
-
-  /** Observable list of posts grouped by category ID. */
-  //internal val posts: MutableLiveData<Map<Int, List<PostWithCategory>>> = MutableLiveData()
   /** Observable list of posts. */
   internal val posts: MutableLiveData<List<PostWithCategory>> = MutableLiveData()
 
@@ -48,7 +45,7 @@ class HomeViewModel @Inject constructor(
   init {
     launch { observeCategoriesFromDatabase() }
     launch { observePostsFromDatabase() }
-    launch { downloadCategories() }
+    launch { downloadData() }
   }
 
   fun onDestroy() {
@@ -57,9 +54,7 @@ class HomeViewModel @Inject constructor(
   }
 
   fun refreshData() {
-    /*launch { observeCategoriesFromDatabase() }
-    launch { observePostsFromDatabase() }*/
-    launch { downloadCategories() }
+    launch { downloadData() }
   }
 
   private suspend fun observeCategoriesFromDatabase() {
@@ -69,60 +64,19 @@ class HomeViewModel @Inject constructor(
   private suspend fun observePostsFromDatabase() {
     postsDatabaseObserver.collect { postsWithCategories ->
       posts.postValue(postsWithCategories)
-      /*val postsGroupedByCategory = postsWithCategories.groupBy { it.categoryId }
-      val map = mutableMapOf<Int, List<PostWithCategory>>()
-      postsGroupedByCategory.keys.forEach { k ->
-        map[k] = postsGroupedByCategory.getValue(k)
-      }
-
-      posts.postValue(map)*/
     }
   }
 
-
-  /** Download the [Post]s for all available categories. */
-  private fun loadPostsByCategories(categories: List<Category>) {
-
-    /*val singles = ArrayList<Single<List<PostAdapter>>>()
-
-    categories.forEach { category ->
-      singles.add(feedRepository.feedItemsByCategoryStream(category.id)
-          .filter { it.isNotEmpty() }
-          .subscribeOn(Schedulers.io())
-          .firstOrError()
-      )
-    }
-
-    disposable.add(
-        Single.merge(singles)
-            .toList()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { items ->
-              val postItems = mutableListOf<PostAdapter>()
-              items.forEach { postItems.addAll(it) }
-              postItems.sortBy { it.lastUpdateUtc }
-
-              val postGroupedByCategory = postItems.groupBy { it.categoryId }
-              val map = mutableMapOf<Int, List<PostAdapter>>()
-              postGroupedByCategory.keys.forEach { k ->
-                map[k] = postGroupedByCategory.getValue(k)
-              }
-
-              if (categories.isNotEmpty()) {
-                map[categories.first().id] = postItems.takeLast(10)
-              }
-
-              TODO("type check")
-              //this.posts.postValue(map)
-            }
-    )*/
+  /** Download categories then download posts for each category. */
+  private suspend fun downloadData() {
+    val categories = downloadCategories()
+    downloadPostsByCategories(categories)
   }
 
-  private suspend fun downloadCategories() {
+  private suspend fun downloadCategories(): List<Category> {
     val categories = feedDownloader.getCategories()
     saveCategories(categories)
-    downloadPostsByCategories(categories)
+    return categories
   }
 
   private fun saveCategories(categories: List<Category>) {
@@ -147,24 +101,8 @@ class HomeViewModel @Inject constructor(
         .subscribe()
   }
 
-  private fun moveMainCategoryToTop(categories: MutableList<Category>): List<Category> {
-    val mainCategory = categories.findLast { category -> category.slug == "saviezvousque" }
-
-    mainCategory?.let {
-      categories.apply {
-        remove(mainCategory)
-        add(0, mainCategory)
-      }
-    }
-
-    return categories
-  }
-
   fun getPostsByCategory(categoryId: Int): List<PostWithCategory> {
     posts.value?.let {
-      /*if (it.containsKey(categoryId)) {
-        return it.getValue(categoryId)
-      }*/
       return it.filter { postWithCategory ->  postWithCategory.categoryId == categoryId }
     }
 
