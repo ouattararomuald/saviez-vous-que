@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/ouattararomuald/saviez-vous-que/tree/master.svg?style=svg)](https://circleci.com/gh/ouattararomuald/saviez-vous-que/tree/master)
+
 # saviez-vous-que
 
 [Get it on Google Play](https://play.google.com/store/apps/details?id=com.ouattararomuald.saviezvousque)
