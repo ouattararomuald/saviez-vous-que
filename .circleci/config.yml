@@ -11,10 +11,6 @@ jobs:
       - image: circleci/android:api-29
       - image: circleci/openjdk:9-b179-jdk
 
-    #environment:
-      #JAVA_HOME: /usr/lib/jvm/java-8-openjdk-amd64
-      #TERM: dumb
-
     steps:
       - checkout
 
