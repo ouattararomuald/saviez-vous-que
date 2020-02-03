@@ -19,8 +19,6 @@ class FeedRepository @Inject constructor(
 
   fun postsFlow(): Flow<List<PostWithCategory>> = postDao.getPosts()
 
-  fun postsByCategoryFlow(categoryId: Int): Flow<List<PostWithCategory>> = postDao.getPostsByCategory(categoryId)
-
   /**
    * Saves the given [Post]s.
    *
@@ -33,7 +31,6 @@ class FeedRepository @Inject constructor(
     return CompletableFromAction(Action {
       val postsWithCategory = posts.map { it.copy(categoryId = categoryId) }
       postDao.createPosts(postsWithCategory)
-      //feedItemDao.insert(posts.toFeedItems(categoryId))
     })
   }
 

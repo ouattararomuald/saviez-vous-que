@@ -28,17 +28,6 @@ class CategoryDao @Inject constructor(private val categoryQueries: CategoryQueri
     }
   }
 
-  private fun sortCategories(categories: List<CategoryAdapter>): List<CategoryAdapter> {
-    val mainCategory = categories.findLast { it.slug == "saviezvousque" }
-    val mutableCategories = categories.toMutableList()
-    mutableCategories.sortBy { it.name }
-    mainCategory?.let {
-      mutableCategories.remove(it)
-      mutableCategories.add(0, it)
-    }
-    return mutableCategories
-  }
-
   /**
    * Creates the given [category] if it does not exists.
    *
@@ -50,6 +39,17 @@ class CategoryDao @Inject constructor(private val categoryQueries: CategoryQueri
       categoryQueries.createCategory(category.id, category.numberOfItems, category.name,
           category.slug, displayOrder)
     }
+  }
+
+  private fun sortCategories(categories: List<CategoryAdapter>): List<CategoryAdapter> {
+    val mainCategory = categories.findLast { it.slug == "saviezvousque" }
+    val mutableCategories = categories.toMutableList()
+    mutableCategories.sortBy { it.name }
+    mainCategory?.let {
+      mutableCategories.remove(it)
+      mutableCategories.add(0, it)
+    }
+    return mutableCategories
   }
 
   /**

@@ -24,7 +24,8 @@ abstract class DbModule {
 
   @Provides
   static Database sqlDelightDatabase(SqlDriver driver, LocalDateTimeAdapter localDateTimeAdapter) {
-    return Database.Companion.invoke(driver, new Post.Adapter(localDateTimeAdapter, localDateTimeAdapter));
+    return Database.Companion.invoke(driver,
+        new Post.Adapter(localDateTimeAdapter, localDateTimeAdapter));
   }
 
   @Provides

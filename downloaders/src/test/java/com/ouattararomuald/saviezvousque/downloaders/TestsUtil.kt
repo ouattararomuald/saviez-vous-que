@@ -11,7 +11,7 @@ class TestsUtil {
     @JvmStatic
     fun loadFileFromResources(filename: String): File {
       val url = TestsUtil::class.java.getResource(filename)
-      return File(url.toURI())
+      return File(url!!.toURI())
     }
   }
 }

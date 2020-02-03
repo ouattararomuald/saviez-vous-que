@@ -16,6 +16,7 @@ import org.mockito.Mockito.never
 import org.mockito.Mockito.spy
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
+import com.ouattararomuald.saviezvousque.common.Category as CategoryAdapter
 
 class CategoryDaoTest {
 
@@ -53,7 +54,7 @@ class CategoryDaoTest {
 
     verify(categoryQueries, times(1)).countCategoryWithId(categoryId = category.id)
     verify(categoryQueries, times(1)).createCategory(category.id, category.numberOfItems,
-        category.name, category.slug, displayOrder = 1)
+        category.name, category.slug, category.displayOrder)
     verify(categoryQueries, never()).updateCategoryWithId(anyString(), anyString(), anyInt(),
         anyInt())
   }
@@ -75,13 +76,15 @@ class CategoryDaoTest {
   @Test
   fun `createCategories() should delegate to createCategory()`() {
     val categories = listOf(createCategory(id = 1), createCategory(id = 2), createCategory(id = 3))
+    val categoryAdapters = categories.map { it.toAdapter() }
 
     val spyCategoryDao = spy(categoryDao)
-    spyCategoryDao.createCategories(categories)
+    spyCategoryDao.createCategories(categoryAdapters)
 
-    verify(spyCategoryDao, times(1)).createCategories(categories)
-    categories.forEach { category ->
-      verify(spyCategoryDao, times(1)).createCategory(category = category)
+    verify(spyCategoryDao, times(1)).createCategories(categoryAdapters)
+    categoryAdapters.toCategories().forEach { category ->
+      verify(spyCategoryDao, times(1)).createCategory(category = category,
+          displayOrder = category.displayOrder)
     }
   }
 
@@ -147,5 +150,13 @@ class CategoryDaoTest {
       override val displayOrder: Int
         get() = 0
     }
+  }
+
+  private fun Category.toAdapter(): CategoryAdapter {
+    return CategoryAdapter(this.id, this.numberOfItems, this.name, this.slug)
+  }
+
+  private fun List<CategoryAdapter>.toCategories(): List<Category> = mapIndexed { index, category ->
+    Category.Impl(category.id, category.count, category.name, category.slug, index)
   }
 }
