@@ -6,6 +6,7 @@ import com.ouattararomuald.saviezvousque.common.Post
 import com.ouattararomuald.saviezvousque.common.Title
 import com.ouattararomuald.saviezvousque.db.FeedCategory
 import com.ouattararomuald.saviezvousque.db.FeedItem
+import com.ouattararomuald.saviezvousque.db.PostWithCategory
 import org.threeten.bp.LocalDateTime
 
 class TestsUtil {
@@ -81,22 +82,43 @@ class TestsUtil {
     }
 
     @JvmStatic
-    fun generatePosts(quantity: Int = 1): List<Post> {
+    fun generatePosts(quantity: Int = 1): List<PostWithCategory> {
       if (quantity < 1) {
         throw IllegalArgumentException("quantity must be greater or equals to 1")
       }
 
-      val posts = mutableListOf<Post>()
+      val posts = mutableListOf<PostWithCategory>()
 
       repeat(quantity) { index ->
-        val post = Post(
+        /*val post = Post(
             id = index,
             categoryId = index,
             publicationDateUtc = "2018-02-17T10:36:22",
             lastUpdateUtc = "2018-02-18T11:36:22",
             title = Title(value = "title"),
             content = Content(value = "<p>")
-        )
+        )*/
+
+        val post = object: PostWithCategory {
+          override val postId: Int
+            get() = index
+          override val title: String
+            get() = "title"
+          override val content: String
+            get() = "<p>"
+          override val imageUrl: String?
+            get() = "http://fake.image.com"
+          override val categoryId: Int
+            get() = index
+          override val categoryName: String
+            get() = "Category $index"
+          override val categorySlug: String
+            get() = "Category slug $index"
+          override val publishedOn: LocalDateTime
+            get() = LocalDateTime.now()
+          override val updatedOn: LocalDateTime
+            get() = LocalDateTime.now()
+        }
 
         posts.add(post)
       }
