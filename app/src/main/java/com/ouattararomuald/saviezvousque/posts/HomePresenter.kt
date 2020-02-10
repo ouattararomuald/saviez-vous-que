@@ -43,6 +43,7 @@ class HomePresenter @Inject constructor(
   }
 
   override fun onDestroy() {
+    localDataUpdater.dispose()
     disposable.dispose()
     coroutineContext.cancelChildren()
   }

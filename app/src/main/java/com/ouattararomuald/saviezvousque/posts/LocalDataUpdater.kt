@@ -6,16 +6,30 @@ import com.ouattararomuald.saviezvousque.db.FeedRepository
 import com.ouattararomuald.saviezvousque.db.Post
 import com.ouattararomuald.saviezvousque.db.PostWithCategory
 import com.ouattararomuald.saviezvousque.downloaders.FeedDownloader
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
 /** Fetches data from remote source and saves them in local database. */
 class LocalDataUpdater(
   private val feedDownloader: FeedDownloader,
   private val feedRepository: FeedRepository
-) {
+) : CoroutineScope {
+
+  private val disposable = CompositeDisposable()
+
+  private val supervisorJob = SupervisorJob()
+
+  override val coroutineContext: CoroutineContext
+    get() = Dispatchers.IO + supervisorJob
+
   val postsDatabaseObserver: Flow<List<PostWithCategory>>
     get() = feedRepository.postsFlow()
   val categoriesDatabaseObserver: Flow<List<CategoryIdAndName>>
@@ -26,6 +40,11 @@ class LocalDataUpdater(
     downloadPostsByCategories(categories)
   }
 
+  fun dispose() {
+    disposable.dispose()
+    coroutineContext.cancelChildren()
+  }
+
   private suspend fun downloadCategories(): List<Category> {
     val categories = feedDownloader.getCategories()
     saveCategories(categories)
@@ -33,9 +52,9 @@ class LocalDataUpdater(
   }
 
   private fun saveCategories(categories: List<Category>) {
-    feedRepository.saveCategories(categories)
+    disposable.add(feedRepository.saveCategories(categories)
         .subscribeOn(Schedulers.io())
-        .subscribe()
+        .subscribe())
   }
 
   /** Download the [Post]s for all available categories. */
@@ -48,9 +67,12 @@ class LocalDataUpdater(
     }
   }
 
-  private fun savePosts(posts: List<com.ouattararomuald.saviezvousque.common.Post>, categoryId: Int) {
-    feedRepository.savePosts(posts, categoryId)
+  private fun savePosts(
+    posts: List<com.ouattararomuald.saviezvousque.common.Post>,
+    categoryId: Int
+  ) {
+    disposable.add(feedRepository.savePosts(posts, categoryId)
         .subscribeOn(Schedulers.io())
-        .subscribe()
+        .subscribe())
   }
 }
