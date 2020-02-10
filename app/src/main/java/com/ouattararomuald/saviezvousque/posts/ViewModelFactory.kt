@@ -14,9 +14,9 @@ class ViewModelFactory @Inject constructor(
 
   @Suppress("UnsafeCast")
   override fun <T : ViewModel> create(modelClass: Class<T>): T {
-    if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
+    if (modelClass.isAssignableFrom(HomePresenter::class.java)) {
       @Suppress("UNCHECKED_CAST")
-      return HomeViewModel(feedDownloader, feedRepository) as T
+      return HomePresenter(LocalDataUpdater(feedDownloader, feedRepository)) as T
     }
     throw IllegalArgumentException("Unknown ViewModel class")
   }

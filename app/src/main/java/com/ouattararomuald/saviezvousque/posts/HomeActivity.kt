@@ -40,8 +40,8 @@ import javax.inject.Inject
 /** Displays the different categories and allow users to navigate between them. */
 class HomeActivity : AppCompatActivity() {
 
-  /** The [HomeViewModel] bound to this activity. */
-  @Inject lateinit var viewModel: HomeViewModel
+  /** The [HomePresenter] bound to this activity. */
+  @Inject lateinit var homePresenter: HomePresenter
 
   private lateinit var homeActivityBinding: HomeActivityBinding
 
@@ -115,7 +115,7 @@ class HomeActivity : AppCompatActivity() {
         .build()
         .inject(this)
 
-    homeActivityBinding.viewModel = viewModel
+    homeActivityBinding.viewModel = homePresenter
 
     observeCategories()
     observePosts()
@@ -125,14 +125,14 @@ class HomeActivity : AppCompatActivity() {
 
   private fun observeCategories() {
     val categoriesObserver = Observer<List<CategoryIdAndName>> { displayCategories(it) }
-    viewModel.categories.observe(this, categoriesObserver)
+    homePresenter.categories.observe(this, categoriesObserver)
   }
 
   private fun observePosts() {
     val postsObserver = Observer<List<PostWithCategory>> {
       currentSelectedMenuItem?.let { displayPostsOfCategory(it.itemId) }
     }
-    viewModel.posts.observe(this, postsObserver)
+    homePresenter.posts.observe(this, postsObserver)
   }
 
   private fun configureNavigationMenuEventClickListener() {
@@ -195,7 +195,7 @@ class HomeActivity : AppCompatActivity() {
 
   override fun onDestroy() {
     super.onDestroy()
-    viewModel.onDestroy()
+    homePresenter.onDestroy()
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -209,7 +209,7 @@ class HomeActivity : AppCompatActivity() {
     // Handle item selection
     return when (item.itemId) {
       R.id.refresh_menu_item -> {
-        viewModel.refreshData()
+        homePresenter.refreshData()
         true
       }
       else -> super.onOptionsItemSelected(item)
@@ -222,7 +222,7 @@ class HomeActivity : AppCompatActivity() {
    * @param categoryId id of the category to display.
    */
   private fun displayPostsOfCategory(categoryId: Int) {
-    val posts = viewModel.getPostsByCategory(categoryId)
+    val posts = homePresenter.getPostsByCategory(categoryId)
     if (posts.isNotEmpty()) {
       postListView.updateDisplayedPosts(categoryId, posts)
     }

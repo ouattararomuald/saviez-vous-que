@@ -5,9 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
 >
   <data>
-    <import type="com.ouattararomuald.saviezvousque.posts.HomeViewModel"/>
+    <import type="com.ouattararomuald.saviezvousque.posts.HomePresenter"/>
 
-    <variable name="viewModel" type="HomeViewModel"/>
+    <variable name="viewModel" type="HomePresenter"/>
   </data>
 
   <androidx.drawerlayout.widget.DrawerLayout
