@@ -1,7 +1,6 @@
 package com.ouattararomuald.saviezvousque.posts;
 
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import com.ouattararomuald.saviezvousque.db.FeedRepository;
 import com.ouattararomuald.saviezvousque.downloaders.FeedDownloader;
 import dagger.Module;
@@ -20,7 +19,7 @@ abstract class HomeModule {
 
   @Singleton
   @Provides
-  static HomeViewModel homeViewModel(HomeActivity activity, ViewModelFactory viewModelFactory) {
-    return new ViewModelProvider(activity, viewModelFactory).get(HomeViewModel.class);
+  static HomePresenter homeViewModel(HomeActivity activity, ViewModelFactory viewModelFactory) {
+    return new ViewModelProvider(activity, viewModelFactory).get(HomePresenter.class);
   }
 }
