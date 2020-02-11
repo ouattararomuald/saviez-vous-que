@@ -6,6 +6,7 @@ import com.ouattararomuald.saviezvousque.db.FeedRepository
 import com.ouattararomuald.saviezvousque.db.Post
 import com.ouattararomuald.saviezvousque.db.PostWithCategory
 import com.ouattararomuald.saviezvousque.downloaders.FeedDownloader
+import com.ouattararomuald.saviezvousque.common.Post as PostAdapter
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
@@ -67,10 +68,7 @@ class LocalDataUpdater(
     }
   }
 
-  private fun savePosts(
-    posts: List<com.ouattararomuald.saviezvousque.common.Post>,
-    categoryId: Int
-  ) {
+  private fun savePosts(posts: List<PostAdapter>, categoryId: Int) {
     disposable.add(feedRepository.savePosts(posts, categoryId)
         .subscribeOn(Schedulers.io())
         .subscribe())
