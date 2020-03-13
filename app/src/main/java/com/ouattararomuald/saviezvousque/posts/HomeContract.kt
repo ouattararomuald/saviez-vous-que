@@ -19,4 +19,10 @@ interface HomeContract {
      */
     fun getPostsByCategory(categoryId: Int): List<PostWithCategory>
   }
+
+  interface View {
+    fun showProgressBar()
+
+    fun hideProgressBar()
+  }
 }

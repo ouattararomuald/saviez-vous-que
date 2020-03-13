@@ -9,13 +9,8 @@ import com.ouattararomuald.saviezvousque.downloaders.FeedDownloader
 import com.ouattararomuald.saviezvousque.common.Post as PostAdapter
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancelChildren
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 /** Fetches data from remote source and saves them in local database. */
@@ -23,6 +18,8 @@ class LocalDataUpdater(
   private val feedDownloader: FeedDownloader,
   private val feedRepository: FeedRepository
 ) : CoroutineScope {
+
+  private var downloadStateListener: DownloadStateListener? = null
 
   private val disposable = CompositeDisposable()
 
@@ -37,13 +34,20 @@ class LocalDataUpdater(
     get() = feedRepository.categoriesFlow()
 
   suspend fun downloadCategoriesAndPosts() {
+    downloadStateListener?.onDownloadStarted()
     val categories = downloadCategories()
     downloadPostsByCategories(categories)
+    downloadStateListener?.onDownloadFinished()
   }
 
   fun dispose() {
     disposable.dispose()
     coroutineContext.cancelChildren()
+    downloadStateListener = null
+  }
+
+  fun setDownloadStateListener(listener: DownloadStateListener) {
+    downloadStateListener = listener
   }
 
   private suspend fun downloadCategories(): List<Category> {
@@ -72,5 +76,11 @@ class LocalDataUpdater(
     disposable.add(feedRepository.savePosts(posts, categoryId)
         .subscribeOn(Schedulers.io())
         .subscribe())
+  }
+
+  interface DownloadStateListener {
+    suspend fun onDownloadStarted()
+
+    suspend fun onDownloadFinished()
   }
 }

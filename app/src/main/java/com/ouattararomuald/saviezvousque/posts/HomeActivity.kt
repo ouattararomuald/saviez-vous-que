@@ -38,7 +38,7 @@ import kotlinx.android.synthetic.main.home_content.view.posts_view
 import javax.inject.Inject
 
 /** Displays the different categories and allow users to navigate between them. */
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(), HomeContract.View {
 
   /** The [HomePresenter] bound to this activity. */
   @Inject lateinit var homePresenter: HomePresenter
@@ -112,6 +112,7 @@ class HomeActivity : AppCompatActivity() {
         .databaseComponent(dbComponent)
         .downloaderComponent(downloaderComponent)
         .activity(this)
+        .view(this)
         .build()
         .inject(this)
 
@@ -214,6 +215,14 @@ class HomeActivity : AppCompatActivity() {
       }
       else -> super.onOptionsItemSelected(item)
     }
+  }
+
+  override fun showProgressBar() {
+    postListView.showProgressBar()
+  }
+
+  override fun hideProgressBar() {
+    postListView.hideProgressBar()
   }
 
   /**

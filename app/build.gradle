@@ -1,18 +1,9 @@
-buildscript {
-  repositories {
-    mavenCentral()
-  }
-
-  dependencies {
-    //classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.6'
-  }
-}
-
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs'
+apply plugin: 'com.getkeepsafe.dexcount'
 
 android {
   compileSdkVersion buildConfig.compileSdk
@@ -128,8 +119,6 @@ dependencies {
   implementation deps.retrofit.rxjavaCallAdapter
   implementation deps.retrofit.gsonConverter
 
-  implementation deps.threetenabp
-
   testImplementation deps.junit
   testImplementation deps.coroutines.test
   testImplementation deps.robolectric
@@ -143,10 +132,4 @@ dependencies {
   androidTestImplementation deps.androidx.paging.testing
   androidTestImplementation deps.mockito
   androidTestImplementation deps.truth
-}
-
-//apply plugin: 'com.getkeepsafe.dexcount'
-
-repositories {
-  mavenCentral()
 }

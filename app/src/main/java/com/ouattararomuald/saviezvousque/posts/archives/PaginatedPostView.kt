@@ -25,6 +25,11 @@ import kotlinx.android.synthetic.main.paginated_post_view.view.viewLayout
  */
 class PaginatedPostView : FrameLayout {
 
+  companion object {
+    private const val TWO = 2
+    private const val THREE = 3
+  }
+
   private lateinit var feedDownloader: FeedDownloader
   private lateinit var feedRepository: FeedRepository
 
@@ -63,8 +68,8 @@ class PaginatedPostView : FrameLayout {
     // initial page size to fetch can also be configured here too
     config = PagedList.Config.Builder()
         .setPrefetchDistance(ArchivePostDataSourceFactory.NETWORK_PAGE_SIZE)
-        .setPageSize(2 * ArchivePostDataSourceFactory.NETWORK_PAGE_SIZE)
-        .setInitialLoadSizeHint(3 * ArchivePostDataSourceFactory.NETWORK_PAGE_SIZE)
+        .setPageSize(TWO * ArchivePostDataSourceFactory.NETWORK_PAGE_SIZE)
+        .setInitialLoadSizeHint(THREE * ArchivePostDataSourceFactory.NETWORK_PAGE_SIZE)
         .setEnablePlaceholders(true)
         .build()
   }
