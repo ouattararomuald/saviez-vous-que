@@ -25,6 +25,9 @@ interface HomeActivityInjectorComponent {
     @BindsInstance
     fun activity(activity: HomeActivity): Builder
 
+    @BindsInstance
+    fun view(view: HomeContract.View): Builder
+
     fun build(): HomeActivityInjectorComponent
   }
 

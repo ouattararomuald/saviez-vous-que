@@ -8,7 +8,7 @@ buildscript {
   ]
 
   ext.versions = [
-    'androidPlugin': '4.0.0-alpha09',
+    'androidPlugin': '4.1.0-alpha02',
     'coroutines': '1.3.2',
     'dagger': '2.25.2',
     'groupie': '2.7.0',
@@ -17,7 +17,7 @@ buildscript {
     'nav': '1.0.0',
     'paging': '2.1.0',
     'retrofit': '2.6.2',
-    'room': '2.2.1', // https://developer.android.com/jetpack/androidx/releases/room#2.2.0-alpha01
+    //'room': '2.2.1', // https://developer.android.com/jetpack/androidx/releases/room#2.2.0-alpha01
     'sqlDelight': '1.2.0', // https://developer.android.com/jetpack/androidx/releases/room#2.2.0-alpha01
   ]
 
@@ -117,6 +117,7 @@ buildscript {
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
     classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:${versions.nav}"
     classpath 'com.squareup.sqldelight:gradle-plugin:1.2.0'
+    classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:1.0.2'
 
     // NOTE: Do not place your application dependencies here; they belong
     // in the individual module build.gradle files
@@ -124,7 +125,7 @@ buildscript {
 }
 
 plugins {
-  //id 'io.gitlab.arturbosch.detekt' version '1.0.0.RC9.2'
+  id 'io.gitlab.arturbosch.detekt' version '1.6.0'
   id 'com.github.ben-manes.versions' version '0.21.0'
 }
 
@@ -172,9 +173,9 @@ task clean(type: Delete) {
   delete rootProject.buildDir
 }
 
-//detekt {
-//  toolVersion = "1.0.0.RC9.2"
-//  input = files("$projectDir/app/src/main/java")
-//  config = files("$projectDir/code-analysis/detekt.yml")
-//  filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
-//}
+detekt {
+  //toolVersion = "1.6.0"
+  input = files("$projectDir/app/src/main/java")
+  config = files("$projectDir/code-analysis/detekt.yml")
+  //excludes = ".*test.*,.*/resources/.*,.*/tmp/.*"
+}

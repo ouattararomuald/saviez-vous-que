@@ -2,7 +2,10 @@ package com.ouattararomuald.saviezvousque.posts.views
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.widget.FrameLayout
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ouattararomuald.saviezvousque.R
 import com.ouattararomuald.saviezvousque.common.Post
@@ -12,6 +15,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.post_list_view.view.posts_recycler_view
+import kotlinx.android.synthetic.main.post_list_view.view.progress_bar
 
 /** Displays a fixed list of [Post]s. */
 class PostListView : FrameLayout {
@@ -42,6 +46,14 @@ class PostListView : FrameLayout {
       setHasFixedSize(true)
       adapter = groupAdapter
     }
+  }
+
+  fun showProgressBar() {
+    progress_bar.isVisible = true
+  }
+
+  fun hideProgressBar() {
+    progress_bar.isGone = true
   }
 
   /**

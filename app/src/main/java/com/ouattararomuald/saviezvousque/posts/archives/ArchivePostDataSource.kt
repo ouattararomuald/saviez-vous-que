@@ -40,7 +40,7 @@ internal class ArchivePostDataSource(
 
     try {
       withContext(Dispatchers.IO) { getPostByPage(params, callback) }
-    } catch (ex: Exception) {
+    } catch (ignored: Exception) {
       updateState(RequestState.ERROR)
     }
   }
@@ -82,7 +82,7 @@ internal class ArchivePostDataSource(
         updateState(RequestState.DONE)
         callback.onResult(posts, adjacentPageKey)
       }
-    } catch (ex: Exception) {
+    } catch (ignored: Exception) {
       updateState(RequestState.ERROR)
     }
   }

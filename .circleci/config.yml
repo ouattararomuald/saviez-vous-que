@@ -42,9 +42,9 @@ jobs:
       - store_artifacts:
           path: app/build/reports/lint-results.html
 
-      #- run:
-      #    name: Kotlin Lint
-      #    command: ./gradlew detektCheck
+      - run:
+          name: Kotlin Lint
+          command: ./gradlew detekt
 
       - save_cache:
           <<: *cache_key

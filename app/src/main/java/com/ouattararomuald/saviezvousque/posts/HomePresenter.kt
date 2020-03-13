@@ -12,12 +12,14 @@ import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 class HomePresenter @Inject constructor(
-  private val localDataUpdater: LocalDataUpdater
-) : HomeContract.Presenter, ViewModel(), CoroutineScope {
+  private val localDataUpdater: LocalDataUpdater,
+  private val view: HomeContract.View
+) : HomeContract.Presenter, ViewModel(), CoroutineScope, LocalDataUpdater.DownloadStateListener {
 
   /** Observable list of categories. */
   internal val categories: MutableLiveData<List<CategoryIdAndName>> = MutableLiveData()
@@ -37,6 +39,7 @@ class HomePresenter @Inject constructor(
     get() = Dispatchers.IO + supervisorJob
 
   init {
+    localDataUpdater.setDownloadStateListener(this)
     launch { observeCategoriesFromDatabase() }
     launch { observePostsFromDatabase() }
     launch { localDataUpdater.downloadCategoriesAndPosts() }
@@ -50,6 +53,18 @@ class HomePresenter @Inject constructor(
 
   override fun refreshData() {
     launch { localDataUpdater.downloadCategoriesAndPosts() }
+  }
+
+  override suspend fun onDownloadStarted() {
+    withContext(Dispatchers.Main) {
+      view.showProgressBar()
+    }
+  }
+
+  override suspend fun onDownloadFinished() {
+    withContext(Dispatchers.Main) {
+      view.hideProgressBar()
+    }
   }
 
   private suspend fun observeCategoriesFromDatabase() {
