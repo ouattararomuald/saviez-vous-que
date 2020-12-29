@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/ouattararomuald/saviez-vous-que/tree/master.svg?style=svg)](https://circleci.com/gh/ouattararomuald/saviez-vous-que/tree/master)
+[![CircleCI](https://circleci.com/gh/ouattararomuald/saviez-vous-que/tree/master.svg?style=shield)](https://circleci.com/gh/ouattararomuald/saviez-vous-que/tree/master)
 
 # saviez-vous-que
 
