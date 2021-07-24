@@ -2,6 +2,7 @@ package com.ouattararomuald.saviezvousque.posts.archives
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -11,14 +12,10 @@ import androidx.lifecycle.Observer
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ouattararomuald.saviezvousque.R
 import com.ouattararomuald.saviezvousque.common.Post
+import com.ouattararomuald.saviezvousque.databinding.PaginatedPostViewBinding
 import com.ouattararomuald.saviezvousque.db.FeedRepository
 import com.ouattararomuald.saviezvousque.downloaders.FeedDownloader
-import kotlinx.android.synthetic.main.paginated_post_view.view.noInternetLayout
-import kotlinx.android.synthetic.main.paginated_post_view.view.posts_recycler_view
-import kotlinx.android.synthetic.main.paginated_post_view.view.progressBar
-import kotlinx.android.synthetic.main.paginated_post_view.view.viewLayout
 
 /**
  * Displays a list of [Post]s in an infinite scroll view.
@@ -29,6 +26,8 @@ class PaginatedPostView : FrameLayout {
     private const val TWO = 2
     private const val THREE = 3
   }
+
+  private lateinit var binding: PaginatedPostViewBinding
 
   private lateinit var feedDownloader: FeedDownloader
   private lateinit var feedRepository: FeedRepository
@@ -53,11 +52,11 @@ class PaginatedPostView : FrameLayout {
   }
 
   private fun initialize() {
-    inflate(context, R.layout.paginated_post_view, this)
+    binding = PaginatedPostViewBinding.inflate(LayoutInflater.from(context), this)
 
     postsAdapter = PagedPostAdapter()
 
-    posts_recycler_view.apply {
+    binding.postsRecyclerView.apply {
       layoutManager = LinearLayoutManager(context).apply {
         reverseLayout = true
       }
@@ -76,8 +75,8 @@ class PaginatedPostView : FrameLayout {
 
   fun notifyInternetAvailable() {
     lifecycleOwner?.let { observePageLoading(it) }
-    viewLayout.isVisible = true
-    noInternetLayout.isVisible = false
+    binding.viewLayout.isVisible = true
+    binding.noInternetLayout.isVisible = false
     if (::factory.isInitialized) {
       factory.loadNextPage()
     }
@@ -85,8 +84,8 @@ class PaginatedPostView : FrameLayout {
 
   fun notifyInternetLost() {
     if (::posts.isInitialized && posts.value!!.isEmpty()) {
-      viewLayout.isVisible = false
-      noInternetLayout.isVisible = true
+      binding.viewLayout.isVisible = false
+      binding.noInternetLayout.isVisible = true
     }
   }
 
@@ -103,26 +102,26 @@ class PaginatedPostView : FrameLayout {
       posts = LivePagedListBuilder(factory, config).build()
     }
 
-    factory.requestState.observe(lifecycleOwner, Observer<RequestState> {
+    factory.requestState.observe(lifecycleOwner) {
       when (it) {
         RequestState.LOADING -> {
-          progressBar.isVisible = true
+          binding.progressBar.isVisible = true
         }
         RequestState.ERROR, RequestState.DONE -> {
-          progressBar.isGone = true
+          binding.progressBar.isGone = true
         }
         else -> {
-          progressBar.isGone = true
+          binding.progressBar.isGone = true
         }
       }
-    })
+    }
 
     observePageLoading(lifecycleOwner)
   }
 
   private fun observePageLoading(lifecycleOwner: LifecycleOwner) {
-    posts.observe(lifecycleOwner, Observer<PagedList<Post>> {
+    posts.observe(lifecycleOwner) {
       postsAdapter.submitList(it)
-    })
+    }
   }
 }

@@ -12,15 +12,14 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.google.android.material.navigation.NavigationView
 import com.ouattararomuald.saviezvousque.R
 import com.ouattararomuald.saviezvousque.common.Category
-import com.ouattararomuald.saviezvousque.db.Post
 import com.ouattararomuald.saviezvousque.databinding.HomeActivityBinding
 import com.ouattararomuald.saviezvousque.db.CategoryIdAndName
 import com.ouattararomuald.saviezvousque.db.DbComponent
+import com.ouattararomuald.saviezvousque.db.Post
 import com.ouattararomuald.saviezvousque.db.PostWithCategory
 import com.ouattararomuald.saviezvousque.db.SharedPreferenceManager
 import com.ouattararomuald.saviezvousque.downloaders.DownloaderComponent
@@ -30,11 +29,6 @@ import com.ouattararomuald.saviezvousque.posts.theme.ThemeStyleFactory
 import com.ouattararomuald.saviezvousque.posts.views.PostListView
 import com.ouattararomuald.saviezvousque.util.getDbComponent
 import com.ouattararomuald.saviezvousque.util.getDownloaderComponent
-import kotlinx.android.synthetic.main.home_app_bar.toolbar
-import kotlinx.android.synthetic.main.home_app_bar.view.toolbar
-import kotlinx.android.synthetic.main.home_content.view.content_home
-import kotlinx.android.synthetic.main.home_content.view.paginated_post_view
-import kotlinx.android.synthetic.main.home_content.view.posts_view
 import javax.inject.Inject
 
 /** Displays the different categories and allow users to navigate between them. */
@@ -81,9 +75,11 @@ class HomeActivity : AppCompatActivity(), HomeContract.View {
     sharedPreferenceManager = SharedPreferenceManager(this)
     setTheme(ThemeStyleFactory.getStyle(this, sharedPreferenceManager.theme))
     super.onCreate(savedInstanceState)
-    homeActivityBinding = DataBindingUtil.setContentView(this, R.layout.home_activity)
 
-    setSupportActionBar(homeActivityBinding.drawerLayout.toolbar)
+    homeActivityBinding = HomeActivityBinding.inflate(layoutInflater)
+    setContentView(homeActivityBinding.root)
+
+    setSupportActionBar(homeActivityBinding.appBarContainer.toolbar)
 
     themeDialogPicker = ThemeDialogPicker(this) { themeStyle, themeName ->
       sharedPreferenceManager.theme = themeName
@@ -94,7 +90,7 @@ class HomeActivity : AppCompatActivity(), HomeContract.View {
     val toggle = ActionBarDrawerToggle(
         this,
         homeActivityBinding.drawerLayout,
-        homeActivityBinding.drawerLayout.toolbar,
+        homeActivityBinding.appBarContainer.toolbar,
         R.string.navigation_drawer_open,
         R.string.navigation_drawer_close
     )
@@ -102,8 +98,8 @@ class HomeActivity : AppCompatActivity(), HomeContract.View {
     toggle.syncState()
 
     navigationView = homeActivityBinding.navView
-    archivePostView = homeActivityBinding.drawerLayout.content_home.paginated_post_view
-    postListView = homeActivityBinding.drawerLayout.content_home.posts_view
+    archivePostView = homeActivityBinding.appBarContainer.homeContentContainer.paginatedPostView
+    postListView = homeActivityBinding.appBarContainer.homeContentContainer.postsView
 
     dbComponent = getDbComponent()
     downloaderComponent = getDownloaderComponent()
@@ -116,7 +112,7 @@ class HomeActivity : AppCompatActivity(), HomeContract.View {
         .build()
         .inject(this)
 
-    homeActivityBinding.viewModel = homePresenter
+    //homeActivityBinding.viewModel = homePresenter
 
     observeCategories()
     observePosts()
@@ -143,7 +139,7 @@ class HomeActivity : AppCompatActivity(), HomeContract.View {
       menuItem.isChecked = true
 
       if (menuItem.itemId != R.id.choose_theme_menu_item) {
-        toolbar.title = menuItem.title
+        homeActivityBinding.appBarContainer.toolbar.title = menuItem.title
       }
 
       chooseViewToDisplay(menuItem)

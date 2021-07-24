@@ -1,9 +1,10 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'androidx.navigation.safeargs'
-apply plugin: 'com.getkeepsafe.dexcount'
+plugins {
+  id 'com.android.application'
+  id 'kotlin-android'
+  id 'kotlin-parcelize'
+  id 'kotlin-kapt'
+  id 'androidx.navigation.safeargs'
+}
 
 android {
   compileSdkVersion buildConfig.compileSdk
@@ -27,12 +28,13 @@ android {
   }
 
   compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
+    sourceCompatibility JavaVersion.VERSION_11
+    targetCompatibility JavaVersion.VERSION_11
   }
 
   kotlinOptions {
-    jvmTarget = "1.8"
+    jvmTarget = JavaVersion.VERSION_11.toString()
+    useIR = true
   }
 
   testOptions {
@@ -42,7 +44,7 @@ android {
   }
 
   buildFeatures {
-    dataBinding = true
+    viewBinding true
   }
 
   lintOptions {
@@ -73,10 +75,6 @@ android {
       buildConfigField 'String', FEED_BASE_URL_KEY, FEED_BASE_URL
     }
   }
-
-  androidExtensions {
-    experimental = true
-  }
 }
 
 dependencies {
@@ -106,9 +104,8 @@ dependencies {
   implementation deps.androidx.arch.lifecycle.java8
   implementation deps.androidx.arch.lifecycle.reactivestreams
 
-  implementation deps.groupie.runtime
-  implementation deps.groupie.extensions
-  implementation deps.groupie.databinding
+  implementation deps.groupie.core
+  implementation deps.groupie.viewbinding
 
   implementation deps.picasso
 

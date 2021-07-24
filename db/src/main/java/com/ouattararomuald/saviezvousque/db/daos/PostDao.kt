@@ -36,7 +36,7 @@ class PostDao @Inject constructor(private val postQueries: PostQueries) {
   fun postExists(postId: Int): Boolean = postQueries.countPostWithId(postId).executeAsOne() > 0
 
   private fun List<PostAdapter>.toPosts(): List<Post> = map { post ->
-    Post.Impl(
+    Post(
         post.id, post.categoryId, post.title.value, post.content.value, post.getImageUrl(),
         DateTimeConverter.toLocalDateTime(post.publicationDateUtc),
         DateTimeConverter.toLocalDateTime(post.lastUpdateUtc)

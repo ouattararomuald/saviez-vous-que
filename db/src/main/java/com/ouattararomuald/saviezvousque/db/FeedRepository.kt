@@ -28,10 +28,10 @@ class FeedRepository @Inject constructor(
    * @return a [Completable].
    */
   fun savePosts(posts: List<Post>, categoryId: Int): Completable {
-    return CompletableFromAction(Action {
+    return CompletableFromAction {
       val postsWithCategory = posts.map { it.copy(categoryId = categoryId) }
       postDao.createPosts(postsWithCategory)
-    })
+    }
   }
 
   /**
@@ -42,9 +42,9 @@ class FeedRepository @Inject constructor(
    * @return a [Completable].
    */
   fun saveCategories(categories: List<Category>): Completable {
-    return CompletableFromAction(Action {
+    return CompletableFromAction {
       categoryDao.deleteCategories()
       categoryDao.createCategories(categories)
-    })
+    }
   }
 }
