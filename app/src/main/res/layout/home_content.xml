@@ -1,28 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
->
-  <LinearLayout
-      android:id="@+id/content_home"
+    android:id="@+id/content_home"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.ouattararomuald.saviezvousque.posts.HomeActivity"
+    tools:showIn="@layout/home_app_bar">
+
+  <com.ouattararomuald.saviezvousque.posts.archives.PaginatedPostView
+      android:id="@+id/paginated_post_view"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:orientation="vertical"
-      app:layout_behavior="@string/appbar_scrolling_view_behavior"
-      tools:context="com.ouattararomuald.saviezvousque.posts.HomeActivity"
-      tools:showIn="@layout/home_app_bar"
-  >
-    <com.ouattararomuald.saviezvousque.posts.archives.PaginatedPostView
-        android:id="@+id/paginated_post_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-    />
-    <com.ouattararomuald.saviezvousque.posts.views.PostListView
-        android:id="@+id/posts_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-    />
-  </LinearLayout>
-</layout>
+      android:visibility="gone"/>
+
+  <com.ouattararomuald.saviezvousque.posts.views.PostListView
+      android:id="@+id/posts_view"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
+</LinearLayout>

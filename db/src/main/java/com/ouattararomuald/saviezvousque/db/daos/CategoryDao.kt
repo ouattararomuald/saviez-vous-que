@@ -84,6 +84,6 @@ class CategoryDao @Inject constructor(private val categoryQueries: CategoryQueri
       categoryId).executeAsOne() > 0
 
   private fun List<CategoryAdapter>.toCategories(): List<Category> = mapIndexed { index, category ->
-    Category.Impl(category.id, category.count, category.name, category.slug, index)
+    Category(category.id, category.count, category.name, category.slug, index)
   }
 }

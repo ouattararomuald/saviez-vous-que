@@ -138,18 +138,13 @@ class CategoryDaoTest {
   }
 
   private fun createCategory(id: Int): Category {
-    return object : Category {
-      override val id: Int
-        get() = id
-      override val numberOfItems: Int
-        get() = id * 10
-      override val name: String
-        get() = "Category $id"
-      override val slug: String
-        get() = "category-slug-$id"
-      override val displayOrder: Int
-        get() = 0
-    }
+    return Category(
+      id = id,
+      numberOfItems = id * 10,
+      name = "Category $id",
+      slug = "category-slug-$id",
+      displayOrder = 0
+    )
   }
 
   private fun Category.toAdapter(): CategoryAdapter {
@@ -157,6 +152,6 @@ class CategoryDaoTest {
   }
 
   private fun List<CategoryAdapter>.toCategories(): List<Category> = mapIndexed { index, category ->
-    Category.Impl(category.id, category.count, category.name, category.slug, index)
+    Category(category.id, category.count, category.name, category.slug, index)
   }
 }

@@ -74,22 +74,15 @@ class PostDaoTest {
   }
 
   private fun createPost(id: Int, categoryId: Int): Post {
-    return object : Post {
-      override val id: Int
-        get() = id
-      override val categoryId: Int
-        get() = categoryId
-      override val title: String
-        get() = "Title $id"
-      override val content: String
-        get() = "Content $id"
-      override val imageUrl: String?
-        get() = "http://server.fake.com/image-$id.png"
-      override val publishedOn: LocalDateTime
-        get() = LocalDateTime.now()
-      override val updatedOn: LocalDateTime
-        get() = LocalDateTime.now()
-    }
+    return Post(
+      id= id,
+      categoryId = categoryId,
+      title = "Title $id",
+      content = "Content $id",
+      imageUrl ="http://server.fake.com/image-$id.png",
+      publishedOn = LocalDateTime.now(),
+      updatedOn = LocalDateTime.now()
+    )
   }
 
   private fun Post.toAdapter(): PostAdapter {
@@ -103,8 +96,8 @@ class PostDaoTest {
     )
   }
 
-  private fun PostAdapter.toImplementation(): Post.Impl {
-    return Post.Impl(
+  private fun PostAdapter.toImplementation(): Post {
+    return Post(
         this.id, this.categoryId, this.title.value, this.content.value, this.getImageUrl(),
         DateTimeConverter.toLocalDateTime(this.publicationDateUtc),
         DateTimeConverter.toLocalDateTime(this.lastUpdateUtc)

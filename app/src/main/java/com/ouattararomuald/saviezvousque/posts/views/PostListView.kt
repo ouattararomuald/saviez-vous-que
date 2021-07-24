@@ -2,20 +2,18 @@ package com.ouattararomuald.saviezvousque.posts.views
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
+import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ouattararomuald.saviezvousque.R
 import com.ouattararomuald.saviezvousque.common.Post
 import com.ouattararomuald.saviezvousque.customviews.FeedItem
+import com.ouattararomuald.saviezvousque.databinding.PostListViewBinding
 import com.ouattararomuald.saviezvousque.db.PostWithCategory
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.Section
 import com.xwray.groupie.GroupieViewHolder
-import kotlinx.android.synthetic.main.post_list_view.view.posts_recycler_view
-import kotlinx.android.synthetic.main.post_list_view.view.progress_bar
+import com.xwray.groupie.Section
 
 /** Displays a fixed list of [Post]s. */
 class PostListView : FrameLayout {
@@ -26,6 +24,8 @@ class PostListView : FrameLayout {
   private val posts = mutableListOf<PostWithCategory>()
   private var currentCategoryId: Int = -1
 
+  private lateinit var binding: PostListViewBinding
+
   constructor(context: Context) : super(context) {
     initialize()
   }
@@ -35,11 +35,11 @@ class PostListView : FrameLayout {
   }
 
   private fun initialize() {
-    inflate(context, R.layout.post_list_view, this)
+    binding = PostListViewBinding.inflate(LayoutInflater.from(context), this)
 
     groupAdapter.add(postSection)
 
-    posts_recycler_view.apply {
+    with(binding.postsRecyclerView) {
       layoutManager = LinearLayoutManager(context).apply {
         stackFromEnd = true
       }
@@ -49,11 +49,11 @@ class PostListView : FrameLayout {
   }
 
   fun showProgressBar() {
-    progress_bar.isVisible = true
+    binding.progressBar.isVisible = true
   }
 
   fun hideProgressBar() {
-    progress_bar.isGone = true
+    binding.progressBar.isGone = true
   }
 
   /**
@@ -63,7 +63,7 @@ class PostListView : FrameLayout {
    * @param posts [posts] to be displayed.
    */
   fun updateDisplayedPosts(categoryId: Int, posts: List<PostWithCategory>) {
-    this.posts.apply {
+    with(this.posts) {
       clear()
       addAll(posts)
     }
