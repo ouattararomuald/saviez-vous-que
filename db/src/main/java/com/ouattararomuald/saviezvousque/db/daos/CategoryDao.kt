@@ -12,6 +12,10 @@ import com.ouattararomuald.saviezvousque.common.Category as CategoryAdapter
 
 class CategoryDao @Inject constructor(private val categoryQueries: CategoryQueries) {
 
+  companion object {
+    private const val MAIN_CATEGORY_SLUG = "saviezvousque"
+  }
+
   fun getCategories(): Flow<List<CategoryIdAndName>> = categoryQueries.categoryIdAndName().asFlow().mapToList()
 
   /**
@@ -42,7 +46,7 @@ class CategoryDao @Inject constructor(private val categoryQueries: CategoryQueri
   }
 
   private fun sortCategories(categories: List<CategoryAdapter>): List<CategoryAdapter> {
-    val mainCategory = categories.findLast { it.slug == "saviezvousque" }
+    val mainCategory = categories.findLast { it.slug == MAIN_CATEGORY_SLUG }
     val mutableCategories = categories.toMutableList()
     mutableCategories.sortBy { it.name }
     mainCategory?.let {

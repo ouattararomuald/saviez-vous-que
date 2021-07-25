@@ -122,14 +122,14 @@ class HomeActivity : AppCompatActivity(), HomeContract.View {
 
   private fun observeCategories() {
     val categoriesObserver = Observer<List<CategoryIdAndName>> { displayCategories(it) }
-    homePresenter.categories.observe(this, categoriesObserver)
+    homePresenter.categoriesObservable.observe(this, categoriesObserver)
   }
 
   private fun observePosts() {
     val postsObserver = Observer<List<PostWithCategory>> {
       currentSelectedMenuItem?.let { displayPostsOfCategory(it.itemId) }
     }
-    homePresenter.posts.observe(this, postsObserver)
+    homePresenter.postsObservable.observe(this, postsObserver)
   }
 
   private fun configureNavigationMenuEventClickListener() {

@@ -85,6 +85,9 @@ dependencies {
 
   implementation deps.coroutines.core
 
+  implementation deps.hilt.android
+  kapt deps.hilt.compiler
+
   implementation deps.dagger.runtime
   kapt deps.dagger.compiler
 
@@ -100,6 +103,8 @@ dependencies {
   implementation deps.androidx.databinding.library
   kapt deps.androidx.databinding.compiler
 
+  implementation deps.androidx.arch.lifecycle.runtime
+  implementation deps.androidx.arch.lifecycle.viewModel.ktx
   implementation deps.androidx.arch.lifecycle.extensions
   implementation deps.androidx.arch.lifecycle.java8
   implementation deps.androidx.arch.lifecycle.reactivestreams
