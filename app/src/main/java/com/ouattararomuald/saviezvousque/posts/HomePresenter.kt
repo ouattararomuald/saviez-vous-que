@@ -2,6 +2,8 @@ package com.ouattararomuald.saviezvousque.posts
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.ouattararomuald.saviezvousque.core.AppCoroutineDispatchers
 import com.ouattararomuald.saviezvousque.db.CategoryIdAndName
 import com.ouattararomuald.saviezvousque.db.PostWithCategory
 import io.reactivex.disposables.CompositeDisposable
@@ -18,13 +20,14 @@ import kotlin.coroutines.CoroutineContext
 
 class HomePresenter @Inject constructor(
   private val localDataUpdater: LocalDataUpdater,
-  private val view: HomeContract.View
-) : HomeContract.Presenter, ViewModel(), CoroutineScope, LocalDataUpdater.DownloadStateListener {
+  private val view: HomeContract.View,
+  private val dispatchers: AppCoroutineDispatchers
+) : ViewModel(), HomeContract.Presenter, LocalDataUpdater.DownloadStateListener {
 
   /** Observable list of categories. */
-  internal val categories: MutableLiveData<List<CategoryIdAndName>> = MutableLiveData()
+  internal val categoriesObservable: MutableLiveData<List<CategoryIdAndName>> = MutableLiveData()
   /** Observable list of posts. */
-  internal val posts: MutableLiveData<List<PostWithCategory>> = MutableLiveData()
+  internal val postsObservable: MutableLiveData<List<PostWithCategory>> = MutableLiveData()
 
   private val postsDatabaseObserver: Flow<List<PostWithCategory>> =
       localDataUpdater.postsDatabaseObserver
@@ -33,52 +36,46 @@ class HomePresenter @Inject constructor(
 
   private val disposable = CompositeDisposable()
 
-  private val supervisorJob = SupervisorJob()
-
-  override val coroutineContext: CoroutineContext
-    get() = Dispatchers.IO + supervisorJob
-
   init {
     localDataUpdater.setDownloadStateListener(this)
-    launch { observeCategoriesFromDatabase() }
-    launch { observePostsFromDatabase() }
-    launch { localDataUpdater.downloadCategoriesAndPosts() }
+    viewModelScope.launch(dispatchers.io) { observeCategoriesFromDatabase() }
+    viewModelScope.launch(dispatchers.io) { observePostsFromDatabase() }
+    viewModelScope.launch(dispatchers.io) { localDataUpdater.downloadCategoriesAndPosts() }
   }
 
   override fun onDestroy() {
     localDataUpdater.dispose()
     disposable.dispose()
-    coroutineContext.cancelChildren()
   }
 
   override fun refreshData() {
-    launch { localDataUpdater.downloadCategoriesAndPosts() }
+    viewModelScope.launch(dispatchers.io) { localDataUpdater.downloadCategoriesAndPosts() }
   }
 
   override suspend fun onDownloadStarted() {
-    withContext(Dispatchers.Main) {
+    withContext(dispatchers.main) {
       view.showProgressBar()
     }
   }
 
   override suspend fun onDownloadFinished() {
-    withContext(Dispatchers.Main) {
+    withContext(dispatchers.main) {
       view.hideProgressBar()
     }
   }
 
   private suspend fun observeCategoriesFromDatabase() {
-    categoriesDatabaseObserver.collect { categories.postValue(it) }
+    categoriesDatabaseObserver.collect { categoriesObservable.postValue(it) }
   }
 
   private suspend fun observePostsFromDatabase() {
     postsDatabaseObserver.collect { postsWithCategories ->
-      posts.postValue(postsWithCategories)
+      postsObservable.postValue(postsWithCategories)
     }
   }
 
   override fun getPostsByCategory(categoryId: Int): List<PostWithCategory> {
-    posts.value?.let {
+    postsObservable.value?.let {
       return it.filter { postWithCategory -> postWithCategory.categoryId == categoryId }
     }
 
