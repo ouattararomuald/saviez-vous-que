@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.common.truth.Truth.assertThat
 import com.ouattararomuald.saviezvousque.R
 import com.ouattararomuald.saviezvousque.TestsUtil
-import com.ouattararomuald.saviezvousque.customviews.FeedItem
+import com.ouattararomuald.saviezvousque.adapters.FeedItem
 import com.xwray.groupie.GroupAdapter
 import org.junit.Before
 import org.junit.Test

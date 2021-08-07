@@ -13,10 +13,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.navigation.NavigationView
 import com.ouattararomuald.saviezvousque.R
 import com.ouattararomuald.saviezvousque.common.Category
+import com.ouattararomuald.saviezvousque.customviews.LoadingState
 import com.ouattararomuald.saviezvousque.databinding.HomeActivityBinding
 import com.ouattararomuald.saviezvousque.db.CategoryIdAndName
 import com.ouattararomuald.saviezvousque.db.FeedRepository
@@ -29,6 +32,8 @@ import com.ouattararomuald.saviezvousque.posts.theme.ThemeDialogPicker
 import com.ouattararomuald.saviezvousque.posts.theme.ThemeStyleFactory
 import com.ouattararomuald.saviezvousque.posts.views.PostListView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /** Displays the different categories and allow users to navigate between them. */
@@ -76,7 +81,14 @@ class HomeActivity : AppCompatActivity(), HomeContract.View {
     homeActivityBinding = HomeActivityBinding.inflate(layoutInflater)
     setContentView(homeActivityBinding.root)
 
-    homePresenter.start(this)
+    lifecycleScope.launch {
+      repeatOnLifecycle(Lifecycle.State.STARTED) {
+        launch { observeCategories() }
+        launch { observePosts() }
+        launch { observePostsByCategories() }
+        launch { observeLoadingState() }
+      }
+    }
 
     setSupportActionBar(homeActivityBinding.appBarContainer.toolbar)
 
@@ -87,11 +99,11 @@ class HomeActivity : AppCompatActivity(), HomeContract.View {
     }
 
     val toggle = ActionBarDrawerToggle(
-        this,
-        homeActivityBinding.drawerLayout,
-        homeActivityBinding.appBarContainer.toolbar,
-        R.string.navigation_drawer_open,
-        R.string.navigation_drawer_close
+      this,
+      homeActivityBinding.drawerLayout,
+      homeActivityBinding.appBarContainer.toolbar,
+      R.string.navigation_drawer_open,
+      R.string.navigation_drawer_close
     )
     homeActivityBinding.drawerLayout.addDrawerListener(toggle)
     toggle.syncState()
@@ -100,22 +112,38 @@ class HomeActivity : AppCompatActivity(), HomeContract.View {
     archivePostView = homeActivityBinding.appBarContainer.homeContentContainer.paginatedPostView
     postListView = homeActivityBinding.appBarContainer.homeContentContainer.postsView
 
-    observeCategories()
-    observePosts()
-
     configureNavigationMenuEventClickListener()
   }
 
-  private fun observeCategories() {
-    val categoriesObserver = Observer<List<CategoryIdAndName>> { displayCategories(it) }
-    homePresenter.categoriesObservable.observe(this, categoriesObserver)
+  private suspend fun observeCategories() {
+    homePresenter.categoriesObservable.collect {
+      displayCategories(it)
+    }
   }
 
-  private fun observePosts() {
-    val postsObserver = Observer<List<PostWithCategory>> {
-      currentSelectedMenuItem?.let { displayPostsOfCategory(it.itemId) }
+  private suspend fun observePosts() {
+    homePresenter.postsObservable.collect { posts ->
+      currentSelectedMenuItem?.let { displayPostsOfCategory(it.itemId, posts) }
     }
-    homePresenter.postsObservable.observe(this, postsObserver)
+  }
+
+  private suspend fun observePostsByCategories() {
+    homePresenter.postsByCategoryObservable.collect { posts ->
+      currentSelectedMenuItem?.let { displayPostsOfCategory(it.itemId, posts) }
+    }
+  }
+
+  private suspend fun observeLoadingState() {
+    homePresenter.loadingStateObservable.collect {
+      when (it) {
+        LoadingState.FINISHED -> {
+          hideProgressBar()
+        }
+        LoadingState.LOADING -> {
+          showProgressBar()
+        }
+      }
+    }
   }
 
   private fun configureNavigationMenuEventClickListener() {
@@ -134,15 +162,15 @@ class HomeActivity : AppCompatActivity(), HomeContract.View {
         R.id.archive_menu_item -> {
           refreshMenuItem?.isVisible = false
           archivePostView.configureDataSourceFactory(
-              feedDownloader,
-              feedRepository,
-              this
+            feedDownloader,
+            feedRepository,
+            this
           )
         }
         R.id.choose_theme_menu_item -> themeDialogPicker.show()
         else -> {
           refreshMenuItem?.isVisible = true
-          currentSelectedMenuItem?.let { displayPostsOfCategory(categoryId = it.itemId) }
+          currentSelectedMenuItem?.let { homePresenter.categoryClicked(categoryId = it.itemId) }
         }
       }
 
@@ -176,11 +204,6 @@ class HomeActivity : AppCompatActivity(), HomeContract.View {
     unregisterReceiver(connectivityStatusMonitor)
   }
 
-  override fun onDestroy() {
-    super.onDestroy()
-    homePresenter.onDestroy()
-  }
-
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     val inflater: MenuInflater = menuInflater
     inflater.inflate(R.menu.home, menu)
@@ -189,7 +212,6 @@ class HomeActivity : AppCompatActivity(), HomeContract.View {
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    // Handle item selection
     return when (item.itemId) {
       R.id.refresh_menu_item -> {
         homePresenter.refreshData()
@@ -199,11 +221,11 @@ class HomeActivity : AppCompatActivity(), HomeContract.View {
     }
   }
 
-  override fun showProgressBar() {
+  private fun showProgressBar() {
     postListView.showProgressBar()
   }
 
-  override fun hideProgressBar() {
+  private fun hideProgressBar() {
     postListView.hideProgressBar()
   }
 
@@ -211,9 +233,9 @@ class HomeActivity : AppCompatActivity(), HomeContract.View {
    * Displays the [Post]s of the [Category] with the given [categoryId].
    *
    * @param categoryId id of the category to display.
+   * @param posts list of posts that belong to the category.
    */
-  private fun displayPostsOfCategory(categoryId: Int) {
-    val posts = homePresenter.getPostsByCategory(categoryId)
+  private fun displayPostsOfCategory(categoryId: Int, posts: List<PostWithCategory>) {
     if (posts.isNotEmpty()) {
       postListView.updateDisplayedPosts(categoryId, posts)
     }

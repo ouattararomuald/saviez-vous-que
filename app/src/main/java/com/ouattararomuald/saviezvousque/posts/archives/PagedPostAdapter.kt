@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import com.ouattararomuald.saviezvousque.common.Post
-import com.ouattararomuald.saviezvousque.customviews.FeedItemViewHolder
+import com.ouattararomuald.saviezvousque.adapters.FeedItemViewHolder
 import com.ouattararomuald.saviezvousque.databinding.FeedItemViewBinding
 import com.ouattararomuald.saviezvousque.db.DateTimeConverter
 import com.ouattararomuald.saviezvousque.db.PostWithCategory
