@@ -8,7 +8,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ouattararomuald.saviezvousque.common.Post
-import com.ouattararomuald.saviezvousque.customviews.FeedItem
+import com.ouattararomuald.saviezvousque.adapters.FeedItem
 import com.ouattararomuald.saviezvousque.databinding.PostListViewBinding
 import com.ouattararomuald.saviezvousque.db.PostWithCategory
 import com.xwray.groupie.GroupAdapter

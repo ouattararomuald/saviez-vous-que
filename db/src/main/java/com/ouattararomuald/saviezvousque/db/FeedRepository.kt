@@ -5,7 +5,6 @@ import com.ouattararomuald.saviezvousque.common.Post
 import com.ouattararomuald.saviezvousque.db.daos.CategoryDao
 import com.ouattararomuald.saviezvousque.db.daos.PostDao
 import io.reactivex.Completable
-import io.reactivex.functions.Action
 import io.reactivex.internal.operators.completable.CompletableFromAction
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -18,6 +17,8 @@ class FeedRepository @Inject constructor(
   fun categoriesFlow(): Flow<List<CategoryIdAndName>> = categoryDao.getCategories()
 
   fun postsFlow(): Flow<List<PostWithCategory>> = postDao.getPosts()
+
+  fun getPostsByCategory(categoryId: Int): List<PostWithCategory> = postDao.getPostsByCategory(categoryId)
 
   /**
    * Saves the given [Post]s.

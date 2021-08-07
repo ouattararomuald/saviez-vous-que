@@ -1,4 +1,4 @@
-package com.ouattararomuald.saviezvousque.customviews
+package com.ouattararomuald.saviezvousque.adapters
 
 import androidx.recyclerview.widget.RecyclerView
 import com.ouattararomuald.saviezvousque.common.Post
@@ -15,7 +15,9 @@ class FeedItemViewHolder(
    * @param post [Post] to bind to this [FeedItemViewHolder].
    */
   fun bind(post: PostWithCategory) {
-    itemBinding.feedItemView.postTitle = post.title
-    itemBinding.feedItemView.postImageUrl = post.imageUrl!!
+    with(itemBinding.feedItemView) {
+      postTitle = post.title
+      postImageUrl = post.imageUrl!!
+    }
   }
 }

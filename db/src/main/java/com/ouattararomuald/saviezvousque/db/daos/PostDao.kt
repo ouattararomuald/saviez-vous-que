@@ -14,8 +14,11 @@ class PostDao @Inject constructor(private val postQueries: PostQueries) {
 
   fun getPosts(): Flow<List<PostWithCategory>> = postQueries.getPosts().asFlow().mapToList()
 
-  fun getPostsByCategory(categoryId: Int): Flow<List<PostWithCategory>> = postQueries.getPostsByCategory(
+  fun getPostsByCategoryObservable(categoryId: Int): Flow<List<PostWithCategory>> = postQueries.getPostsByCategory(
       categoryId).asFlow().mapToList()
+
+  fun getPostsByCategory(categoryId: Int): List<PostWithCategory> = postQueries.getPostsByCategory(
+    categoryId).executeAsList()
 
   fun createPosts(posts: List<PostAdapter>) {
     posts.toPosts().forEach { post -> createPost(post) }

@@ -1,14 +1,8 @@
 package com.ouattararomuald.saviezvousque.posts
 
-import com.ouattararomuald.saviezvousque.db.PostWithCategory
-
 interface HomeContract {
 
   interface Presenter {
-    fun start(view: View)
-
-    /** Notifies the presenter that the view will be destroyed. */
-    fun onDestroy()
 
     /** Asks the presenter to refresh its dara. */
     fun refreshData()
@@ -17,14 +11,9 @@ interface HomeContract {
      * Gets the posts that belong to the category with given [categoryId].
      *
      * @param categoryId id of the category whose you want posts.
-     * @return list of posts.
      */
-    fun getPostsByCategory(categoryId: Int): List<PostWithCategory>
+    fun categoryClicked(categoryId: Int)
   }
 
-  interface View {
-    fun showProgressBar()
-
-    fun hideProgressBar()
-  }
+  interface View
 }

@@ -51,8 +51,8 @@ class PostDaoTest {
 
     postDao.createPosts(posts.map { it.toAdapter() })
 
-    postDao.getPostsByCategory(categoryId = 1)
-    postDao.getPostsByCategory(categoryId = 2)
+    postDao.getPostsByCategoryObservable(categoryId = 1)
+    postDao.getPostsByCategoryObservable(categoryId = 2)
 
     Mockito.verify(postQueries, Mockito.times(1)).getPostsByCategory(categoryId = 1)
     Mockito.verify(postQueries, Mockito.times(1)).getPostsByCategory(categoryId = 2)
