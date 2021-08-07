@@ -11,10 +11,11 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 /** Fetches data from remote source and saves them in local database. */
-class LocalDataUpdater(
+class LocalDataUpdater @Inject constructor(
   private val feedDownloader: FeedDownloader,
   private val feedRepository: FeedRepository
 ) : CoroutineScope {

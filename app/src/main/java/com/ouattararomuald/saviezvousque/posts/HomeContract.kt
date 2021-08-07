@@ -5,6 +5,8 @@ import com.ouattararomuald.saviezvousque.db.PostWithCategory
 interface HomeContract {
 
   interface Presenter {
+    fun start(view: View)
+
     /** Notifies the presenter that the view will be destroyed. */
     fun onDestroy()
 
