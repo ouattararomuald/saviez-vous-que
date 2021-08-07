@@ -1,7 +1,11 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'com.squareup.sqldelight'
+plugins {
+  id 'com.android.library'
+  id 'kotlin-android'
+  id 'kotlin-kapt'
+  id 'com.squareup.sqldelight'
+  id 'dagger.hilt.android.plugin'
+}
+
 
 android {
   compileSdkVersion buildConfig.compileSdk
@@ -42,19 +46,26 @@ android {
   }
 
   buildTypes {
+    def DATABASE_NAME_KEY = 'DATABASE_NAME'
+
+    debug {
+      buildConfigField 'String', DATABASE_NAME_KEY, '"svqDbDebug"'
+    }
+
     release {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+      buildConfigField 'String', DATABASE_NAME_KEY, '"HaveFun"'
     }
   }
 }
 
 dependencies {
-  implementation deps.kotlin.stdlib.jdk8
   api project(':common')
 
-  api deps.dagger.runtime
-  kapt deps.dagger.compiler
+  implementation deps.hilt.android
+  kapt deps.hilt.compiler
 
   api deps.sqlDelight.androidDriver
   api deps.sqlDelight.coroutines
@@ -78,4 +89,8 @@ dependencies {
   androidTestImplementation deps.androidx.test.ext.junit
   androidTestImplementation deps.androidx.test.espresso.runner
   androidTestImplementation deps.androidx.test.espresso.core
+}
+
+kapt {
+  correctErrorTypes true
 }

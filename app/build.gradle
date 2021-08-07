@@ -4,6 +4,7 @@ plugins {
   id 'kotlin-parcelize'
   id 'kotlin-kapt'
   id 'androidx.navigation.safeargs'
+  id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -79,17 +80,14 @@ android {
 
 dependencies {
   implementation fileTree(include: ['*.jar'], dir: 'libs')
-  implementation deps.kotlin.stdlib.jdk8
   implementation project(':db')
   implementation project(':downloaders')
 
   implementation deps.coroutines.core
 
+  implementation deps.hilt.viewmodel
   implementation deps.hilt.android
   kapt deps.hilt.compiler
-
-  implementation deps.dagger.runtime
-  kapt deps.dagger.compiler
 
   implementation deps.androidx.appcompat
   implementation deps.androidx.constraintlayout
@@ -99,6 +97,7 @@ dependencies {
   implementation deps.androidx.annotation
   implementation deps.androidx.vectordrawable
   implementation deps.androidx.arch.core.ktx
+  implementation deps.androidx.arch.core.fragment
 
   implementation deps.androidx.databinding.library
   kapt deps.androidx.databinding.compiler
@@ -134,4 +133,8 @@ dependencies {
   androidTestImplementation deps.androidx.paging.testing
   androidTestImplementation deps.mockito
   androidTestImplementation deps.truth
+}
+
+kapt {
+  correctErrorTypes true
 }

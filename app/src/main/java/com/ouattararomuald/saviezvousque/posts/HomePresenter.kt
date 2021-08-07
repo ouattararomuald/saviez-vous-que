@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.ouattararomuald.saviezvousque.core.AppCoroutineDispatchers
 import com.ouattararomuald.saviezvousque.db.CategoryIdAndName
 import com.ouattararomuald.saviezvousque.db.PostWithCategory
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,9 +19,9 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
+@HiltViewModel
 class HomePresenter @Inject constructor(
   private val localDataUpdater: LocalDataUpdater,
-  private val view: HomeContract.View,
   private val dispatchers: AppCoroutineDispatchers
 ) : ViewModel(), HomeContract.Presenter, LocalDataUpdater.DownloadStateListener {
 
@@ -34,7 +35,7 @@ class HomePresenter @Inject constructor(
   private val categoriesDatabaseObserver: Flow<List<CategoryIdAndName>> =
       localDataUpdater.categoriesDatabaseObserver
 
-  private val disposable = CompositeDisposable()
+  private lateinit var view: HomeContract.View
 
   init {
     localDataUpdater.setDownloadStateListener(this)
@@ -43,9 +44,12 @@ class HomePresenter @Inject constructor(
     viewModelScope.launch(dispatchers.io) { localDataUpdater.downloadCategoriesAndPosts() }
   }
 
+  override fun start(view: HomeContract.View) {
+    this.view = view
+  }
+
   override fun onDestroy() {
     localDataUpdater.dispose()
-    disposable.dispose()
   }
 
   override fun refreshData() {

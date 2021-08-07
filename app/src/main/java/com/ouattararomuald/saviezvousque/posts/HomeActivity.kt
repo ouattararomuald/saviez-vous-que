@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -18,32 +19,30 @@ import com.ouattararomuald.saviezvousque.R
 import com.ouattararomuald.saviezvousque.common.Category
 import com.ouattararomuald.saviezvousque.databinding.HomeActivityBinding
 import com.ouattararomuald.saviezvousque.db.CategoryIdAndName
-import com.ouattararomuald.saviezvousque.db.DbComponent
+import com.ouattararomuald.saviezvousque.db.FeedRepository
 import com.ouattararomuald.saviezvousque.db.Post
 import com.ouattararomuald.saviezvousque.db.PostWithCategory
 import com.ouattararomuald.saviezvousque.db.SharedPreferenceManager
-import com.ouattararomuald.saviezvousque.downloaders.DownloaderComponent
+import com.ouattararomuald.saviezvousque.downloaders.FeedDownloader
 import com.ouattararomuald.saviezvousque.posts.archives.PaginatedPostView
 import com.ouattararomuald.saviezvousque.posts.theme.ThemeDialogPicker
 import com.ouattararomuald.saviezvousque.posts.theme.ThemeStyleFactory
 import com.ouattararomuald.saviezvousque.posts.views.PostListView
-import com.ouattararomuald.saviezvousque.util.getDbComponent
-import com.ouattararomuald.saviezvousque.util.getDownloaderComponent
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 /** Displays the different categories and allow users to navigate between them. */
+@AndroidEntryPoint
 class HomeActivity : AppCompatActivity(), HomeContract.View {
 
   /** The [HomePresenter] bound to this activity. */
-  @Inject lateinit var homePresenter: HomePresenter
+  private val homePresenter: HomePresenter by viewModels()
+
+  @Inject lateinit var sharedPreferenceManager: SharedPreferenceManager
+  @Inject lateinit var feedDownloader: FeedDownloader
+  @Inject lateinit var feedRepository: FeedRepository
 
   private lateinit var homeActivityBinding: HomeActivityBinding
-
-  /** Dagger database component. */
-  private lateinit var dbComponent: DbComponent
-
-  /** Dagger downloader component. */
-  private lateinit var downloaderComponent: DownloaderComponent
 
   private lateinit var navigationView: NavigationView
 
@@ -64,8 +63,6 @@ class HomeActivity : AppCompatActivity(), HomeContract.View {
 
   private lateinit var themeDialogPicker: ThemeDialogPicker
 
-  private lateinit var sharedPreferenceManager: SharedPreferenceManager
-
   private val menuManager: MenuManager by lazy {
     val menu = navigationView.menu
     MenuManager(menu, DEFAULT_SELECTED_MENU_ITEM_INDEX)
@@ -78,6 +75,8 @@ class HomeActivity : AppCompatActivity(), HomeContract.View {
 
     homeActivityBinding = HomeActivityBinding.inflate(layoutInflater)
     setContentView(homeActivityBinding.root)
+
+    homePresenter.start(this)
 
     setSupportActionBar(homeActivityBinding.appBarContainer.toolbar)
 
@@ -100,19 +99,6 @@ class HomeActivity : AppCompatActivity(), HomeContract.View {
     navigationView = homeActivityBinding.navView
     archivePostView = homeActivityBinding.appBarContainer.homeContentContainer.paginatedPostView
     postListView = homeActivityBinding.appBarContainer.homeContentContainer.postsView
-
-    dbComponent = getDbComponent()
-    downloaderComponent = getDownloaderComponent()
-
-    DaggerHomeActivityInjectorComponent.builder()
-        .databaseComponent(dbComponent)
-        .downloaderComponent(downloaderComponent)
-        .activity(this)
-        .view(this)
-        .build()
-        .inject(this)
-
-    //homeActivityBinding.viewModel = homePresenter
 
     observeCategories()
     observePosts()
@@ -148,8 +134,8 @@ class HomeActivity : AppCompatActivity(), HomeContract.View {
         R.id.archive_menu_item -> {
           refreshMenuItem?.isVisible = false
           archivePostView.configureDataSourceFactory(
-              getDownloaderComponent().feedDownloader(),
-              getDbComponent().feedRepository(),
+              feedDownloader,
+              feedRepository,
               this
           )
         }
