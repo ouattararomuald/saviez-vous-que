@@ -34,9 +34,9 @@ class PostDao @Inject constructor(private val postQueries: PostQueries) {
     }
   }
 
-  fun postExists(post: Post): Boolean = postExists(post.id)
+  private fun postExists(post: Post): Boolean = postExists(post.id)
 
-  fun postExists(postId: Int): Boolean = postQueries.countPostWithId(postId).executeAsOne() > 0
+  private fun postExists(postId: Int): Boolean = postQueries.countPostWithId(postId).executeAsOne() > 0
 
   private fun List<PostAdapter>.toPosts(): List<Post> = map { post ->
     Post(
